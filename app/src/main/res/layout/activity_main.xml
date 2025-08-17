@@ -22,6 +22,11 @@
             android:id="@+id/solutionType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/molarityUnit"/>
 
         <LinearLayout
             android:layout_marginTop="15dp"
@@ -34,7 +39,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Molarity"/>
+                android:text="Molarity (M)"/>
             <EditText
                 android:id="@+id/molarity"
                 android:layout_weight="1"
@@ -53,7 +58,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Molecular Weight(g/mol)"/>
+                android:text="Molecular Weight (g/mol)"/>
             <EditText
                 android:id="@+id/weight"
                 android:layout_weight="1"
@@ -71,7 +76,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Volume(ml)"/>
+                android:text="Volume (ml)"/>
             <EditText
                 android:id="@+id/volume"
                 android:layout_weight="1"

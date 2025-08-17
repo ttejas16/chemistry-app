@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Map<String,String> molecularMap, equivalenceMap;
     private ActivityMainBinding binding;
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
+    final String[] molarityUnitOptions = { "Mole (M)", "milliMole (mM)", "microMole (μM)"};
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
 
     @Override
@@ -80,18 +81,47 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (position == 0){
-                    binding.solutionTypeTitle.setText("Molarity");
-                    binding.weightTypeTtile.setText("Molecular Weight(g/mol)");
+                    binding.solutionTypeTitle.setText("Molarity (M)");
+                    binding.weightTypeTtile.setText("Molecular Weight (g/mol)");
+                    binding.molarityUnit.setEnabled(true);
+                    binding.molarityUnit.setAlpha(1.0f);
                 }
                 else {
                     binding.solutionTypeTitle.setText("Normality");
-                    binding.weightTypeTtile.setText("Equivalence Weight(g/eq)");
+                    binding.weightTypeTtile.setText("Equivalence Weight (g/eq)");
+                    binding.molarityUnit.setSelection(0);
+                    binding.molarityUnit.setEnabled(false);
+                    binding.molarityUnit.setAlpha(0.5f);
                 }
                 updateWeights(binding.salt.getSelectedItem().toString());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+
+        setSpinnerItems(binding.molarityUnit, molarityUnitOptions);
+        binding.molarityUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        binding.solutionTypeTitle.setText("Molarity (M)");
+                        break;
+                    case 1:
+                        binding.solutionTypeTitle.setText("Molarity (mM)");
+                        break;
+                    case 2:
+                        binding.solutionTypeTitle.setText("Molarity (μM)");
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
 
@@ -112,22 +142,20 @@ public class MainActivity extends AppCompatActivity {
                 
                 try {
                     StringBuilder buffer = new StringBuilder();
-                    double concentration = Double.parseDouble(concentrationString);
+                    double concentration = getConcentration();
                     double weight = Double.parseDouble(weightString);
                     
                     if (binding.standardSizes.isChecked()) {
                         for(double size: sizes) {
                             double res = calculateResult(weight, concentration, size);
-                            String formatted = String.format("%-20.6f%.6f", size, res);
-
+                            String formatted = String.format("%-25.2f %-25.2f %-20.2f%n", size, res, res * 1000);
                             buffer.append(formatted);
-                            buffer.append("\n");
                         }
                         
                     } else  {
                         double volume = Double.parseDouble(volumeString);
                         double res = calculateResult(weight, concentration, volume);
-                        String formatted = String.format("%-20.6f%.6f", volume, res);
+                        String formatted = String.format("%-20.2f %.2f%n", volume, res);
 
                         buffer.append(formatted);
                     }
@@ -136,11 +164,30 @@ public class MainActivity extends AppCompatActivity {
 
 
                 } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please enter valid strings ...", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
+    }
+
+    public double getConcentration(){
+        if (binding.molarity.getText().toString().isEmpty()) return 0;
+
+        double res = Double.parseDouble(binding.molarity.getText().toString());
+
+        if (binding.solutionType.getSelectedItemPosition() == 0) {
+            switch (binding.molarityUnit.getSelectedItemPosition()) {
+                case 1:
+                    res = res / 1000;
+                    break;
+                case 2:
+                    res = res / 1000000;
+                    break;
+            }
+        }
+
+        return res;
     }
 
     public void setSpinnerItems(Spinner spinner, String[] options){
@@ -178,12 +225,13 @@ public class MainActivity extends AppCompatActivity {
     public void showResultAlert(String salt, String res){
         String volumeTitle = String.format("%-20s","Volume(ml)");
         String weightTitle = String.format("%-20s","Weight(g)");
+        String weightTitleMg = String.format("%-20s","Weight(mg)");
 
         unfocusAllEditTexts();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("For " + salt + " solution");
-        builder.setMessage(String.format("%s%s\n\n%s", volumeTitle, weightTitle, res));
+        builder.setMessage(String.format("%s%s%s\n\n%s", volumeTitle, weightTitle, weightTitleMg, res));
         builder.setPositiveButton("Close", (dialog, which) -> {
             dialog.dismiss();
         });
