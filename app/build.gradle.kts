@@ -6,6 +6,10 @@ android {
     namespace = "com.example.chemapp"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.chemapp"
         minSdk = 24
