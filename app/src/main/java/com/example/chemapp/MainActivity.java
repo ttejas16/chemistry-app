@@ -2,16 +2,11 @@ package com.example.chemapp;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -216,7 +211,28 @@ public class MainActivity extends AppCompatActivity {
             binding.weight.setText(equivalenceMap.get(salt));
         }
     }
+    public double calculateConcentrationByParts(double concentration,double volumeML){
+        //concentration IS IN PPM
+        // volumeML IS the desired volume of a solution
+        //The O/P here will be the required Weight of A solute in a solutionIN MILLIGRAMS
+        // 1000 MILLIGRAM = 1 GRAMS
+        if(concentration < 0 || volumeML < 0){
+           return 0;
+        }
 
+        return concentration * (volumeML/1000);
+    }
+
+    public double calculateCompoundWeightForElement(String element, String compound, double concentration, double volumeMl){
+        //NOT SURE WHAT WILL BE THE INPUT TYPE FOR ELEMENT AND COMPOUND
+
+        // eleCnt = eleCountInCompound(element,compound)  it will return no. of elements in compund;
+        // eleWeight = eleCnt * getEleWeight(element);
+        // percentage = eleWeight / compoundWeight;
+        //result  =  calculateConcentrationByParts(concentration,volumeMl) / percentage;
+        //return result; in milligrams
+        return 0;
+    }
     public double calculateResult(double w, double c, double volumeInMillilitres){
         double l = volumeInMillilitres / 1000;
         return w * c * l;
