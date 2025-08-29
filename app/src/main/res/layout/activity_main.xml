@@ -6,96 +6,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <LinearLayout
-        android:padding="20dp"
+    <com.google.android.material.button.MaterialButton
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="25dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <Spinner
-            android:id="@+id/salt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <Spinner
-            android:layout_marginTop="20dp"
-            android:id="@+id/solutionType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:id="@+id/molarityUnit"/>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:paddingHorizontal="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
-            <TextView
-                android:id="@+id/solutionTypeTitle"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Molarity (M)"/>
-            <EditText
-                android:id="@+id/molarity"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:paddingHorizontal="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
-            <TextView
-                android:id="@+id/weightTypeTtile"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Molecular Weight (g/mol)"/>
-            <EditText
-                android:id="@+id/weight"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:paddingHorizontal="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2">
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Volume (ml)"/>
-            <EditText
-                android:id="@+id/volume"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <CheckBox
-            android:id="@+id/standardSizes"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="calculate for all standard sizes"/>
-
-        <Button
-            android:id="@+id/calculate"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Calculate"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="Measure Solid From Liquid"
+        app:icon="@drawable/flask_conical"
+        app:iconSize="20dp"
+        app:iconTint="@color/white"
+        app:iconGravity="start"
+        app:cornerRadius="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="5dp"
+        android:textAlignment="viewStart"
+        android:textSize="15sp"/>
+    <com.google.android.material.button.MaterialButton
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Measure Liquid From Liquid"
+        app:icon="@drawable/test_tube_diagonal"
+        app:iconSize="20dp"
+        app:iconTint="@color/white"
+        app:iconGravity="start"
+        app:cornerRadius="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="5dp"
+        android:textAlignment="viewStart"
+        android:textSize="15sp"/>
+    <com.google.android.material.button.MaterialButton
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Molarity Calculator"
+        app:icon="@drawable/calculator"
+        app:iconSize="20dp"
+        app:iconTint="@color/white"
+        app:iconGravity="start"
+        app:cornerRadius="15dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="5dp"
+        android:textAlignment="viewStart"
+        android:textSize="15sp"
+        android:id="@+id/btn"/>
 </LinearLayout>
