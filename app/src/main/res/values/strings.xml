@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">ChemApp</string>
+
+    <!-- Activity titles   -->
+    <string name="measure_molarity_title">Measure a salt</string>
+    <string name="measure_solid_title">Measure a element</string>
+    <string name="measure_mass_title">Measure mass</string>
+
+    <!-- MeasureSolid.java   -->
+    <string name="tip_text">Calculate mass of an element from a compound</string>
+
+    <string name="element_input_label">Select a element</string>
+
+    <string name="concentration_input_label">Enter concentration and its unit</string>
+
+    <string name="element_hint">Select a element</string>
+    <string name="salt_hint">Select a salt</string>
+
+    <string name="concentration_hint">Ex. 100 ppm</string>
+
+
+
+    <!-- MeasureMolarity.java   -->
+    <string name="tip_text_molarity">Calculate mass of a salt for required volume and concentration</string>
+
+    <string name="solution_type_label">Select solution type</string>
+
+    <string name="concentration_hint_molarity">Ex. 2</string>
+    <string name="concentration_label_molarity">Enter molarity and its unit</string>
+    <string name="concentration_label_normality">Enter normality</string>
+
+    <string name="weight_label_molarity">Enter molecular weight (g/mol)</string>
+    <string name="weight_label_normality">Enter equivalent weight (eq/mol)</string>
+    <string name="weight_hint_molarity">Ex. 55.41</string>
+
+    <string name="standard_sizes_checkbox_text">Calculate for standard sizes</string>
+
+
+    <!-- MeasureMass.java   -->
+    <string name="tip_text_mass">Calculate mass needed for trace concentration</string>
+
+
+    <!-- Common   -->
+    <string name="calculate_text">Calculate</string>
+    <string name="salt_input_label">Select a salt</string>
+    <string name="volume_hint">Ex. 250 mL</string>
+    <string name="volume_input_label">Enter volume</string>
+
 </resources>

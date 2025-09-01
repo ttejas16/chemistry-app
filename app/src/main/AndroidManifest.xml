@@ -22,13 +22,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MolarCalculator"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".MeasureMolarity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".MeasureMass"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".MeasureSolid"
+            android:exported="false">
         </activity>
     </application>
 

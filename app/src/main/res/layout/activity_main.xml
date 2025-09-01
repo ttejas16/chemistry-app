@@ -10,6 +10,7 @@
     android:padding="10dp">
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn1"
         android:paddingHorizontal="20dp"
         android:paddingVertical="25dp"
         android:layout_width="match_parent"
@@ -25,6 +26,7 @@
         android:textAlignment="viewStart"
         android:textSize="15sp"/>
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn2"
         android:paddingHorizontal="20dp"
         android:paddingVertical="25dp"
         android:layout_width="match_parent"
