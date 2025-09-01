@@ -14,13 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chemapp.databinding.ActivityMainBinding;
 
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
-    Map<String,String> molecularMap, equivalenceMap;
     private ActivityMainBinding binding;
-    final String[] solutionOptions = { "Molar solution", "Normal solution" };
-    final String[] molarityUnitOptions = { "Mole (M)", "milliMole (mM)", "microMole (μM)"};
-    final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
     private Map<String, Compound> compoundsMap;
     private Map<String, Element> elementsMap;
 
