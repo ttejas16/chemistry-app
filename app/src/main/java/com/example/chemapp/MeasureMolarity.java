@@ -98,6 +98,10 @@ public class MeasureMolarity extends AppCompatActivity {
             if (binding.salt.getText().toString().isEmpty()) return;
 
             String salt = binding.salt.getText().toString();
+            if (!Arrays.asList(salts).contains(salt)) {
+                return;
+            }
+
             String weightString = binding.weight.getText().toString();
             String concentrationString = binding.concentration.getText().toString();
             String volumeString = binding.volume.getText().toString();
@@ -108,33 +112,67 @@ public class MeasureMolarity extends AppCompatActivity {
             }
 
             try {
-                StringBuilder buffer = new StringBuilder();
                 double concentration = getConcentration();
                 double weight = Double.parseDouble(weightString);
 
-                if (binding.standardSizes.isChecked()) {
-                    for(double size: sizes) {
-                        double res = calculateResult(weight, concentration, size);
-                        String formatted = String.format("%-25.2f %-25.2f %-20.2f%n", size, res, res * 1000);
-                        buffer.append(formatted);
-                    }
+                double[] volumes;
 
+                if (binding.standardSizes.isChecked()) {
+                    volumes = sizes;
                 } else  {
                     double volume = Double.parseDouble(volumeString);
-                    double res = calculateResult(weight, concentration, volume);
-                    String formatted = String.format("%-25.2f %-25.2f %-20.2f%n", volume, res, res * 1000);
-
-                    buffer.append(formatted);
+                    volumes = new double[]{volume};
                 }
 
-                showResultAlert(salt, buffer.toString());
+                String[][] data = new String[volumes.length + 1][3];
+                data[0][0] = "For volume (mL)";
+                data[0][1] = "Req weight (g)";
+                data[0][2] = "Req weight (mg)";
 
+                int j = 1;
+                for(double vlm: volumes) {
+                    double resInGrams = calculateResult(weight, concentration, vlm);
+                    double resInMilligrams = resInGrams * 1000;
+                    data[j][0] = vlm + "";
+                    data[j][1] = resInGrams + "";
+                    data[j][2] = resInMilligrams + "";
+
+                    j++;
+                }
+
+                String title = "For " + salt + " solution";
+                BottomSheetHelper.showExpandableBottomSheet(
+                        MeasureMolarity.this,
+                        R.layout.sheet_layout,
+                        getResultTitle(),
+                        data
+                );
 
             } catch (NumberFormatException e) {
                 Toast.makeText(getApplicationContext(), "Please enter valid strings ...", Toast.LENGTH_SHORT).show();
 
             }
         });
+    }
+
+    public String getResultTitle(){
+        String salt = binding.salt.getText().toString();
+        String concentration = binding.concentration.getText().toString();
+        String cUnit = binding.concentrationUnit.getSelectedItem().toString();
+        int solutionType = binding.solutionType.getSelectedItemPosition();
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("For " + salt + " solution of ");
+        builder.append(concentration + " ");
+
+        if (solutionType == 0) {
+            builder.append(cUnit);
+        }
+        else {
+            builder.append("N");
+        }
+
+        return builder.toString();
     }
 
     public double getConcentration(){
