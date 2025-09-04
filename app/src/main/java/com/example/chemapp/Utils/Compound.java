@@ -1,4 +1,4 @@
-package com.example.chemapp;
+package com.example.chemapp.Utils;
 
 import java.util.Arrays;
 
@@ -6,15 +6,17 @@ public class Compound {
     private  String name;
     public final String cas;
     public final String iupacName;
+    public final String molecularFormula;
     public final double molecularWeight;
     public final double equivalentWeight;
     public final String[] elements;
 
 
-    public Compound(String name, String cas, String iupacName, double molecularWeight, double equivalentWeight, String[] elements){
+    public Compound(String name, String cas, String iupacName, String molecularFormula, double molecularWeight, double equivalentWeight, String[] elements){
     this.name = name;
     this.cas= cas;
     this.iupacName = iupacName;
+    this.molecularFormula = molecularFormula;
     this.molecularWeight = molecularWeight;
     this.equivalentWeight = equivalentWeight;
     this.elements = elements;
@@ -53,6 +55,7 @@ public class Compound {
                 "IUPAC Name: " + this.iupacName + "\n" +
                 "Molecular Weight: " + this.molecularWeight + "\n" +
                 "Equivalence Weight: " + this.equivalentWeight + "\n" +
+                "Molecular Formula: "  + this.molecularFormula + "\n" +
                 "Elements " + Arrays.toString(this.elements);
     }
 }

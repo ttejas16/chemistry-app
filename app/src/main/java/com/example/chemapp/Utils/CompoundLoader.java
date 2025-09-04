@@ -1,4 +1,4 @@
-package com.example.chemapp;
+package com.example.chemapp.Utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CompoundLoader {
-    public Map<String,Compound> loadCompoundAsMap(Context context, int jsonResourceId){
+    public Map<String, Compound> loadCompoundAsMap(Context context, int jsonResourceId){
         Map<String,Compound> compoundsMap = new HashMap<>() ;
         InputStream inputStream = null;
         BufferedReader reader = null;

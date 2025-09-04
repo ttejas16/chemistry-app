@@ -1,11 +1,11 @@
-package com.example.chemapp;
+package com.example.chemapp.Utils;
 
 import android.content.Context;
 
+import com.example.chemapp.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -107,5 +107,33 @@ public class CalculatorUtil {
 
         // Returns Required Compound Mass in MILLIGRAMS
         return result;
+    }
+
+
+    public String[] getFormattedDisplayName(){
+        String[] Keys  = compoundsMap.keySet().toArray(new String[0]);
+        return formatCompoundNameFromKeys(Keys);
+    }
+
+    public String[] getFormattedDisplayName(Element e){
+        String[] Keys = getSaltsOfElement(e);
+        return formatCompoundNameFromKeys(Keys);
+    }
+
+    private String[] formatCompoundNameFromKeys(String[] Keys){
+        if (Keys == null || compoundsMap == null) {
+            return new String[0];
+        }
+        ArrayList<String> saltNames = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+
+        for (String key : Keys){
+            Compound compound = compoundsMap.get(key);
+            if(compound == null) continue;
+            builder.append(key).append(" ").append("(").append(compound.molecularFormula).append(")");
+            saltNames.add(builder.toString());
+            builder.setLength(0);
+        }
+        return saltNames.toArray(new String[0]);
     }
 }

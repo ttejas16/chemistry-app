@@ -17,11 +17,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 
-import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 public class MeasureMolarity extends AppCompatActivity {
@@ -30,9 +30,10 @@ public class MeasureMolarity extends AppCompatActivity {
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
     final String[] molarityUnitOptions = { "M", "mM", "μM"};
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
-
+    CalculatorUtil util = CalculatorUtil.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
@@ -46,22 +47,21 @@ public class MeasureMolarity extends AppCompatActivity {
         });
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+//        InputStream is = getResources().openRawResource(R.raw.salt_data);
 
-        InputStream is = getResources().openRawResource(R.raw.salt_data);
+//        molecularMap = new HashMap<>();
+//        equivalenceMap = new HashMap<>();
+//        CSVUtils.getMaps(is, molecularMap, equivalenceMap);
 
-        molecularMap = new HashMap<>();
-        equivalenceMap = new HashMap<>();
-        CSVUtils.getMaps(is, molecularMap, equivalenceMap);
+//        String[] salts = new String[molecularMap.size()];
 
-        String[] salts = new String[molecularMap.size()];
-
-        int i = 0;
-        for(String salt: molecularMap.keySet()) {
-            salts[i++] = salt;
-        }
-
+//        int i = 0;
+//        for(String salt: molecularMap.keySet()) {
+//            salts[i++] = salt;
+//        }
+        String[] salts = util.getFormattedDisplayName();
         Arrays.sort(salts);
-        setSpinnerItems(binding.salt, salts);
+        setSpinnerItems(binding.salt,salts );
 
         binding.salt.setOnItemClickListener((parent, view, position, id) -> updateWeights(parent.getItemAtPosition(position).toString()));
 
@@ -217,18 +217,32 @@ public class MeasureMolarity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    public void updateWeights(String salt) {
+    public void updateWeights(String formattedSaltName) {
         if (binding.salt.getText().length() == 0) {
             binding.weight.setText("");
             return;
         }
+        if(formattedSaltName == null || formattedSaltName.equals("")){
+            binding.weight.setText("");
+            return;
+        }
+        String saltName = formattedSaltName;
+        int splitIndex = formattedSaltName.lastIndexOf(" (");
+        if(splitIndex != -1){
+            saltName = formattedSaltName.substring(0,splitIndex).trim();
+        }
 
         int solutionType = binding.solutionType.getSelectedItemPosition();
+        Compound  compound = util.getCompoundsMap().get(saltName);
+        if (compound == null){
+            return;
+        }
         if (solutionType == 0) {
-            binding.weight.setText(molecularMap.get(salt));
+
+            binding.weight.setText(String.valueOf(compound.molecularWeight));
         }
         else  {
-            binding.weight.setText(equivalenceMap.get(salt));
+            binding.weight.setText(String.valueOf(compound.equivalentWeight));
         }
     }
 

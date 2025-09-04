@@ -2,7 +2,6 @@ package com.example.chemapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -11,9 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.databinding.ActivityMainBinding;
-
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
 //        compoundsMap = compoundLoader.loadCompoundAsMap(this, R.raw.compound_data);
 //        ElementMapLoader elementMapLoader = new ElementMapLoader();
 //        elementsMap = elementMapLoader.loadElementAsMap(this,R.raw.element_data);
+        //TESTING THE FUNCTIONALITY OF THE PP CALCULATOR AND ELEMENT WISE CALCULATOR FUNCTIONALITY
         /*
         for(Map.Entry<String,Compound> entry: compoundsMap.entrySet()){
             String compoundName = entry.getKey();
@@ -75,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Element data  ","No: "+ ++count + " "+elementData.toString());
         }
         */
-        //TESTING THE FUNCTIONALITY OF THE PP CALCULATOR AND ELEMENT WISE CALCULATOR FUNCTIONALITY
 //        try{
 //
 //            Log.d("Result","HELLOO"+calculateRequiredCompoundMassForElementConcentration("Ca","calcium hydrogen phosphate",20,500,1));
@@ -87,5 +85,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         CalculatorUtil.init(this);
+
     }
 }

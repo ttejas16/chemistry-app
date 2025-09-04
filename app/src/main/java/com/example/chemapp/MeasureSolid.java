@@ -14,6 +14,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.Element;
 import com.example.chemapp.databinding.MeasureSolidBinding;
 
 public class MeasureSolid extends AppCompatActivity {
@@ -49,16 +51,21 @@ public class MeasureSolid extends AppCompatActivity {
                 binding.salt.setText("");
 
                 Element element = util.getElementsMap().get(selectedElement);
-                String[] elementSalts = util.getSaltsOfElement(element);
+                String[] elementSalts = util.getFormattedDisplayName(element);
                 setSpinnerItems(binding.salt, elementSalts);
             }
         });
 
         binding.calculate.setOnClickListener(v -> {
             String element = binding.element.getText().toString();
-            String salt = binding.salt.getText().toString();
-            if (element.isEmpty() || salt.isEmpty()) {
+            String formattedSaltName = binding.salt.getText().toString();
+            if (element.isEmpty() || formattedSaltName.isEmpty()) {
                 return;
+            }
+            String salt = formattedSaltName;
+            int splitIndex = formattedSaltName.lastIndexOf(" (");
+            if(splitIndex != -1){
+                salt = formattedSaltName.substring(0,splitIndex).trim();
             }
 
             if (!util.getElementsMap().containsKey(element) ||
