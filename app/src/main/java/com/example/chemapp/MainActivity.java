@@ -1,10 +1,15 @@
 package com.example.chemapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioGroup;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -12,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.databinding.ActivityMainBinding;
+import com.google.android.material.appbar.MaterialToolbar;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,60 +37,61 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        binding.btn.setOnClickListener(new View.OnClickListener() {
+
+        setSupportActionBar(binding.toolbar);
+
+        binding.toolbar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MeasureMolarity.class);
-                startActivity(intent);
+            public boolean onMenuItemClick(MenuItem item) {
+                return true;
             }
         });
 
-        binding.btn2.setOnClickListener(new View.OnClickListener() {
+        binding.featureSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MeasureMass.class);
-                startActivity(intent);
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (binding.solidrb.isChecked()) {
+                    binding.solid.setVisibility(View.VISIBLE);
+                    binding.liquid.setVisibility(View.GONE);
+                }
+                else if (binding.liquidrb.isChecked()) {
+                    binding.solid.setVisibility(View.GONE);
+                    binding.liquid.setVisibility(View.VISIBLE);
+                }
             }
         });
 
-        binding.btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MeasureSolid.class);
-                startActivity(intent);
-            }
+        binding.measureMolarity.setOnClickListener(v -> {
+            startNewActivity(MeasureMolarity.class);
         });
-        /// TEMP CODE TO CHECK LOADING OF JSON IN MAP
-//        CompoundLoader compoundLoader = new CompoundLoader();
-//        compoundsMap = compoundLoader.loadCompoundAsMap(this, R.raw.compound_data);
-//        ElementMapLoader elementMapLoader = new ElementMapLoader();
-//        elementsMap = elementMapLoader.loadElementAsMap(this,R.raw.element_data);
-        //TESTING THE FUNCTIONALITY OF THE PP CALCULATOR AND ELEMENT WISE CALCULATOR FUNCTIONALITY
-        /*
-        for(Map.Entry<String,Compound> entry: compoundsMap.entrySet()){
-            String compoundName = entry.getKey();
-            Compound compoundData = entry.getValue();
 
-            Log.d("Compound data ",compoundData.toString());
-        }
-        int count =0;
-        for(Map.Entry<String,Element> entry: elementsMap.entrySet()){
-            String elementName = entry.getKey();
-            Element elementData = entry.getValue();
-            Log.d("Element data  ","No: "+ ++count + " "+elementData.toString());
-        }
-        */
-//        try{
-//
-//            Log.d("Result","HELLOO"+calculateRequiredCompoundMassForElementConcentration("Ca","calcium hydrogen phosphate",20,500,1));
-//            Log.d("Result","HELLOO"+calculateRequiredCompoundMassForElementConcentration("Na","magnesium disodium edta",20,500,1));
-//
-//        }catch (Exception e){
-//            Log.d("Exception", ""+e);
-//        }
+        binding.measurePpm.setOnClickListener(v -> {
+            startNewActivity(MeasureMass.class);
+        });
+
+        binding.measureElement.setOnClickListener(v -> {
+            startNewActivity(MeasureSolid.class);
+        });
 
 
         CalculatorUtil.init(this);
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void startNewActivity(Class<?> cls){
+        Intent intent = new Intent(getApplicationContext(), cls);
+        startActivity(intent);
+    }
+
 }

@@ -1,60 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
+    <com.google.android.material.appbar.MaterialToolbar
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/primary"
+        app:navigationIcon="@drawable/settings"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:navigationIconTint="@color/md_theme_primary"
+        />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn1"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="25dp"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Measure Solid From Liquid"
-        app:icon="@drawable/flask_conical"
-        app:iconSize="20dp"
-        app:iconTint="@color/white"
-        app:iconGravity="start"
-        app:cornerRadius="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="5dp"
-        android:textAlignment="viewStart"
-        android:textSize="15sp"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn2"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Measure Liquid From Liquid"
-        app:icon="@drawable/test_tube_diagonal"
-        app:iconSize="20dp"
-        app:iconTint="@color/white"
-        app:iconGravity="start"
-        app:cornerRadius="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="5dp"
-        android:textAlignment="viewStart"
-        android:textSize="15sp"/>
-    <com.google.android.material.button.MaterialButton
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Molarity Calculator"
-        app:icon="@drawable/calculator"
-        app:iconSize="20dp"
-        app:iconTint="@color/white"
-        app:iconGravity="start"
-        app:cornerRadius="15dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="5dp"
-        android:textAlignment="viewStart"
-        android:textSize="15sp"
-        android:id="@+id/btn"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/onboarding"
+            android:elevation="4dp"
+            android:background="@drawable/title_bg"
+            android:layout_margin="40dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/primary"
+                android:drawablePadding="15dp"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:paddingVertical="15dp"
+                android:paddingStart="20dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="What are you starting with?"
+                app:drawableStartCompat="@drawable/asterisk"
+                app:drawableTint="@color/primary" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RadioGroup
+                android:id="@+id/feature_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="15dp">
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/solidrb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Solid"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="15sp"/>
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/liquidrb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Liquid"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="15sp"/>
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/solid"
+            android:elevation="4dp"
+            android:background="@drawable/title_bg"
+            android:layout_margin="40dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@+id/onboarding"
+            app:layout_constraintTop_toBottomOf="@id/onboarding"
+            app:layout_constraintVertical_bias="0.35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/primary"
+                android:drawablePadding="15dp"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:paddingVertical="15dp"
+                android:paddingStart="20dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="How do you want to measure it?"
+                app:drawableStartCompat="@drawable/asterisk"
+                app:drawableTint="@color/primary" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Measure using molarity/normality"
+                    android:textAllCaps="false"
+                    android:textAlignment="viewStart"
+                    app:iconPadding="15dp"
+                    app:icon="@drawable/percent"
+                    android:letterSpacing="0"
+                    android:id="@+id/measureMolarity"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Measure using ppm/ppb/ppt"
+                    android:textAlignment="viewStart"
+                    app:iconPadding="15dp"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/droplet"
+                    android:letterSpacing="0"
+                    android:id="@+id/measurePpm"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewStart"
+                    app:iconPadding="15dp"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Measure element from compounds"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/atom"
+                    android:letterSpacing="0"
+                    android:id="@+id/measureElement"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/liquid"
+            android:elevation="4dp"
+            android:background="@drawable/title_bg"
+            android:layout_margin="40dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@+id/onboarding"
+            app:layout_constraintTop_toBottomOf="@id/onboarding"
+            app:layout_constraintVertical_bias="0.35"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="@color/primary"
+                android:drawablePadding="15dp"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:paddingVertical="15dp"
+                android:paddingStart="20dp"
+                android:textSize="18sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Stock Dilution"
+                app:drawableStartCompat="@drawable/asterisk"
+                app:drawableTint="@color/primary" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:text="Dilute a solution"
+                    android:textAllCaps="false"
+                    android:textAlignment="viewStart"
+                    app:iconPadding="15dp"
+                    app:icon="@drawable/flask_conical"
+                    android:letterSpacing="0"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Checked state: rounded rect border -->
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="2dp" android:color="@color/md_theme_primary"/>
+            <corners android:radius="8dp"/>
+            <padding android:left="8dp" android:top="6dp" android:right="8dp" android:bottom="6dp"/>
+        </shape>
+    </item>
+
+    <!-- Default: transparent / no border -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+            <stroke android:width="2dp" android:color="@color/primaryLight"/>
+            <corners android:radius="8dp"/>
+            <padding android:left="8dp" android:top="6dp" android:right="8dp" android:bottom="6dp"/>
+        </shape>
+    </item>
+</selector>
