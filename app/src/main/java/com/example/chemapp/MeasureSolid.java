@@ -59,10 +59,13 @@ public class MeasureSolid extends AppCompatActivity {
         binding.calculate.setOnClickListener(v -> {
             String element = binding.element.getText().toString();
             String formattedSaltName = binding.salt.getText().toString();
+
             if (element.isEmpty() || formattedSaltName.isEmpty()) {
                 return;
             }
+
             String salt = formattedSaltName;
+
             int splitIndex = formattedSaltName.lastIndexOf(" (");
             if(splitIndex != -1){
                 salt = formattedSaltName.substring(0,splitIndex).trim();
@@ -84,12 +87,9 @@ public class MeasureSolid extends AppCompatActivity {
                 return;
             }
 
-
             double[] sizes = new double[]{volume};
 
-
             int concentrationUnit = binding.concentrationUnit.getSelectedItemPosition() + 1;
-
 
             String[][] data = new String[2][2];
             data[0][0] = "For Volume (mL)";
