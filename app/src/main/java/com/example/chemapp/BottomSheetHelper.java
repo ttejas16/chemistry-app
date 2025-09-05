@@ -82,13 +82,6 @@ public class BottomSheetHelper {
         container.addView(view);
         container.addView(table);
 
-        MaterialButton button = contentView.findViewById(R.id.closeSheet);
-        button.setOnClickListener(v -> {
-            bottomSheetDialog.dismiss();
-        });
-
-
-        // Show the dialog
         bottomSheetDialog.show();
         return bottomSheetDialog;
     }
