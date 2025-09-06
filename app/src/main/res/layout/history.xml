@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".History"
+    android:id="@+id/main">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:title="History"
+        app:titleTextColor="@color/primary"
+        app:navigationIcon="@drawable/arrow_left"
+        app:navigationIconTint="@color/primary"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleCentered="true"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        app:layout_constraintStart_toStartOf="@id/navigation"
+        app:layout_constraintTop_toBottomOf="@id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <LinearLayout
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="@id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/title_bg"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textColor="#85193C"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:text="Measure Fe in FeCl3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/atom"
+                android:drawablePadding="10dp"
+                android:drawableTint="#85193C"
+                />
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="100ppm of Fe from FeCl3\nvolume 250mL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/title_bg"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#E67514"
+                android:text="Measure NaCl molrity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/percent"
+                android:drawablePadding="10dp"
+                android:drawableTint="#E67514"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="2M of Sodium chloride in 250mL\n2M of Sodium chloride in 100mL\n2M of Sodium chloride in 150mL\n2M of Sodium chloride in 50mL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/title_bg"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#00809D"
+                android:text="Measure trace concentration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/droplet"
+                android:drawablePadding="10dp"
+                android:drawableTint="#00809D" />
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="100ppm in 1500mL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_margin="5dp"
+            android:paddingVertical="18dp"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/title_bg"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#732255"
+                android:text="Stock Dilution"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/flask_conical"
+                android:drawablePadding="10dp"
+                android:drawableTint="#732255"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="Dilute 1000ppb to 200ppb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

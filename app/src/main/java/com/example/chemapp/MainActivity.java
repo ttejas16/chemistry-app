@@ -40,13 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        binding.toolbar.setOnMenuItemClickListener(new MaterialToolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return true;
-            }
-        });
-
         binding.featureSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -86,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (R.id.history == item.getItemId()) {
+            startNewActivity(History.class);
+        }
+        else if(R.id.bookmarks == item.getItemId()) {
+//            startNewActivity(History);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
