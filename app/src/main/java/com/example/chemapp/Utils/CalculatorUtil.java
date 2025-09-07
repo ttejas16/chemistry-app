@@ -200,4 +200,44 @@ public class CalculatorUtil {
         }
     }
 
+    public double getDilutionResultFrom(
+            double stockConcentration, int stockConcentrationUnit,
+            double reqConcentration, int reqConcentrationUnit,
+            double volumeInMillilitres
+    ) {
+        // stockC * stockV = reqC * reqV;
+        // stockV = (reqC * reqV) / stockC ;
+
+        // concentration will be normalized so
+        // always convert concentration values to ppm or M
+
+        double normalizedStockConcentration = getNormalizedConcentration(stockConcentration, stockConcentrationUnit);
+        double normalizedReqConcentration = getNormalizedConcentration(reqConcentration, reqConcentrationUnit);
+
+        return (normalizedReqConcentration * volumeInMillilitres) / normalizedStockConcentration;
+    }
+
+    private double getNormalizedConcentration(double c, int unit){
+        /*
+        * 1 for PPM
+        * 2 for PPB
+        * 3 for PPT
+        * 4 for M
+        * 5 for mM
+        * 6 for uM
+        */
+        switch (unit) {
+            case 1:
+                return c;
+
+            case 2:
+                return c / 1000;
+
+            case 3:
+                return c / 1000000;
+
+            default:
+                return c;
+        }
+    }
 }

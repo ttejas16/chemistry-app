@@ -42,6 +42,7 @@ public class MeasureDilution extends AppCompatActivity {
             return insets;
         });
 
+        CalculatorUtil util = CalculatorUtil.getInstance();
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
@@ -75,6 +76,58 @@ public class MeasureDilution extends AppCompatActivity {
 
 
         setSpinnerItems(binding.requiredConcentrationUnit, concentrationByPartsUnits);
+
+
+        binding.calculate.setOnClickListener(v -> {
+            String stockConcentrationString = binding.stockConcentration.getText().toString();
+            String reqConcentrationString = binding.requiredConcentration.getText().toString();
+            String volumeString = binding.volume.getText().toString();
+
+            String stockUnitString = binding.stockConcentrationUnit.getSelectedItem().toString();
+            String reqUnitString = binding.requiredConcentrationUnit.getSelectedItem().toString();
+
+            if (stockConcentrationString.isEmpty() ||
+                reqConcentrationString.isEmpty() ||
+                volumeString.isEmpty()) {
+                return;
+            }
+
+            int stockUnit = (binding.stockConcentrationUnit.getSelectedItemPosition() % 3) + 1;
+            int reqUnit = binding.requiredConcentrationUnit.getSelectedItemPosition() + 1;
+
+            try {
+                double stockConcentration = Double.parseDouble(stockConcentrationString);
+                double reqConcentration = Double.parseDouble(reqConcentrationString);
+                double volume = Double.parseDouble(volumeString);
+
+                double result = util.getDilutionResultFrom(
+                        stockConcentration, stockUnit,
+                        reqConcentration, reqUnit,
+                        volume
+                );
+
+                String title = "To measure " + reqConcentrationString + reqUnitString + " from " + stockConcentrationString + stockUnitString;
+
+                String[][] data = new String[2][2];
+                data[0][0] = "Req stock volume (mL)";
+                data[0][1] = "Req solvent volume (mL)";
+
+                data[1][0] = String.valueOf(result);
+                data[1][1] = String.valueOf(volume - result);
+
+
+                BottomSheetHelper.showExpandableBottomSheet(
+                        MeasureDilution.this,
+                        R.layout.sheet_layout,
+                        title,
+                        data
+                );
+
+            } catch (NumberFormatException e) {
+                Toast.makeText(getApplicationContext(), "Invalid inputs", Toast.LENGTH_SHORT).show();
+            }
+
+        });
     }
 
     public void setSpinnerItems(Spinner spinner, String[] options){
