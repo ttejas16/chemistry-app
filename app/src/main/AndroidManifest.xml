@@ -34,6 +34,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".MeasureDilution"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".History"
             android:exported="false">
         </activity>

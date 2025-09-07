@@ -30,119 +30,14 @@
         android:layout_height="wrap_content"
         />
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyRecyclerView"
         android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintStart_toStartOf="@id/divider"
-        app:layout_constraintTop_toBottomOf="@id/divider"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:paddingVertical="18dp"
-            android:paddingHorizontal="20dp"
-            android:background="@drawable/title_bg"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textColor="#85193C"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:text="Measure Fe in FeCl3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/atom"
-                android:drawablePadding="10dp"
-                android:drawableTint="#85193C"
-                />
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="100ppm of Fe from FeCl3\nvolume 250mL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:paddingVertical="18dp"
-            android:paddingHorizontal="20dp"
-            android:background="@drawable/title_bg"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="#E67514"
-                android:text="Measure NaCl molrity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/percent"
-                android:drawablePadding="10dp"
-                android:drawableTint="#E67514"/>
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="2M of Sodium chloride in 250mL\n2M of Sodium chloride in 100mL\n2M of Sodium chloride in 150mL\n2M of Sodium chloride in 50mL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:paddingVertical="18dp"
-            android:paddingHorizontal="20dp"
-            android:background="@drawable/title_bg"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="#00809D"
-                android:text="Measure trace concentration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/droplet"
-                android:drawablePadding="10dp"
-                android:drawableTint="#00809D" />
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="100ppm in 1500mL"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_margin="5dp"
-            android:paddingVertical="18dp"
-            android:paddingHorizontal="20dp"
-            android:background="@drawable/title_bg"
-            android:elevation="4dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="#732255"
-                android:text="Stock Dilution"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/flask_conical"
-                android:drawablePadding="10dp"
-                android:drawableTint="#732255"/>
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="Dilute 1000ppb to 200ppb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -202,6 +202,7 @@
                     app:iconPadding="15dp"
                     app:icon="@drawable/flask_conical"
                     android:letterSpacing="0"
+                    android:id="@+id/measureDilution"
                     />
             </LinearLayout>
 

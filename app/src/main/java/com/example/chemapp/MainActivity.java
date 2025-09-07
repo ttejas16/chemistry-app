@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
             startNewActivity(MeasureSolid.class);
         });
 
+        binding.measureDilution.setOnClickListener(v -> {
+            startNewActivity(MeasureDilution.class);
+        });
+
 
         CalculatorUtil.init(this);
 
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             startNewActivity(History.class);
         }
         else if(R.id.bookmarks == item.getItemId()) {
-//            startNewActivity(History);
+            startNewActivity(Bookmarks.class);
         }
 
         return super.onOptionsItemSelected(item);
