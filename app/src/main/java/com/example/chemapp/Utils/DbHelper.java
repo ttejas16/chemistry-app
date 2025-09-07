@@ -99,34 +99,43 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(historyCreateQ);
 
     }
-    public boolean addHistory(String title, int type, String description)throws  Exception{
+    public boolean addHistory(String title, int type, String description) throws  Exception {
         if(title == null || title.isEmpty() || description == null || description.isEmpty()  ){
             throw new IllegalArgumentException("No Title or Description");
         }
+
         if(type < 1 || type > 4){
             throw new IllegalArgumentException("Invalid Type");
         }
+
         SQLiteDatabase db  = this.getWritableDatabase();
         boolean success = false;
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE,title);
         values.put(COLUMN_TYPE,type);
         values.put(COLUMN_DESCRIPTION,description);
+
         db.beginTransaction();
 
         try{
+            long id = db.insert(TABLE_HISTORY, null, values);
+//            Log.d("inserted id", id + "");
 
-            if( db.insert(TABLE_HISTORY, null, values) == -1) return false;
+            if (id == -1) return false;
+
             String trimQuery = "DELETE FROM " + TABLE_HISTORY + " WHERE " + COLUMN_HISTORY_ID +
-                    "NOT IN  (SELECT "+ COLUMN_HISTORY_ID + " FROM " + TABLE_HISTORY + " ORDER BY " + COLUMN_HISTORY_ID + " DESC LIMIT 10)";
+                    " NOT IN  (SELECT "+ COLUMN_HISTORY_ID + " FROM " + TABLE_HISTORY + " ORDER BY " + COLUMN_HISTORY_ID + " DESC LIMIT 10)";
             db.execSQL(trimQuery);
             success = true;
+            db.setTransactionSuccessful();
+
         } catch (Exception e) {
             Log.d("DbHelper", "Error while trying to add history to database", e);
         }finally {
             db.endTransaction();
-
         }
+
         return success;
     }
 
@@ -140,8 +149,10 @@ public class DbHelper extends SQLiteOpenHelper {
             while(cursor.moveToNext()){
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_HISTORY_ID));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
+
                 int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+
                 historyList.add(new CalculationRecord(id, title, type, description));
             }
        } catch (Exception e) {
@@ -150,6 +161,8 @@ public class DbHelper extends SQLiteOpenHelper {
            if (cursor != null) cursor.close();
 
        }
+
+//       Log.d("history list", historyList.toString());
        return historyList;
     }
     public boolean clearHistory(){

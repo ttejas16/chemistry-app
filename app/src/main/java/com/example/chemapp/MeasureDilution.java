@@ -13,7 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureDilutionBinding;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -46,6 +48,7 @@ public class MeasureDilution extends AppCompatActivity {
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        DbHelper db = DbHelper.getInstance(MeasureDilution.this);
 
         String[] unitsConcatenated = Stream
                 .concat(Arrays.stream(concentrationByPartsUnits), Arrays.stream(concentrationByMoleUnits))
@@ -106,7 +109,10 @@ public class MeasureDilution extends AppCompatActivity {
                         volume
                 );
 
-                String title = "To measure " + reqConcentrationString + reqUnitString + " from " + stockConcentrationString + stockUnitString;
+                String title = getResultTitle(
+                        reqConcentrationString, reqUnitString,
+                        stockConcentrationString, stockUnitString
+                );
 
                 String[][] data = new String[2][2];
                 data[0][0] = "Req stock volume (mL)";
@@ -116,11 +122,26 @@ public class MeasureDilution extends AppCompatActivity {
                 data[1][1] = String.valueOf(volume - result);
 
 
+                String description = getDescription(data);
+
+                try {
+                    boolean res = db.addHistory(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
+                } catch (Exception e) {
+
+                }
+
                 BottomSheetHelper.showExpandableBottomSheet(
                         MeasureDilution.this,
                         R.layout.sheet_layout,
                         title,
-                        data
+                        data,
+                        () -> {
+                            try {
+                                db.addBookmark(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
+                            } catch (Exception e) {
+
+                            }
+                        }
                 );
 
             } catch (NumberFormatException e) {
@@ -128,6 +149,30 @@ public class MeasureDilution extends AppCompatActivity {
             }
 
         });
+    }
+
+    public String getDescription(String[][] data){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0;i < data.length;i++) {
+            builder.append(data[i][0]).append("\t").append(data[i][1]);
+
+            if (i != data.length - 1) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
+    }
+    private String getResultTitle(String reqConc, String reqUnit, String stockConc, String stockUnit) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("To measure ");
+        builder.append(reqConc + reqUnit);
+        builder.append(" from ");
+        builder.append(stockConc + stockUnit);
+        builder.append(" stock solution");
+
+        return builder.toString();
     }
 
     public void setSpinnerItems(Spinner spinner, String[] options){

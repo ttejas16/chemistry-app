@@ -16,11 +16,11 @@ import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<HistoryItem> historyItemList;
+    private List<CalculationRecord> historyItemList;
     private AdapterView.OnItemClickListener listener;
 
 
-    public HistoryAdapter(List<HistoryItem> historyItemList) {
+    public HistoryAdapter(List<CalculationRecord> historyItemList) {
         this.historyItemList = historyItemList;
     }
 
@@ -38,25 +38,25 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         switch (viewType) {
-            case HistoryItem.ELEMENT_HISTORY_ITEM: {
+            case CalculationRecord.ELEMENT_HISTORY_ITEM: {
                 View view = LayoutInflater.from(parent.getContext()).
                         inflate(R.layout.element_history_item, parent, false);
                 return new ElementHistoryItemHolder(view);
             }
 
-            case HistoryItem.MOLARITY_HISTORY_ITEM: {
+            case CalculationRecord.MOLARITY_HISTORY_ITEM: {
                 View view = LayoutInflater.from(parent.getContext()).
                         inflate(R.layout.molarity_history_item, parent, false);
                 return new MolarityHistoryItemHolder(view);
             }
 
-            case HistoryItem.PPM_HISTORY_ITEM: {
+            case CalculationRecord.PPM_HISTORY_ITEM: {
                 View view = LayoutInflater.from(parent.getContext()).
                         inflate(R.layout.ppm_history_item, parent, false);
                 return new PpmHistoryItemHolder(view);
             }
 
-            case HistoryItem.DILUTION_HISTORY_ITEM: {
+            case CalculationRecord.DILUTION_HISTORY_ITEM: {
                 View view = LayoutInflater.from(parent.getContext()).
                         inflate(R.layout.dilution_history_item, parent, false);
                 return new DilutionHistoryItemHolder(view);
@@ -72,20 +72,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HistoryItem item = historyItemList.get(position);
+        CalculationRecord item = historyItemList.get(position);
         int type = item.getType();
 
         switch (type) {
-            case HistoryItem.ELEMENT_HISTORY_ITEM:
+            case CalculationRecord.ELEMENT_HISTORY_ITEM:
                 ((ElementHistoryItemHolder) holder).bind(item);
                 break;
-            case HistoryItem.MOLARITY_HISTORY_ITEM:
+            case CalculationRecord.MOLARITY_HISTORY_ITEM:
                 ((MolarityHistoryItemHolder) holder).bind(item);
                 break;
-            case HistoryItem.PPM_HISTORY_ITEM:
+            case CalculationRecord.PPM_HISTORY_ITEM:
                 ((PpmHistoryItemHolder) holder).bind(item);
                 break;
-            case HistoryItem.DILUTION_HISTORY_ITEM:
+            case CalculationRecord.DILUTION_HISTORY_ITEM:
                 ((DilutionHistoryItemHolder) holder).bind(item);
                 break;
         }
@@ -109,7 +109,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(itemView.getContext(), "type 1 clicked", Toast.LENGTH_SHORT).show();
             });
         }
-        void bind(HistoryItem item) {
+        void bind(CalculationRecord item) {
             title.setText(item.getTitle());
             description.setText(item.getDescription());
         }
@@ -126,7 +126,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(itemView.getContext(), "type 2 clicked", Toast.LENGTH_SHORT).show();
             });
         }
-        void bind(HistoryItem item) {
+        void bind(CalculationRecord item) {
             title.setText(item.getTitle());
             description.setText(item.getDescription());
         }
@@ -143,7 +143,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(itemView.getContext(), "type 3 clicked", Toast.LENGTH_SHORT).show();
             });
         }
-        void bind(HistoryItem item) {
+        void bind(CalculationRecord item) {
             title.setText(item.getTitle());
             description.setText(item.getDescription());
         }
@@ -160,7 +160,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Toast.makeText(itemView.getContext(), "type 4 clicked", Toast.LENGTH_SHORT).show();
             });
         }
-        void bind(HistoryItem item) {
+        void bind(CalculationRecord item) {
             title.setText(item.getTitle());
             description.setText(item.getDescription());
         }

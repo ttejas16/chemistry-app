@@ -24,13 +24,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 
 public class BottomSheetHelper {
-    public interface OnDismissListener {
-        void onDismiss();
+    public interface OnAddBookMarkClickListener {
+        void onClick();
     }
 
     public static BottomSheetDialog showExpandableBottomSheet(
             @NonNull Context context,
-            @NonNull View contentView, String title, String[][] data) {
+            @NonNull View contentView, String title, String[][] data,
+            OnAddBookMarkClickListener listener) {
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
 
@@ -82,6 +83,13 @@ public class BottomSheetHelper {
         container.addView(view);
         container.addView(table);
 
+        MaterialButton addBookmarkButton = contentView.findViewById(R.id.addBookmark);
+        addBookmarkButton.setOnClickListener(v -> {
+            listener.onClick();
+            addBookmarkButton.setEnabled(false);
+            addBookmarkButton.setText("Added to bookmarks!");
+        });
+
         bottomSheetDialog.show();
         return bottomSheetDialog;
     }
@@ -89,11 +97,11 @@ public class BottomSheetHelper {
 
     public static BottomSheetDialog showExpandableBottomSheet(
             @NonNull Context context,
-            @LayoutRes int layoutResId, String title, String[][] data) {
+            @LayoutRes int layoutResId, String title, String[][] data, OnAddBookMarkClickListener listener) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(layoutResId, null);
-        return showExpandableBottomSheet(context, contentView, title, data);
+        return showExpandableBottomSheet(context, contentView, title, data, listener);
     }
 
     private static View getTable(Context context, String[][] data){

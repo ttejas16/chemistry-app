@@ -17,8 +17,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
+import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 
 import java.util.Arrays;
@@ -46,6 +48,8 @@ public class MeasureMolarity extends AppCompatActivity {
         });
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
 
         String[] salts = util.getFormattedDisplayName();
         Arrays.sort(salts);
@@ -128,11 +132,27 @@ public class MeasureMolarity extends AppCompatActivity {
                     j++;
                 }
 
+                String title = getResultTitle();
+                String description = getDescription(data);
+
+                try {
+                    boolean res = db.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                } catch (Exception e) {
+
+                }
+
                 BottomSheetHelper.showExpandableBottomSheet(
                         MeasureMolarity.this,
                         R.layout.sheet_layout,
                         getResultTitle(),
-                        data
+                        data,
+                        () -> {
+                            try {
+                                db.addBookmark(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                            } catch (Exception e) {
+
+                            }
+                        }
                 );
 
             } catch (NumberFormatException e) {
@@ -140,6 +160,20 @@ public class MeasureMolarity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public String getDescription(String[][] data){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0;i < data.length;i++) {
+            builder.append(data[i][0]).append("\t").append(data[i][1]);
+
+            if (i != data.length - 1) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
     }
 
     public String getResultTitle(){

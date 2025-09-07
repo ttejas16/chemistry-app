@@ -14,7 +14,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
 import com.example.chemapp.databinding.MeasureSolidBinding;
 
@@ -37,6 +39,8 @@ public class MeasureSolid extends AppCompatActivity {
         });
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
+
+        DbHelper db = DbHelper.getInstance(MeasureSolid.this);
 
         CalculatorUtil util = CalculatorUtil.getInstance();
         String[] elements = util.getElementsMap().keySet().toArray(new String[0]);
@@ -116,7 +120,28 @@ public class MeasureSolid extends AppCompatActivity {
                 i++;
             }
 
-            BottomSheetHelper.showExpandableBottomSheet(MeasureSolid.this, R.layout.sheet_layout,getResultTitle(),data);
+            String title = getResultTitle();
+            String description = getDescription(data);
+
+            try {
+                boolean res = db.addHistory(title, CalculationRecord.ELEMENT_HISTORY_ITEM, description);
+            } catch (Exception e) {
+
+            }
+
+            BottomSheetHelper.showExpandableBottomSheet(
+                    MeasureSolid.this,
+                    R.layout.sheet_layout,
+                    title,
+                    data,
+                    () -> {
+                        try {
+                            db.addBookmark(title, CalculationRecord.ELEMENT_HISTORY_ITEM, description);
+                        } catch (Exception e) {
+
+                        }
+                    }
+            );
         });
 
     }
@@ -151,6 +176,19 @@ public class MeasureSolid extends AppCompatActivity {
 
         builder.append("To make " + cValue + cUnit + " of " + element + "\n");
         builder.append("using " + salt);
+        return builder.toString();
+    }
+    public String getDescription(String[][] data){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0;i < data.length;i++) {
+            builder.append(data[i][0]).append("\t").append(data[i][1]);
+
+            if (i != data.length - 1) {
+                builder.append("\n");
+            }
+        }
+
         return builder.toString();
     }
 }

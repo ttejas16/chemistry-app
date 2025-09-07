@@ -1,6 +1,7 @@
 package com.example.chemapp;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chemapp.Utils.CalculationRecord;
+import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.HistoryAdapter;
 import com.example.chemapp.Utils.HistoryItem;
 import com.example.chemapp.databinding.BookmarksBinding;
@@ -21,6 +24,14 @@ import java.util.List;
 
 public class Bookmarks extends AppCompatActivity {
     private BookmarksBinding binding;
+
+    private HistoryAdapter adapter;
+
+    private final RecyclerView.AdapterDataObserver emptyObserver = new RecyclerView.AdapterDataObserver() {
+        @Override public void onChanged() { checkIfEmpty(); }
+        @Override public void onItemRangeInserted(int positionStart, int itemCount) { checkIfEmpty(); }
+        @Override public void onItemRangeRemoved(int positionStart, int itemCount) { checkIfEmpty(); }
+    };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,16 +48,31 @@ public class Bookmarks extends AppCompatActivity {
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        List<HistoryItem> items = new ArrayList<>();
+        DbHelper db = DbHelper.getInstance(getApplicationContext());
+        List<CalculationRecord> items = db.getBookmarks();
 
-        for (int i = 0;i < 4;i++) {
-            HistoryItem historyItem = new HistoryItem(i, i + 1, "Item Title", "Item description");
-            items.add(historyItem);
-        }
+        adapter = new HistoryAdapter(items);
+        adapter.registerAdapterDataObserver(emptyObserver);
+
 
         RecyclerView recyclerView = findViewById(R.id.historyRecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new HistoryAdapter(items));
+        recyclerView.setAdapter(adapter);
+
+        checkIfEmpty();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // unregister observer to avoid leaks
+        adapter.unregisterAdapterDataObserver(emptyObserver);
+    }
+
+    private void checkIfEmpty(){
+        boolean isEmpty = adapter.getItemCount() == 0;
+        binding.historyRecyclerView.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
+        binding.emptyView.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 }

@@ -11,7 +11,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureMassBinding;
 
 
@@ -37,6 +39,7 @@ public class MeasureMass extends AppCompatActivity {
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
 
         CalculatorUtil util = CalculatorUtil.getInstance();
+        DbHelper db = DbHelper.getInstance(MeasureMass.this);
 
         binding.calculate.setOnClickListener(v -> {
             String concentrationString = binding.concentration.getText().toString();
@@ -68,11 +71,26 @@ public class MeasureMass extends AppCompatActivity {
                 data[1][1] = String.valueOf(result);
 
 
+                String description = getDescription(data);
+
+                try {
+                    boolean res = db.addHistory(title, CalculationRecord.PPM_HISTORY_ITEM, description);
+                } catch (Exception e) {
+
+                }
+
                 BottomSheetHelper.showExpandableBottomSheet(
                         MeasureMass.this,
                         R.layout.sheet_layout,
                         title,
-                        data
+                        data,
+                        () -> {
+                            try {
+                                db.addBookmark(title, CalculationRecord.PPM_HISTORY_ITEM, description);
+                            } catch (Exception e) {
+
+                            }
+                        }
                 );
 
 
@@ -82,6 +100,19 @@ public class MeasureMass extends AppCompatActivity {
         });
     }
 
+    public String getDescription(String[][] data){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 0;i < data.length;i++) {
+            builder.append(data[i][0]).append("\t").append(data[i][1]);
+
+            if (i != data.length - 1) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
+    }
     public void setSpinnerItems(Spinner spinner, String[] options){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
