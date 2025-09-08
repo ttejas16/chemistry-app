@@ -1,6 +1,9 @@
 package com.example.chemapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -9,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,9 +24,13 @@ import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
 import com.example.chemapp.databinding.MeasureSolidBinding;
 
+import java.util.Arrays;
+
 public class MeasureSolid extends AppCompatActivity {
     private MeasureSolidBinding binding;
     private final String[] concentrationUnits = {"ppm", "ppb", "ppt"};
+
+    CalculatorUtil util;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +46,12 @@ public class MeasureSolid extends AppCompatActivity {
             return insets;
         });
 
+        setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         DbHelper db = DbHelper.getInstance(MeasureSolid.this);
 
-        CalculatorUtil util = CalculatorUtil.getInstance();
+        util = CalculatorUtil.getInstance();
         String[] elements = util.getElementsMap().keySet().toArray(new String[0]);
         setSpinnerItems(binding.element, elements);
 
@@ -145,6 +154,41 @@ public class MeasureSolid extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String selectedElement = binding.element.getText().toString();
+
+        if (!selectedElement.isEmpty() && util.getElementsMap().containsKey(selectedElement)) {
+            binding.salt.setText("");
+
+            Element element = util.getElementsMap().get(selectedElement);
+
+            String[] salts = util.getFormattedDisplayName(element);
+            setSpinnerItems(binding.salt, salts);
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.measure_molarity_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.plusItem) {
+            Intent intent = new Intent(MeasureSolid.this, AddCompound.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void setSpinnerItems(AutoCompleteTextView spinner, String[] options){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,

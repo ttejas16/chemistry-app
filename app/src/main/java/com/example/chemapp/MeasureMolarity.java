@@ -166,6 +166,17 @@ public class MeasureMolarity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String[] salts = util.getFormattedDisplayName();
+        Arrays.sort(salts);
+
+        setSpinnerItems(binding.salt, salts);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.measure_molarity_toolbar_menu, menu);
         return true;
