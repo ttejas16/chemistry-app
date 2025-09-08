@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/clearHistory"
+        android:icon="@drawable/trash"
+        android:iconTint="@color/primary"
+        android:title="clear history"
+        app:showAsAction="always"/>
+
+</menu>

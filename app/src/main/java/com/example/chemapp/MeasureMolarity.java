@@ -2,6 +2,8 @@ package com.example.chemapp;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -11,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -24,7 +27,6 @@ import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public class MeasureMolarity extends AppCompatActivity {
     private MeasureMolarityBinding binding;
@@ -47,6 +49,7 @@ public class MeasureMolarity extends AppCompatActivity {
             return insets;
         });
 
+        setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
@@ -160,6 +163,16 @@ public class MeasureMolarity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.measure_molarity_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     public String getDescription(String[][] data){

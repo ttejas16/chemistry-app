@@ -1,9 +1,13 @@
 package com.example.chemapp;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -12,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chemapp.Utils.BookmarkAdapter;
 import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.HistoryAdapter;
@@ -25,7 +30,7 @@ import java.util.List;
 public class Bookmarks extends AppCompatActivity {
     private BookmarksBinding binding;
 
-    private HistoryAdapter adapter;
+    private BookmarkAdapter adapter;
 
     private final RecyclerView.AdapterDataObserver emptyObserver = new RecyclerView.AdapterDataObserver() {
         @Override public void onChanged() { checkIfEmpty(); }
@@ -46,13 +51,23 @@ public class Bookmarks extends AppCompatActivity {
             return insets;
         });
 
+        setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         DbHelper db = DbHelper.getInstance(getApplicationContext());
         List<CalculationRecord> items = db.getBookmarks();
 
-        adapter = new HistoryAdapter(items);
+        adapter = new BookmarkAdapter(items);
         adapter.registerAdapterDataObserver(emptyObserver);
+        adapter.setOnItemDeleteListener((id, position) -> {
+            if (position == RecyclerView.NO_POSITION) return;
+
+            boolean res = db.deleteBookmark(String.valueOf(id));
+            if (res) {
+                adapter.removeAt(position);
+            }
+
+        });
 
 
         RecyclerView recyclerView = findViewById(R.id.historyRecyclerView);
@@ -68,6 +83,27 @@ public class Bookmarks extends AppCompatActivity {
         super.onDestroy();
         // unregister observer to avoid leaks
         adapter.unregisterAdapterDataObserver(emptyObserver);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bookmark_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.sort_by_title) {
+            adapter.sortByTitle();
+        } else if (id == R.id.sort_by_type) {
+            adapter.sortByType();
+        } else if (id == R.id.sort_by_created) {
+            adapter.sortByTime();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkIfEmpty(){

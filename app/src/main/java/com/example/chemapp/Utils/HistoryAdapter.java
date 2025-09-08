@@ -96,7 +96,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return historyItemList.size();
     }
 
+    public void clearItems(){
+        int oldSize = historyItemList.size();
 
+        if (oldSize == 0) return;
+
+        historyItemList.clear();
+
+        notifyItemRangeRemoved(0, oldSize);
+    }
 
     static class ElementHistoryItemHolder extends RecyclerView.ViewHolder {
         TextView title,description;

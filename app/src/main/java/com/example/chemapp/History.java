@@ -2,9 +2,14 @@ package com.example.chemapp;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -25,7 +30,7 @@ public class History extends AppCompatActivity {
 
     private HistoryBinding binding;
     private HistoryAdapter adapter;
-
+    private DbHelper db;
 
     private final RecyclerView.AdapterDataObserver emptyObserver = new RecyclerView.AdapterDataObserver() {
         @Override public void onChanged() { checkIfEmpty(); }
@@ -46,9 +51,10 @@ public class History extends AppCompatActivity {
             return insets;
         });
 
+        setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        DbHelper db = DbHelper.getInstance(History.this);
+        db = DbHelper.getInstance(History.this);
 
         List<CalculationRecord> items = db.getHistoryCalculations();
         adapter = new HistoryAdapter(items);
@@ -66,6 +72,32 @@ public class History extends AppCompatActivity {
         super.onDestroy();
         // unregister observer to avoid leaks
         adapter.unregisterAdapterDataObserver(emptyObserver);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.history_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.clearHistory) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(History.this);
+            builder.setTitle("Clear History")
+                    .setMessage("Are you sure you want to clear history?")
+                    .setPositiveButton("Yes", (dialog,whichButton) -> {
+                        boolean res = db.clearHistory();
+                        if (res) {
+                            adapter.clearItems();
+                        }
+                    })
+                    .setNegativeButton("No", null);
+
+            builder.show();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void checkIfEmpty(){

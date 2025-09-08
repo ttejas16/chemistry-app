@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/arrow_down_up"
+        android:id="@+id/action_parent"
+        android:title="sort bookmarks"
+        app:showAsAction="always">
+
+        <!-- nested submenu -->
+        <menu>
+            <item
+                android:id="@+id/sort_by_title"
+                android:title="sort by title" />
+            <item
+                android:id="@+id/sort_by_type"
+                android:title="sort by type" />
+            <item
+                android:id="@+id/sort_by_created"
+                android:title="sort by created time" />
+        </menu>
+    </item>
+
+</menu>
