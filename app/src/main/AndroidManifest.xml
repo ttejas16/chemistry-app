@@ -45,6 +45,10 @@
             android:name=".Bookmarks"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".AddCompound"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

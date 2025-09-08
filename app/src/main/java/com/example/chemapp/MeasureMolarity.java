@@ -1,6 +1,7 @@
 package com.example.chemapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -172,6 +173,12 @@ public class MeasureMolarity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.plusItem) {
+            Intent intent = new Intent(MeasureMolarity.this, AddCompound.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
