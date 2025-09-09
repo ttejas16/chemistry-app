@@ -80,8 +80,8 @@ public class BottomSheetHelper {
         LinearLayout table = (LinearLayout) getTable(context, data);
 
         LinearLayout container = contentView.findViewById(R.id.container);
-        container.addView(view);
-        container.addView(table);
+        container.addView(view, 0);
+        container.addView(table, 1);
 
         MaterialButton addBookmarkButton = contentView.findViewById(R.id.addBookmark);
         addBookmarkButton.setOnClickListener(v -> {

@@ -19,13 +19,15 @@
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:padding="20dp">
+        <com.google.android.material.button.MaterialButton
+            android:layout_marginTop="15dp"
+            android:id="@+id/addBookmark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cornerRadius="20dp"
+            android:text="Add to bookmarks"/>
     </LinearLayout>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/addBookmark"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cornerRadius="20dp"
-        android:text="Add to bookmarks"/>
+
 
 
 </LinearLayout>
