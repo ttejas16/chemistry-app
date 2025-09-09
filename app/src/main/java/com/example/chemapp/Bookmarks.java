@@ -7,24 +7,18 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chemapp.Utils.BookmarkAdapter;
 import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.HistoryAdapter;
-import com.example.chemapp.Utils.HistoryItem;
 import com.example.chemapp.databinding.BookmarksBinding;
-import com.example.chemapp.databinding.HistoryBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Bookmarks extends AppCompatActivity {

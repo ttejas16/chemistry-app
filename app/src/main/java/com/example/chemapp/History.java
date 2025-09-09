@@ -1,11 +1,9 @@
 package com.example.chemapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -20,10 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.HistoryAdapter;
-import com.example.chemapp.Utils.HistoryItem;
 import com.example.chemapp.databinding.HistoryBinding;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class History extends AppCompatActivity {
