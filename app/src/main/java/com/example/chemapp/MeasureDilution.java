@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
+import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.databinding.MeasureDilutionBinding;
 import com.google.gson.Gson;
 
@@ -120,8 +121,8 @@ public class MeasureDilution extends AppCompatActivity {
                 data[0][0] = "Req stock volume (mL)";
                 data[0][1] = "Req solvent volume (mL)";
 
-                data[1][0] = String.valueOf(result);
-                data[1][1] = String.valueOf(volume - result);
+                data[1][0] = NumberFormatter.formatNumber(result);
+                data[1][1] = NumberFormatter.formatNumber(volume - result);
 
 
                 String description = gson.toJson(data);

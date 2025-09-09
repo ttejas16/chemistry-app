@@ -25,6 +25,7 @@ import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.Utils.DbHelper;
+import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 import com.google.gson.Gson;
 
@@ -131,9 +132,10 @@ public class MeasureMolarity extends AppCompatActivity {
                 for(double vlm: volumes) {
                     double resInGrams = calculateResult(weight, concentration, vlm);
                     double resInMilligrams = resInGrams * 1000;
+
                     data[j][0] = vlm + "";
-                    data[j][1] = resInGrams + "";
-                    data[j][2] = resInMilligrams + "";
+                    data[j][1] = NumberFormatter.formatNumber(resInGrams);
+                    data[j][2] = NumberFormatter.formatNumber(resInMilligrams);
 
                     j++;
                 }

@@ -22,6 +22,7 @@ import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
+import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.databinding.MeasureSolidBinding;
 import com.google.gson.Gson;
 
@@ -122,7 +123,7 @@ public class MeasureSolid extends AppCompatActivity {
                             concentrationUnit
                     );
                     data[i][0] = size + "";
-                    data[i][1] = result + "";
+                    data[i][1] = NumberFormatter.formatNumber(result);
 
                 } catch (Exception e) {
 

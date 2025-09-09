@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
+import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.databinding.MeasureMassBinding;
 import com.google.gson.Gson;
 
@@ -70,7 +71,7 @@ public class MeasureMass extends AppCompatActivity {
                 data[0][1] = "Mass required (mg)";
 
                 data[1][0] = String.valueOf(volume);
-                data[1][1] = String.valueOf(result);
+                data[1][1] = NumberFormatter.formatNumber(result);
 
 
                 String description = gson.toJson(data);
