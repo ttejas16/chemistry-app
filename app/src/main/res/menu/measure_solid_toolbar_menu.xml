@@ -8,5 +8,11 @@
         android:icon="@drawable/plus"
         android:title="add new compound"
         app:showAsAction="always"/>
+    <item
+        android:iconTint="@color/md_theme_primary"
+        android:id="@+id/listAdditions"
+        android:icon="@drawable/list"
+        android:title="additional compounds"
+        app:showAsAction="always"/>
 
 </menu>

@@ -184,6 +184,9 @@ public class MeasureSolid extends AppCompatActivity {
         if (item.getItemId() == R.id.plusItem) {
             Intent intent = new Intent(MeasureSolid.this, AddCompound.class);
             startActivity(intent);
+        } else if (item.getItemId() == R.id.listAdditions) {
+            Intent intent = new Intent(MeasureSolid.this, AdditionalCompounds.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

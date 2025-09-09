@@ -49,6 +49,10 @@
             android:name=".AddCompound"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".AdditionalCompounds"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

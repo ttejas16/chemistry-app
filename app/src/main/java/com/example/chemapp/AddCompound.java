@@ -61,12 +61,14 @@ public class AddCompound extends AppCompatActivity {
                 );
 
                 if (isAdded) {
-                    Toast.makeText(getApplicationContext(), "Added new compound", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddCompound.this, "Added new compound", Toast.LENGTH_SHORT).show();
                     resetInputs();
+                } else {
+                    Toast.makeText(AddCompound.this, "Compound already exists", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (NumberFormatException e) {
-                Toast.makeText(getApplicationContext(), "invalid inputs", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddCompound.this, "invalid inputs", Toast.LENGTH_SHORT).show();
             }
         });
     }

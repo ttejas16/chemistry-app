@@ -9,11 +9,12 @@
     android:layout_height="wrap_content">
     <TextView
         android:paddingVertical="15dp"
-        android:paddingHorizontal="15dp"
+        android:paddingHorizontal="10dp"
         android:textColor="#85193C"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:text="Sodium Chloride"
+        android:text=""
+        android:gravity="center_vertical"
         android:id="@+id/newCompoundItemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,28 +32,28 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/newCompoundItemMolecularFormula"
-            android:text="Molecular Formula: NaCl"
+            android:text="Molecular Formula: "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"/>
         <TextView
             android:layout_marginTop="5dp"
             android:id="@+id/newCompoundItemMolecularWeight"
-            android:text="Molecular Weight: 55.44"
+            android:text="Molecular Weight: "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"/>
         <TextView
             android:layout_marginTop="5dp"
             android:id="@+id/newCompoundItemEquivalentWeight"
-            android:text="Equivalent Weight: 55.44"
+            android:text="Equivalent Weight: "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"/>
         <TextView
             android:layout_marginTop="5dp"
             android:id="@+id/newCompoundItemIupacName"
-            android:text="Iupac Name: Sodium Chloride"
+            android:text="Iupac Name: "
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"/>

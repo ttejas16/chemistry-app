@@ -189,6 +189,10 @@ public class MeasureMolarity extends AppCompatActivity {
             Intent intent = new Intent(MeasureMolarity.this, AddCompound.class);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.listAdditions) {
+            Intent intent = new Intent(MeasureMolarity.this, AdditionalCompounds.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
