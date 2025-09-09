@@ -106,6 +106,15 @@ public class MeasureDilution extends AppCompatActivity {
                 double reqConcentration = Double.parseDouble(reqConcentrationString);
                 double volume = Double.parseDouble(volumeString);
 
+                if (reqUnit < stockUnit || (reqUnit == stockUnit && stockConcentration < reqConcentration)) {
+                    Toast.makeText(
+                            MeasureDilution.this,
+                            "Stock concentration can't be less than required concentration",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    return;
+                }
+
                 double result = util.getDilutionResultFrom(
                         stockConcentration, stockUnit,
                         reqConcentration, reqUnit,
