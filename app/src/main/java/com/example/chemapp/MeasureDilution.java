@@ -17,6 +17,7 @@ import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureDilutionBinding;
+import com.google.gson.Gson;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -48,6 +49,7 @@ public class MeasureDilution extends AppCompatActivity {
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        Gson gson = new Gson();
         DbHelper db = DbHelper.getInstance(MeasureDilution.this);
 
         String[] unitsConcatenated = Stream
@@ -122,7 +124,7 @@ public class MeasureDilution extends AppCompatActivity {
                 data[1][1] = String.valueOf(volume - result);
 
 
-                String description = getDescription(data);
+                String description = gson.toJson(data);
 
                 try {
                     boolean res = db.addHistory(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);

@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chemapp.BottomSheetHelper;
 import com.example.chemapp.R;
 
 import java.util.Collections;
@@ -119,7 +121,8 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     static class BookmarkItemHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
-        TextView title,description;
+        TextView title;
+        LinearLayout tableContainer;
 
         private long id = -1;
         private final OnItemDeleteListener onItemDeleteListener;
@@ -128,14 +131,18 @@ public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
 
             title = itemView.findViewById(R.id.historyTitle);
-            description = itemView.findViewById(R.id.historyDescription);
+            tableContainer = itemView.findViewById(R.id.itemTableContainer);
             this.onItemDeleteListener = listener;
 
             itemView.setOnCreateContextMenuListener(this);
         }
         void bind(CalculationRecord item) {
             title.setText(item.getTitle());
-            description.setText(item.getDescription());
+            View table = BottomSheetHelper.getTable(itemView.getContext(), item.tableData);
+
+            tableContainer.removeAllViews();
+            tableContainer.addView(table);
+
             this.id = item.getId();
         }
 

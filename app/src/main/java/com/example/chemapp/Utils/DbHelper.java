@@ -62,11 +62,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_UC_MOLECULAR_WEIGHT = "molecularWeight";
     public static final String COLUMN_UC_EQUIVALENT_WEIGHT = "equivalentWeight";
     public static final String COLUMN_UC_ELEMENTS_JSON = "elementsJson";
-
-    public static int TYPE_MOLARITY_CALCULATION = 1;
-    public static int TYPE_PPM_CALCULATION = 2;
-    public static int TYPE_ELEMENT_CALCULATION = 3;
-    public static int TYPE_DILUTION = 4;
+    private static final Gson gson = new Gson();
 
 
 
@@ -152,8 +148,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
                 int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
+                String[][] tableData = gson.fromJson(description, String[][].class);
 
-                historyList.add(new CalculationRecord(id, title, type, description));
+                historyList.add(new CalculationRecord(id, title, type, description, tableData));
             }
        } catch (Exception e) {
            Log.e("DbHelper", "Error while trying to get history calculations from database", e);
@@ -210,7 +207,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
                 int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
-                bookmarkList.add(new CalculationRecord(id, title, type, description));
+
+                String[][] tableData = gson.fromJson(description, String[][].class);
+
+                bookmarkList.add(new CalculationRecord(id, title, type, description, tableData));
             }
         } catch (Exception e){
             Log.e("DbHelper", "Error while trying to get bookmarks from database", e);

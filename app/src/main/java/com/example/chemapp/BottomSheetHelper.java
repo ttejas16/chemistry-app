@@ -104,7 +104,7 @@ public class BottomSheetHelper {
         return showExpandableBottomSheet(context, contentView, title, data, listener);
     }
 
-    private static View getTable(Context context, String[][] data){
+    public static View getTable(Context context, String[][] data){
         Drawable vDivider = ContextCompat.getDrawable(context, R.drawable.divider_vertical);
 
 

@@ -20,11 +20,10 @@
         android:drawableStart="@drawable/percent"
         android:drawablePadding="10dp"
         android:drawableTint="#E67514"/>
-    <TextView
-        android:id="@+id/historyDescription"
-        android:layout_marginTop="10dp"
-        android:text=""
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/itemTableContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content">
+    </LinearLayout>
 </LinearLayout>

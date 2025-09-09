@@ -26,6 +26,7 @@ import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 
@@ -53,6 +54,7 @@ public class MeasureMolarity extends AppCompatActivity {
         setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        Gson gson = new Gson();
         DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
 
         String[] salts = util.getFormattedDisplayName();
@@ -137,7 +139,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 }
 
                 String title = getResultTitle();
-                String description = getDescription(data);
+                String description = gson.toJson(data);
 
                 try {
                     boolean res = db.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);

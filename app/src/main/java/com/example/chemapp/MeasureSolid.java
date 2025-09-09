@@ -23,6 +23,7 @@ import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
 import com.example.chemapp.databinding.MeasureSolidBinding;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 
@@ -49,6 +50,7 @@ public class MeasureSolid extends AppCompatActivity {
         setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
+        Gson gson = new Gson();
         DbHelper db = DbHelper.getInstance(MeasureSolid.this);
 
         util = CalculatorUtil.getInstance();
@@ -130,7 +132,7 @@ public class MeasureSolid extends AppCompatActivity {
             }
 
             String title = getResultTitle();
-            String description = getDescription(data);
+            String description = gson.toJson(data);
 
             try {
                 boolean res = db.addHistory(title, CalculationRecord.ELEMENT_HISTORY_ITEM, description);

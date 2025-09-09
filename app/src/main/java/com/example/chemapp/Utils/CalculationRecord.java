@@ -13,12 +13,14 @@ public class CalculationRecord {
 
     public final int type;
     public final String description;
+    public final String[][] tableData;
 
-    public CalculationRecord(long id, String title, int type, String description) {
+    public CalculationRecord(long id, String title, int type, String description, String[][] data) {
         this.id = id;
         this.title = title;
         this.type = type;
         this.description = description;
+        this.tableData = data;
     }
 
     public long getId() { return id; }

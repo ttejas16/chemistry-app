@@ -4,28 +4,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.chemapp.BottomSheetHelper;
 import com.example.chemapp.R;
 
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private List<CalculationRecord> historyItemList;
-    private AdapterView.OnItemClickListener listener;
-
 
     public HistoryAdapter(List<CalculationRecord> historyItemList) {
         this.historyItemList = historyItemList;
-    }
-
-    public void setItemOnClickListener(AdapterView.OnItemClickListener l){
-        this.listener = l;
     }
 
     @Override
@@ -107,70 +102,70 @@ public class HistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     static class ElementHistoryItemHolder extends RecyclerView.ViewHolder {
-        TextView title,description;
+        TextView title;
+        LinearLayout tableContainer;
         ElementHistoryItemHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.historyTitle);
-            description = itemView.findViewById(R.id.historyDescription);
-
-            itemView.setOnClickListener(v -> {
-                Toast.makeText(itemView.getContext(), "type 1 clicked", Toast.LENGTH_SHORT).show();
-            });
+            tableContainer = itemView.findViewById(R.id.itemTableContainer);
         }
         void bind(CalculationRecord item) {
             title.setText(item.getTitle());
-            description.setText(item.getDescription());
+            View table = BottomSheetHelper.getTable(itemView.getContext(), item.tableData);
+
+            tableContainer.removeAllViews();
+            tableContainer.addView(table);
         }
     }
 
     static class MolarityHistoryItemHolder extends RecyclerView.ViewHolder {
-        TextView title,description;
+        TextView title;
+        LinearLayout tableContainer;
         MolarityHistoryItemHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.historyTitle);
-            description = itemView.findViewById(R.id.historyDescription);
-
-            itemView.setOnClickListener(v -> {
-                Toast.makeText(itemView.getContext(), "type 2 clicked", Toast.LENGTH_SHORT).show();
-            });
+            tableContainer = itemView.findViewById(R.id.itemTableContainer);
         }
         void bind(CalculationRecord item) {
             title.setText(item.getTitle());
-            description.setText(item.getDescription());
+            View table = BottomSheetHelper.getTable(itemView.getContext(), item.tableData);
+
+            tableContainer.removeAllViews();
+            tableContainer.addView(table);
         }
     }
 
     static class PpmHistoryItemHolder extends RecyclerView.ViewHolder {
-        TextView title,description;
+        TextView title;
+        LinearLayout tableContainer;
         PpmHistoryItemHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.historyTitle);
-            description = itemView.findViewById(R.id.historyDescription);
-
-            itemView.setOnClickListener(v -> {
-                Toast.makeText(itemView.getContext(), "type 3 clicked", Toast.LENGTH_SHORT).show();
-            });
+            tableContainer = itemView.findViewById(R.id.itemTableContainer);
         }
         void bind(CalculationRecord item) {
             title.setText(item.getTitle());
-            description.setText(item.getDescription());
+            View table = BottomSheetHelper.getTable(itemView.getContext(), item.tableData);
+
+            tableContainer.removeAllViews();
+            tableContainer.addView(table);
         }
     }
 
     static class DilutionHistoryItemHolder extends RecyclerView.ViewHolder {
-        TextView title,description;
+        TextView title;
+        LinearLayout tableContainer;
         DilutionHistoryItemHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.historyTitle);
-            description = itemView.findViewById(R.id.historyDescription);
-
-            itemView.setOnClickListener(v -> {
-                Toast.makeText(itemView.getContext(), "type 4 clicked", Toast.LENGTH_SHORT).show();
-            });
+            tableContainer = itemView.findViewById(R.id.itemTableContainer);
         }
         void bind(CalculationRecord item) {
             title.setText(item.getTitle());
-            description.setText(item.getDescription());
+            View table = BottomSheetHelper.getTable(itemView.getContext(), item.tableData);
+
+            tableContainer.removeAllViews();
+            tableContainer.addView(table);
         }
     }
 }

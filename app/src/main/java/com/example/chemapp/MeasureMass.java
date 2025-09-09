@@ -15,6 +15,7 @@ import com.example.chemapp.Utils.CalculationRecord;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.databinding.MeasureMassBinding;
+import com.google.gson.Gson;
 
 
 public class MeasureMass extends AppCompatActivity {
@@ -38,6 +39,7 @@ public class MeasureMass extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
 
+        Gson gson = new Gson();
         CalculatorUtil util = CalculatorUtil.getInstance();
         DbHelper db = DbHelper.getInstance(MeasureMass.this);
 
@@ -71,7 +73,7 @@ public class MeasureMass extends AppCompatActivity {
                 data[1][1] = String.valueOf(result);
 
 
-                String description = getDescription(data);
+                String description = gson.toJson(data);
 
                 try {
                     boolean res = db.addHistory(title, CalculationRecord.PPM_HISTORY_ITEM, description);
