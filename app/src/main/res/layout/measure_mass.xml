@@ -44,17 +44,9 @@
         android:layout_marginTop="20dp"
         android:paddingVertical="5dp"
         android:paddingHorizontal="8dp">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/info"
-            app:tint="@color/md_theme_primary"/>
         <TextView
-            android:textColor="@color/md_theme_primary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="5dp"
-            android:textSize="13sp"
+            style="@style/TipText"
+            app:drawableStartCompat="@drawable/info"
             android:text="@string/tip_text_mass"/>
     </LinearLayout>
 
@@ -73,24 +65,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
+                style="@style/LabelText"
                 android:text="@string/concentration_input_label"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
+                    style="@style/InputField"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
                     android:hint="@string/concentration_hint"
-                    android:background="@drawable/input_bg"
                     android:id="@+id/concentration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -118,28 +105,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
+                style="@style/LabelText"
                 android:text="@string/volume_input_label"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
+                    style="@style/InputField"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
                     android:hint="@string/volume_hint"
-                    android:background="@drawable/input_bg"
                     android:id="@+id/volume"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="1" />
@@ -149,9 +130,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/calculate"
-            android:paddingVertical="15dp"
-            android:layout_marginTop="20dp"
-            app:cornerRadius="15dp"
+            style="@style/PrimaryTextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/calculate_text"/>
