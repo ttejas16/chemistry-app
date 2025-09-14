@@ -154,7 +154,7 @@ public class BottomSheetHelper {
         TextView view = new TextView(context);
         view.setText(title);
         view.setTextAlignment(TextView.TEXT_ALIGNMENT_CENTER);
-        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+        view.setTextAppearance(R.style.TextBodyLarge);
         view.setTypeface(null, Typeface.BOLD);
 
         return view;

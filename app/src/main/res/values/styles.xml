@@ -28,4 +28,78 @@
         <item name="behavior_peekHeight">300dp</item>
     </style>
 
+    <style name="TextBodySmall" parent="TextAppearance.Material3.BodySmall">
+    </style>
+    <style name="TextBodyMedium" parent="TextAppearance.Material3.BodyMedium">
+    </style>
+    <style name="TextBodyLarge" parent="TextAppearance.Material3.BodyLarge">
+    </style>
+
+    <style name="TipText">
+        <item name="android:textAppearance">@style/TextBodySmall</item>
+
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawableTint">@color/md_theme_primary</item>
+
+        <item name="android:textColor">@color/md_theme_primary</item>
+
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="LabelText">
+        <item name="android:textAppearance">@style/TextBodyLarge</item>
+        <item name="android:textColor">@color/md_theme_primary</item>
+
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+
+    <style name="StyleTextInputLayout" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintEnabled">false</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="errorTextAppearance">@style/TextBodyMedium</item>
+
+        <item name="android:textColorHint">@color/md_theme_primary</item>
+
+        <item name="boxCornerRadiusTopStart">15dp</item>
+        <item name="boxCornerRadiusTopEnd">15dp</item>
+        <item name="boxCornerRadiusBottomStart">15dp</item>
+        <item name="boxCornerRadiusBottomEnd">15dp</item>
+    </style>
+
+    <style name="StyleAutoCompleteTextView">
+        <item name="android:textAppearance">@style/TextBodyLarge</item>
+
+        <item name="android:background">@drawable/input_bg</item>
+
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">40dp</item>
+    </style>
+
+    <style name="InputField">
+        <item name="android:textAppearance">@style/TextBodyLarge</item>
+
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+
+        <item name="android:background">@drawable/input_bg</item>
+    </style>
+
+    <style name="PrimaryTextButton">
+        <item name="android:textAppearance">@style/TextBodyLarge</item>
+
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="cornerRadius">15dp</item>
+    </style>
+
 </resources>

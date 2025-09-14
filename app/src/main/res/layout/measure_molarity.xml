@@ -36,25 +36,19 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintStart_toStartOf="@id/divider"
         app:layout_constraintEnd_toEndOf="@id/divider"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="20dp"
         android:paddingVertical="5dp"
         android:paddingHorizontal="8dp">
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            app:srcCompat="@drawable/info"
-            app:tint="@color/md_theme_primary"/>
+
         <TextView
-            android:textColor="@color/md_theme_primary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="5dp"
-            android:textSize="13sp"
-            android:text="@string/tip_text_molarity"/>
+            style="@style/TipText"
+            android:text="@string/tip_text_molarity"
+            app:drawableStartCompat="@drawable/info" />
     </LinearLayout>
 
     <LinearLayout
@@ -71,33 +65,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
-                android:text="@string/salt_input_label"/>
+                style="@style/LabelText"
+                android:text="@string/salt_input_label"
+                />
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/saltInputLayout"
+                style="@style/StyleTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:hintEnabled="false"
-                app:boxStrokeWidth="0dp"
-                android:textColorHint="@color/md_theme_primary"
-                app:boxCornerRadiusTopStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusBottomEnd="15dp"
-                >
+                android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/salt"
+                    style="@style/StyleAutoCompleteTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/input_bg"
                     android:hint="@string/salt_hint"
                     android:inputType="text"
-                    android:paddingVertical="15dp" />
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -108,12 +94,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
-                android:text="@string/solution_type_label"/>
+                android:text="@string/solution_type_label"
+                style="@style/LabelText"/>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,27 +120,25 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/concentrationTitle"
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
-                android:text="@string/concentration_label_molarity"/>
+                android:text="@string/concentration_label_molarity"
+                style="@style/LabelText"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
+                    style="@style/InputField"
+
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
                     android:hint="@string/concentration_hint_molarity"
-                    android:background="@drawable/input_bg"
                     android:id="@+id/concentration"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+
                     android:layout_marginEnd="12dp"
                     app:layout_constraintEnd_toStartOf="@id/concentrationUnit"
                     app:layout_constraintStart_toStartOf="parent"
@@ -182,24 +164,19 @@
             android:orientation="vertical">
             <TextView
                 android:id="@+id/weightTitle"
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
-                android:text="@string/weight_label_molarity"/>
+                android:text="@string/weight_label_molarity"
+                style="@style/LabelText"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
+                    style="@style/InputField"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
                     android:hint="@string/weight_hint_molarity"
-                    android:background="@drawable/input_bg"
                     android:id="@+id/weight"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -216,24 +193,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
-                android:textColor="@color/md_theme_primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:paddingHorizontal="10dp"
-                android:text="@string/volume_input_label"/>
+                android:text="@string/volume_input_label"
+                style="@style/LabelText"/>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
+                    style="@style/InputField"
                     android:importantForAutofill="no"
                     android:inputType="number"
-                    android:textSize="15sp"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
                     android:hint="@string/volume_hint"
-                    android:background="@drawable/input_bg"
                     android:id="@+id/volume"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -245,18 +217,16 @@
         </LinearLayout>
 
         <CheckBox
-            android:textColor="@color/md_theme_primary"
             android:id="@+id/standardSizes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/standard_sizes_checkbox_text"
+            style="@style/LabelText"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/calculate"
-            android:paddingVertical="15dp"
-            android:layout_marginTop="5dp"
-            app:cornerRadius="15dp"
+            style="@style/PrimaryTextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/calculate_text"

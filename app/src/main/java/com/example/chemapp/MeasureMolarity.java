@@ -3,6 +3,10 @@ package com.example.chemapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +40,10 @@ public class MeasureMolarity extends AppCompatActivity {
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
     final String[] molarityUnitOptions = { "M", "mM", "μM"};
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
+
+    String [] salts;
     CalculatorUtil util = CalculatorUtil.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,7 +65,8 @@ public class MeasureMolarity extends AppCompatActivity {
         Gson gson = new Gson();
         DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
 
-        String[] salts = util.getFormattedDisplayName();
+        salts = util.getFormattedDisplayName();
+
         Arrays.sort(salts);
         setSpinnerItems(binding.salt, salts);
 
@@ -97,7 +105,7 @@ public class MeasureMolarity extends AppCompatActivity {
             if (binding.salt.getText().toString().isEmpty()) return;
 
             String salt = binding.salt.getText().toString();
-            if (!Arrays.asList(salts).contains(salt)) {
+            if (!isValidSelection(salt, salts)) {
                 return;
             }
 
@@ -174,7 +182,7 @@ public class MeasureMolarity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        String[] salts = util.getFormattedDisplayName();
+        salts = util.getFormattedDisplayName();
         Arrays.sort(salts);
 
         setSpinnerItems(binding.salt, salts);
@@ -275,7 +283,28 @@ public class MeasureMolarity extends AppCompatActivity {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        spinner.setOnDismissListener(() -> {
+            String saltWithFormula = spinner.getText().toString();
+            if (saltWithFormula.isEmpty()) {
+                spinner.setError("please enter or select salt");
+                return;
+            }
+
+            if (!isValidSelection(saltWithFormula, salts)) {
+                spinner.setError("invalid salt");
+                return;
+            }
+
+            spinner.setError(null);
+        });
+
         spinner.setAdapter(adapter);
+    }
+
+    private boolean isValidSelection(String input, String[] items) {
+        if (input == null || input.trim().isEmpty()) return false;
+
+        return Arrays.asList(items).contains(input);
     }
 
     public void updateWeights(String formattedSaltName) {
