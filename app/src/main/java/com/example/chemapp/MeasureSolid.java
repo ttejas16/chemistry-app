@@ -76,17 +76,22 @@ public class MeasureSolid extends AppCompatActivity {
             }
         });
         binding.element.setOnDismissListener(() -> {
-            String element = binding.element.getText().toString();
-            if (element.isEmpty()) {
+            String selectedElement = binding.element.getText().toString();
+            if (selectedElement.isEmpty()) {
                 binding.element.setError("please select a element");
+                setSpinnerItems(binding.salt, new String[0]);
                 return;
             };
 
-            if (!util.getElementsMap().containsKey(element)) {
+            if (!util.getElementsMap().containsKey(selectedElement)) {
+                setSpinnerItems(binding.salt, new String[0]);
                 binding.element.setError("invalid element");
                 return;
             }
 
+            Element element = util.getElementsMap().get(selectedElement);
+            String[] elementSalts = util.getFormattedDisplayName(element);
+            setSpinnerItems(binding.salt, elementSalts);
             binding.element.setError(null);
         });
         binding.element.addTextChangedListener(new TextWatcher() {
