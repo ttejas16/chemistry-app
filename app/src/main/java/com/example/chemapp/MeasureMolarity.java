@@ -71,7 +71,20 @@ public class MeasureMolarity extends AppCompatActivity {
         setSpinnerItems(binding.salt, salts);
 
         binding.salt.setOnItemClickListener((parent, view, position, id) -> updateWeights(parent.getItemAtPosition(position).toString()));
+        binding.salt.setOnDismissListener(() -> {
+            String saltWithFormula = binding.salt.getText().toString();
+            if (saltWithFormula.isEmpty()) {
+                binding.salt.setError("please enter or select salt");
+                return;
+            }
 
+            if (!isValidSelection(saltWithFormula, salts)) {
+                binding.salt.setError("invalid salt");
+                return;
+            }
+
+            binding.salt.setError(null);
+        });
 
         setSpinnerItems(binding.solutionType, solutionOptions);
         binding.solutionType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -282,21 +295,6 @@ public class MeasureMolarity extends AppCompatActivity {
         );
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setOnDismissListener(() -> {
-            String saltWithFormula = spinner.getText().toString();
-            if (saltWithFormula.isEmpty()) {
-                spinner.setError("please enter or select salt");
-                return;
-            }
-
-            if (!isValidSelection(saltWithFormula, salts)) {
-                spinner.setError("invalid salt");
-                return;
-            }
-
-            spinner.setError(null);
-        });
 
         spinner.setAdapter(adapter);
     }
