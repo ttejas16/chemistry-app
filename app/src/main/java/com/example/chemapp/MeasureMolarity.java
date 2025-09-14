@@ -85,6 +85,27 @@ public class MeasureMolarity extends AppCompatActivity {
 
             binding.salt.setError(null);
         });
+        binding.salt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!hasMatchingSuggestions(s.toString(), salts)) {
+                    binding.salt.setError("invalid salt");
+                }
+                else {
+                    binding.salt.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         setSpinnerItems(binding.solutionType, solutionOptions);
         binding.solutionType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -303,6 +324,21 @@ public class MeasureMolarity extends AppCompatActivity {
         if (input == null || input.trim().isEmpty()) return false;
 
         return Arrays.asList(items).contains(input);
+    }
+
+    private boolean hasMatchingSuggestions(String currentText, String[] allOptions) {
+        if (currentText == null || currentText.trim().isEmpty()) {
+            return true;
+        }
+
+        String searchText = currentText.toLowerCase().trim();
+
+        for (String option : allOptions) {
+            if (option.toLowerCase().contains(searchText)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updateWeights(String formattedSaltName) {

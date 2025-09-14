@@ -2,6 +2,8 @@ package com.example.chemapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,7 @@ import java.util.Arrays;
 public class MeasureSolid extends AppCompatActivity {
     private MeasureSolidBinding binding;
     private final String[] concentrationUnits = {"ppm", "ppb", "ppt"};
+    String[] elements;
 
     CalculatorUtil util;
 
@@ -55,7 +58,7 @@ public class MeasureSolid extends AppCompatActivity {
         DbHelper db = DbHelper.getInstance(MeasureSolid.this);
 
         util = CalculatorUtil.getInstance();
-        String[] elements = util.getElementsMap().keySet().toArray(new String[0]);
+        elements = util.getElementsMap().keySet().toArray(new String[0]);
         setSpinnerItems(binding.element, elements);
 
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
@@ -64,11 +67,47 @@ public class MeasureSolid extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedElement = parent.getItemAtPosition(position).toString();
+                binding.element.setError(null);
                 binding.salt.setText("");
 
                 Element element = util.getElementsMap().get(selectedElement);
                 String[] elementSalts = util.getFormattedDisplayName(element);
                 setSpinnerItems(binding.salt, elementSalts);
+            }
+        });
+        binding.element.setOnDismissListener(() -> {
+            String element = binding.element.getText().toString();
+            if (element.isEmpty()) {
+                binding.element.setError("please select a element");
+                return;
+            };
+
+            if (!util.getElementsMap().containsKey(element)) {
+                binding.element.setError("invalid element");
+                return;
+            }
+
+            binding.element.setError(null);
+        });
+        binding.element.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!hasMatchingSuggestions(s.toString(), elements)) {
+                    binding.element.setError("invalid element");
+                }
+                else {
+                    binding.element.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -240,5 +279,20 @@ public class MeasureSolid extends AppCompatActivity {
         }
 
         return builder.toString();
+    }
+
+    private boolean hasMatchingSuggestions(String currentText, String[] allOptions) {
+        if (currentText == null || currentText.trim().isEmpty()) {
+            return true;
+        }
+
+        String searchText = currentText.toLowerCase().trim();
+
+        for (String option : allOptions) {
+            if (option.toLowerCase().contains(searchText)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
