@@ -33,7 +33,7 @@
 
 
     <ScrollView
-        android:paddingBottom="60dp"
+        android:paddingBottom="@dimen/activityBottomPadding"
         app:layout_constraintStart_toStartOf="@id/divider"
         app:layout_constraintTop_toBottomOf="@id/divider"
         android:layout_width="match_parent"
