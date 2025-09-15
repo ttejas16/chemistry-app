@@ -27,18 +27,18 @@
             android:id="@+id/onboarding"
             android:elevation="4dp"
             android:background="@drawable/title_bg"
-            android:layout_margin="40dp"
+            android:layout_margin="30dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:textAppearance="@style/TextBodyLarge"
                 android:textColor="@color/primary"
-                android:drawablePadding="15dp"
+                android:drawablePadding="10dp"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:paddingVertical="15dp"
-                android:paddingStart="20dp"
-                android:textSize="18sp"
+                android:paddingHorizontal="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="What are you starting with?"
@@ -63,7 +63,7 @@
                     android:text="Solid"
                     android:textStyle="bold"
                     android:padding="10dp"
-                    android:textSize="15sp"/>
+                    android:textAppearance="@style/TextBodyMedium"/>
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/liquidrb"
@@ -72,7 +72,7 @@
                     android:text="Liquid"
                     android:textStyle="bold"
                     android:padding="10dp"
-                    android:textSize="15sp"/>
+                    android:textAppearance="@style/TextBodyMedium"/>
             </RadioGroup>
 
         </LinearLayout>
@@ -82,7 +82,7 @@
             android:id="@+id/solid"
             android:elevation="4dp"
             android:background="@drawable/title_bg"
-            android:layout_margin="40dp"
+            android:layout_margin="30dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="@+id/onboarding"
             app:layout_constraintTop_toBottomOf="@id/onboarding"
@@ -91,12 +91,12 @@
             android:layout_height="wrap_content">
             <TextView
                 android:textColor="@color/primary"
-                android:drawablePadding="15dp"
+                android:drawablePadding="10dp"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:paddingVertical="15dp"
-                android:paddingStart="20dp"
-                android:textSize="18sp"
+                android:paddingHorizontal="20dp"
+                android:textAppearance="@style/TextBodyLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="How do you want to measure it?"
@@ -159,7 +159,7 @@
             android:id="@+id/liquid"
             android:elevation="4dp"
             android:background="@drawable/title_bg"
-            android:layout_margin="40dp"
+            android:layout_margin="30dp"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="@+id/onboarding"
             app:layout_constraintTop_toBottomOf="@id/onboarding"
@@ -167,13 +167,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:textAppearance="@style/TextBodyLarge"
                 android:textColor="@color/primary"
-                android:drawablePadding="15dp"
+                android:drawablePadding="10dp"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:paddingVertical="15dp"
-                android:paddingStart="20dp"
-                android:textSize="18sp"
+                android:paddingHorizontal="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Stock Dilution"
