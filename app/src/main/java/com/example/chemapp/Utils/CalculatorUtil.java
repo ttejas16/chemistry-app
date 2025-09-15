@@ -18,7 +18,9 @@ public class CalculatorUtil {
     private static CalculatorUtil instance;
     private static Map<String, Compound> compoundsMap;
     private static Map<String, Element> elementsMap;
-
+    private static final String[] SUBSCRIPT_DIGITS = {
+            "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"
+    };
     private CalculatorUtil() {}
 
     public static void init(Context context){
@@ -134,11 +136,33 @@ public class CalculatorUtil {
         for (String key : Keys){
             Compound compound = compoundsMap.get(key);
             if(compound == null) continue;
-            builder.append(key).append(" ").append("(").append(compound.molecularFormula).append(")");
+
+            String formulaWithSubscripts = formatChemicalFormula(compound.molecularFormula);
+            builder.append(key).append(" ").append("(").append(formulaWithSubscripts).append(")");
             saltNames.add(builder.toString());
             builder.setLength(0);
         }
         return saltNames.toArray(new String[0]);
+    }
+
+    public static String formatChemicalFormula(String formula) {
+        if (formula == null || formula.isEmpty()) {
+            return formula;
+        }
+
+        StringBuilder result = new StringBuilder();
+        char[] chars = formula.toCharArray();
+
+        for (char ch : chars) {
+            if (Character.isDigit(ch)) {
+                int digit = Character.getNumericValue(ch);
+                result.append(SUBSCRIPT_DIGITS[digit]);
+            } else {
+                result.append(ch);
+            }
+        }
+
+        return result.toString();
     }
 
 

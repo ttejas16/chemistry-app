@@ -30,206 +30,210 @@
         android:layout_height="wrap_content"
         />
 
-    <LinearLayout
-        android:id="@+id/tip"
-        android:background="@drawable/tip_border"
-        app:layout_constraintTop_toBottomOf="@id/divider"
+
+
+    <ScrollView
+        android:paddingBottom="60dp"
         app:layout_constraintStart_toStartOf="@id/divider"
-        app:layout_constraintEnd_toEndOf="@id/divider"
+        app:layout_constraintTop_toBottomOf="@id/divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="20dp"
-        android:paddingVertical="5dp"
-        android:paddingHorizontal="8dp">
-
-        <TextView
-            style="@style/TipText"
-            android:text="@string/tip_text_molarity"
-            app:drawableStartCompat="@drawable/info" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@id/tip"
-        app:layout_constraintTop_toBottomOf="@id/tip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="15dp"
-        android:paddingHorizontal="15dp">
-
+        android:layout_height="wrap_content">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="15dp">
+            <LinearLayout
+                android:id="@+id/tip"
+                android:background="@drawable/tip_border"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="8dp">
+
+                <TextView
+                    style="@style/TipText"
+                    android:text="@string/tip_text_molarity"
+                    app:drawableStartCompat="@drawable/info" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/LabelText"
+                    android:text="@string/salt_input_label"
+                    />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/saltInputLayout"
+                    style="@style/StyleTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/salt"
+                        style="@style/StyleAutoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/salt_hint"
+                        android:inputType="text"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/solution_type_label"
+                    style="@style/LabelText"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_bg">
+                    <Spinner
+                        android:id="@+id/solutionType"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:spinnerMode="dropdown"
+                        />
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/concentrationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/concentration_label_molarity"
+                    style="@style/LabelText"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/InputField"
+
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:hint="@string/concentration_hint_molarity"
+                        android:id="@+id/concentration"
+
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
+                        android:layout_marginEnd="12dp"
+                        app:layout_constraintEnd_toStartOf="@id/concentrationUnit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="0.7" />
+                    <Spinner
+                        android:id="@+id/concentrationUnit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/concentration"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintWidth_percent="0.3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/weightTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/weight_label_molarity"
+                    style="@style/LabelText"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:hint="@string/weight_hint_molarity"
+                        android:id="@+id/weight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/volume_input_label"
+                    style="@style/LabelText"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:hint="@string/volume_hint"
+                        android:id="@+id/volume"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/standardSizes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/standard_sizes_checkbox_text"
                 style="@style/LabelText"
-                android:text="@string/salt_input_label"
                 />
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/saltInputLayout"
-                style="@style/StyleTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                    android:id="@+id/salt"
-                    style="@style/StyleAutoCompleteTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/salt_hint"
-                    android:inputType="text"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/solution_type_label"
-                style="@style/LabelText"/>
-            <FrameLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/calculate"
+                style="@style/PrimaryTextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_bg">
-                <Spinner
-                    android:id="@+id/solutionType"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown"
-                    />
-            </FrameLayout>
+                android:text="@string/calculate_text"
+                />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/concentrationTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/concentration_label_molarity"
-                style="@style/LabelText"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:hint="@string/concentration_hint_molarity"
-                    android:id="@+id/concentration"
-
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginEnd="12dp"
-                    app:layout_constraintEnd_toStartOf="@id/concentrationUnit"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="0.7" />
-                <Spinner
-                    android:id="@+id/concentrationUnit"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/concentration"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintWidth_percent="0.3" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/weightTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/weight_label_molarity"
-                style="@style/LabelText"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:hint="@string/weight_hint_molarity"
-                    android:id="@+id/weight"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/volume_input_label"
-                style="@style/LabelText"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:hint="@string/volume_hint"
-                    android:id="@+id/volume"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <CheckBox
-            android:id="@+id/standardSizes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/standard_sizes_checkbox_text"
-            style="@style/LabelText"
-            />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/calculate"
-            style="@style/PrimaryTextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/calculate_text"
-            />
-    </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
