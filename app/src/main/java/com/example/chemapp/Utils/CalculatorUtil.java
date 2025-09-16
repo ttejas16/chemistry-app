@@ -169,7 +169,7 @@ public class CalculatorUtil {
     public boolean addNewUserCompound(String compoundName, double molecularWeight,double equivalentWeight, String molecularFormula,String iupacName,Context context) throws IllegalArgumentException{
 
         if(molecularFormula.isEmpty() || compoundName.isEmpty() || iupacName.isEmpty()){
-            throw new IllegalArgumentException("addNewCompound : IllegalArgument provided");
+           throw new IllegalArgumentException("addNewCompound : IllegalArgument provided");
 
         }
         String newCompoundName = compoundName + " (userdefined)";
