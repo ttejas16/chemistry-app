@@ -31,189 +31,187 @@
         android:layout_height="wrap_content"
         />
 
-    <LinearLayout
-        android:id="@+id/tip"
-        android:background="@drawable/tip_border"
+    <ScrollView
+        android:paddingBottom="@dimen/activityBottomPadding"
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintStart_toStartOf="@id/divider"
         app:layout_constraintEnd_toEndOf="@id/divider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginTop="20dp"
-        android:paddingVertical="5dp"
-        android:paddingHorizontal="8dp">
-        <TextView
-            style="@style/TipText"
-            app:drawableStartCompat="@drawable/info"
-            android:text="Add a new compound that is not in the list"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@id/tip"
-        app:layout_constraintTop_toBottomOf="@id/tip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="15dp"
-        android:paddingHorizontal="15dp">
-
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/LabelText"
-                android:text="Enter Compound name"/>
+            android:paddingVertical="15dp"
+            android:paddingHorizontal="15dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
+                android:id="@+id/tip"
+                android:background="@drawable/tip_border"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:hint="Ex. Sodium chloride"
-                    android:id="@+id/compoundName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                style="@style/LabelText"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter molecular formula"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="8dp">
+                <TextView
+                    style="@style/TipText"
+                    app:drawableStartCompat="@drawable/info"
+                    android:text="Add a new compound that is not in the list"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:hint="Ex. NaCl"
-                    android:id="@+id/molecularFormula"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                style="@style/LabelText"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter molecular weight"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:hint="Ex. 55.84"
-                    android:id="@+id/molecularWeight"
-                    android:layout_width="0dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
+                    style="@style/LabelText"
+                    android:text="Enter Compound name"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:hint="Ex. Sodium chloride"
+                        android:id="@+id/compoundName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
 
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                style="@style/LabelText"
-                android:layout_width="wrap_content"
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter equivalent weight"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="numberDecimal"
-                    android:hint="Ex. 55.84"
-                    android:id="@+id/equivalentWeight"
-                    android:layout_width="0dp"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/LabelText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
+                    android:text="Enter molecular formula"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </LinearLayout>
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:hint="Ex. NaCl"
+                        android:id="@+id/molecularFormula"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
 
-        <LinearLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                style="@style/LabelText"
-                android:layout_width="wrap_content"
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter IUPAC name"/>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    style="@style/InputField"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:hint="Ex. Sodium Chloride"
-                    android:id="@+id/iupacName"
-                    android:layout_width="0dp"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/LabelText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_percent="1" />
+                    android:text="Enter molecular weight"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="numberDecimal"
+                        android:hint="Ex. 55.84"
+                        android:id="@+id/molecularWeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/LabelText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter equivalent weight"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="numberDecimal"
+                        android:hint="Ex. 55.84"
+                        android:id="@+id/equivalentWeight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/LabelText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enter IUPAC name"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        style="@style/InputField"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:hint="Ex. Sodium Chloride"
+                        android:id="@+id/iupacName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent="1" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add"
+                style="@style/PrimaryTextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add"/>
         </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/add"
-            style="@style/PrimaryTextButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add"/>
-    </LinearLayout>
-
-
-
-
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
