@@ -10,12 +10,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chemapp.Utils.CalculatorUtil;
+import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.databinding.AddCompoundBinding;
-import com.example.chemapp.databinding.MeasureMolarityBinding;
 
 public class AddCompound extends AppCompatActivity {
 
     AddCompoundBinding binding;
+    String[] Result;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -34,7 +35,23 @@ public class AddCompound extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         CalculatorUtil util = CalculatorUtil.getInstance();
+        binding.molecularFormula.setOnKeyListener(v -> {
+            String error;
+            String inputText = binding.molecularFormula.getText().toString();
 
+          if(inputText.isEmpty()){
+              return ;
+          }
+
+          Result = Compound.getElementsFromMolecularFormula1(inputText);
+
+          if(Result.length == 0 || Result[0].startsWith("Error")){
+              binding.molecularFormula.setError(Result[0]);
+              return ;
+          }
+          binding.molecularFormula.setError(null);
+          return;
+        });
         binding.add.setOnClickListener(v -> {
             String compoundName = binding.compoundName.getText().toString();
             String molecularFormula = binding.molecularFormula.getText().toString();
