@@ -1,6 +1,8 @@
 package com.example.chemapp;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,7 +18,6 @@ import com.example.chemapp.databinding.AddCompoundBinding;
 public class AddCompound extends AppCompatActivity {
 
     AddCompoundBinding binding;
-    String[] Result;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,23 +36,36 @@ public class AddCompound extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         CalculatorUtil util = CalculatorUtil.getInstance();
-        binding.molecularFormula.setOnKeyListener(v -> {
-            String error;
-            String inputText = binding.molecularFormula.getText().toString();
+        binding.molecularFormula.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-          if(inputText.isEmpty()){
-              return ;
-          }
+            }
 
-          Result = Compound.getElementsFromMolecularFormula1(inputText);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String inputText = s.toString();
 
-          if(Result.length == 0 || Result[0].startsWith("Error")){
-              binding.molecularFormula.setError(Result[0]);
-              return ;
-          }
-          binding.molecularFormula.setError(null);
-          return;
+                if(inputText.isEmpty()){
+                    return;
+                }
+
+                String[] result = Compound.getElementsFromMolecularFormula1(inputText);
+
+                if(result.length > 0 && result[0].startsWith("Error")){
+                    binding.molecularFormula.setError(result[0]);
+                    return ;
+                }
+
+                binding.molecularFormula.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
+
         binding.add.setOnClickListener(v -> {
             String compoundName = binding.compoundName.getText().toString();
             String molecularFormula = binding.molecularFormula.getText().toString();

@@ -41,7 +41,10 @@ public class Compound {
             return new String[]{"Error: "+error};
         }
         if(!VALID_CHAR.matcher(molecularFormula).matches()){
-            error = "Invalid Input Characters Or Case Error" ;
+            // error = "Invalid Input Characters Or Case Error" ;
+
+            // give 'invalid element' error because elements are supposed to be in correct format
+            error = "Invalid elements!" ;
             return new String[]{"Error: "+error};
         }
         int balance = 0;
