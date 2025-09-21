@@ -134,7 +134,7 @@
                         style="@style/InputField"
 
                         android:importantForAutofill="no"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/concentration_hint_molarity"
                         android:id="@+id/concentration"
 
@@ -177,7 +177,7 @@
                     <EditText
                         style="@style/InputField"
                         android:importantForAutofill="no"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/weight_hint_molarity"
                         android:id="@+id/weight"
                         android:layout_width="0dp"

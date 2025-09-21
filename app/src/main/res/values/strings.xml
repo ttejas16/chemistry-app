@@ -44,6 +44,6 @@
     <string name="calculate_text">Calculate</string>
     <string name="salt_input_label">Select a salt</string>
     <string name="volume_hint">Ex. 250 mL</string>
-    <string name="volume_input_label">Enter volume</string>
+    <string name="volume_input_label">Enter volume in mL</string>
 
 </resources>

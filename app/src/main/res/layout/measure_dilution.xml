@@ -77,7 +77,7 @@
                     <EditText
                         style="@style/InputField"
                         android:importantForAutofill="no"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/concentration_hint"
                         android:id="@+id/stockConcentration"
                         android:layout_width="0dp"
@@ -117,7 +117,7 @@
                     <EditText
                         style="@style/InputField"
                         android:importantForAutofill="no"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/concentration_hint"
                         android:id="@+id/requiredConcentration"
                         android:layout_width="0dp"
@@ -149,7 +149,7 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter required volume"/>
+                    android:text="Enter required volume in mL"/>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

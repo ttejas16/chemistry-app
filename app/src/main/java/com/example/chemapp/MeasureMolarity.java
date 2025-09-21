@@ -166,7 +166,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 }
 
                 String[][] data = new String[volumes.length + 1][3];
-                data[0][0] = "For volume (mL)";
+                data[0][0] = "Volume (mL)";
                 data[0][1] = "Req weight (g)";
                 data[0][2] = "Req weight (mg)";
 

@@ -131,12 +131,11 @@
                     <EditText
                         style="@style/InputField"
                         android:importantForAutofill="no"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/concentration_hint"
                         android:id="@+id/concentration"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
                         app:layout_constraintEnd_toStartOf="@id/concentrationUnit"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

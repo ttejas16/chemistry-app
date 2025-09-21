@@ -152,7 +152,7 @@ public class MeasureSolid extends AppCompatActivity {
             int concentrationUnit = binding.concentrationUnit.getSelectedItemPosition() + 1;
 
             String[][] data = new String[2][2];
-            data[0][0] = "For Volume (mL)";
+            data[0][0] = "Volume (mL)";
             data[0][1] = "Salt required (mg)";
 
             int i = 1;
