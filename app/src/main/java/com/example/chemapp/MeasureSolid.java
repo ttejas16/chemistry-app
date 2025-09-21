@@ -151,9 +151,10 @@ public class MeasureSolid extends AppCompatActivity {
 
             int concentrationUnit = binding.concentrationUnit.getSelectedItemPosition() + 1;
 
-            String[][] data = new String[2][2];
+            String[][] data = new String[2][3];
             data[0][0] = "Volume (mL)";
-            data[0][1] = "Salt required (mg)";
+            data[0][1] = "Req weight (g)";
+            data[0][2] = "Req weight (mg)";
 
             int i = 1;
 
@@ -167,7 +168,8 @@ public class MeasureSolid extends AppCompatActivity {
                             concentrationUnit
                     );
                     data[i][0] = size + "";
-                    data[i][1] = NumberFormatter.formatNumber(result);
+                    data[i][1] = NumberFormatter.formatNumber(result * 1000);
+                    data[i][2] = NumberFormatter.formatNumber(result);
 
                 } catch (Exception e) {
 

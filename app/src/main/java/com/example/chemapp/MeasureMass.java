@@ -66,12 +66,14 @@ public class MeasureMass extends AppCompatActivity {
 
                 String title = "For " + concentrationString + " " + selectedUnit + " of solute";
 
-                String[][] data = new String[2][2];
+                String[][] data = new String[2][3];
                 data[0][0] = "Volume (mL)";
-                data[0][1] = "Mass required (mg)";
+                data[0][1] = "Req mass (g)";
+                data[0][2] = "Req mass (mg)";
 
                 data[1][0] = String.valueOf(volume);
-                data[1][1] = NumberFormatter.formatNumber(result);
+                data[1][1] = NumberFormatter.formatNumber(result * 1000);
+                data[1][2] = NumberFormatter.formatNumber(result);
 
 
                 String description = gson.toJson(data);
