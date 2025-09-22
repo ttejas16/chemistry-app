@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none">
+
+        <item
+
+            android:id="@+id/nav_history"
+            android:title="History"
+            android:icon="@drawable/history"
+            />
+
+        <item
+            android:id="@+id/nav_bookmarks"
+            android:title="Bookmarks"
+            android:icon="@drawable/book_marked"
+            />
+
+        <item
+            android:id="@+id/nav_add_new"
+            android:title="Add New Compound"
+            android:icon="@drawable/plus"
+            />
+
+        <item
+            android:id="@+id/nav_additional"
+            android:title="Additional Compounds"
+            android:icon="@drawable/list"
+            />
+
+    </group>
+</menu>
