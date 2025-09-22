@@ -75,6 +75,11 @@ public class AddCompound extends AppCompatActivity {
             String equivalentWeightString = binding.equivalentWeight.getText().toString();
 
             if (compoundName.isEmpty() || molecularFormula.isEmpty() || molecularWeightString.isEmpty()) {
+                Toast.makeText(
+                        AddCompound.this,
+                        "please fill required fields",
+                        Toast.LENGTH_LONG
+                ).show();
                 return;
             }
 

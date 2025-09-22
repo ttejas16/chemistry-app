@@ -95,6 +95,11 @@ public class MeasureDilution extends AppCompatActivity {
             if (stockConcentrationString.isEmpty() ||
                 reqConcentrationString.isEmpty() ||
                 volumeString.isEmpty()) {
+                Toast.makeText(
+                        MeasureDilution.this,
+                        "please fill required fields",
+                        Toast.LENGTH_LONG
+                ).show();
                 return;
             }
 

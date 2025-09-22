@@ -136,32 +136,37 @@ public class MeasureMolarity extends AppCompatActivity {
         setSpinnerItems(binding.concentrationUnit, molarityUnitOptions);
 
         binding.calculate.setOnClickListener(v -> {
-            if (binding.salt.getText().toString().isEmpty()) return;
-
             String salt = binding.salt.getText().toString();
-            if (!isValidSelection(salt, salts)) {
-                return;
-            }
-
             String weightString = binding.weight.getText().toString();
             String concentrationString = binding.concentration.getText().toString();
             String volumeString = binding.volume.getText().toString();
 
-            if (salt.isEmpty() || concentrationString.isEmpty() || weightString.isEmpty() || (
-                    volumeString.isEmpty() && !binding.standardSizes.isChecked())) {
+            if (salt.isEmpty() || concentrationString.isEmpty() ||
+                    weightString.isEmpty() || volumeString.isEmpty()) {
+                Toast.makeText(
+                        MeasureMolarity.this,
+                        "please fill required fields",
+                        Toast.LENGTH_LONG
+                ).show();
+                return;
+            }
+
+            if (!isValidSelection(salt, salts)) {
                 return;
             }
 
             try {
                 double concentration = getConcentration();
                 double weight = Double.parseDouble(weightString);
+                double volume = Double.parseDouble(volumeString);
 
                 double[] volumes;
 
                 if (binding.standardSizes.isChecked()) {
-                    volumes = sizes;
+                    volumes = new double[sizes.length + 1];
+                    volumes[0] = volume;
+                    System.arraycopy(sizes, 0, volumes, 1, sizes.length);
                 } else  {
-                    double volume = Double.parseDouble(volumeString);
                     volumes = new double[]{volume};
                 }
 

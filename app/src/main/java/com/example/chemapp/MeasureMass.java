@@ -51,6 +51,11 @@ public class MeasureMass extends AppCompatActivity {
             int cUnit = binding.concentrationUnit.getSelectedItemPosition() + 1;
 
             if (concentrationString.isEmpty() || volumeString.isEmpty()) {
+                Toast.makeText(
+                        MeasureMass.this,
+                        "please fill required fields",
+                        Toast.LENGTH_LONG
+                ).show();
                 return;
             }
 

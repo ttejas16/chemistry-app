@@ -119,8 +119,16 @@ public class MeasureSolid extends AppCompatActivity {
         binding.calculate.setOnClickListener(v -> {
             String element = binding.element.getText().toString();
             String formattedSaltName = binding.salt.getText().toString();
+            String concentrationString = binding.concentration.getText().toString();
+            String volumeString = binding.volume.getText().toString();
 
-            if (element.isEmpty() || formattedSaltName.isEmpty()) {
+            if (element.isEmpty() || formattedSaltName.isEmpty() ||
+                    concentrationString.isEmpty() || volumeString.isEmpty()) {
+                Toast.makeText(
+                        MeasureSolid.this,
+                        "please fill required fields",
+                        Toast.LENGTH_LONG
+                        ).show();
                 return;
             }
 
@@ -140,8 +148,8 @@ public class MeasureSolid extends AppCompatActivity {
             double concentration,volume;
 
             try {
-                concentration = Double.parseDouble(binding.concentration.getText().toString());
-                volume = Double.parseDouble(binding.volume.getText().toString());
+                concentration = Double.parseDouble(concentrationString);
+                volume = Double.parseDouble(volumeString);
             } catch (NumberFormatException e) {
                 Toast.makeText(MeasureSolid.this, "Invalid inputs", Toast.LENGTH_SHORT).show();
                 return;
