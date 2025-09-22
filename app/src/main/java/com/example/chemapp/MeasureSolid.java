@@ -168,7 +168,7 @@ public class MeasureSolid extends AppCompatActivity {
                             concentrationUnit
                     );
                     data[i][0] = size + "";
-                    data[i][1] = NumberFormatter.formatNumber(result * 1000);
+                    data[i][1] = NumberFormatter.formatNumber(result / 1000);
                     data[i][2] = NumberFormatter.formatNumber(result);
 
                 } catch (Exception e) {

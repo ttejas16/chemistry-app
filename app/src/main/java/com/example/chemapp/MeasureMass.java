@@ -72,7 +72,7 @@ public class MeasureMass extends AppCompatActivity {
                 data[0][2] = "Req mass (mg)";
 
                 data[1][0] = String.valueOf(volume);
-                data[1][1] = NumberFormatter.formatNumber(result * 1000);
+                data[1][1] = NumberFormatter.formatNumber(result / 1000);
                 data[1][2] = NumberFormatter.formatNumber(result);
 
 
