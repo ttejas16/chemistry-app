@@ -69,7 +69,10 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter stock concentration"/>
+                    android:text="Enter stock concentration"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -109,7 +112,10 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter required concentration"/>
+                    android:text="Enter required concentration"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -149,7 +155,10 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter required volume in mL"/>
+                    android:text="Enter required volume in mL"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

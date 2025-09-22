@@ -70,7 +70,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/LabelText"
-                    android:text="@string/concentration_input_label"/>
+                    android:text="@string/concentration_input_label"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -110,7 +113,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/LabelText"
-                    android:text="@string/volume_input_label"/>
+                    android:text="@string/volume_input_label"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

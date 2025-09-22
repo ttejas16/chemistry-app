@@ -69,7 +69,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/LabelText"
-                    android:text="Enter Compound name"/>
+                    android:text="Enter Compound name"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -98,7 +101,10 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter molecular formula"/>
+                    android:text="Enter molecular formula"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -127,7 +133,10 @@
                     style="@style/LabelText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter molecular weight"/>
+                    android:text="Enter molecular weight"
+                    app:drawableEndCompat="@drawable/required_asterisk"
+                    android:drawablePadding="2dp"
+                    />
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
