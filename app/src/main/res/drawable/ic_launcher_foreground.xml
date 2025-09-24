@@ -8,6 +8,6 @@
 
     <!-- Foreground icon -->
     <item
-        android:drawable="@drawable/flask_round"
+        android:drawable="@drawable/test_tube_diagonal"
         android:gravity="center"/>
 </layer-list>
