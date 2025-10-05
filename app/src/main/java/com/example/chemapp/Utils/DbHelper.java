@@ -9,12 +9,15 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.database.sqlite.SQLiteDatabaseKt;
 
+import com.example.chemapp.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,23 +75,27 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_E_MOLECULAR_WEIGHT = "molecularWeight";
     public static final String COLUMN_E_MOLECULAR_FORMULA = "molecularFormula";
     private static final Gson gson = new Gson();
-
+    private final Context context ;
 
 
     public static DbHelper getInstance(Context context){
         if(instance == null){
             instance = new DbHelper(context.getApplicationContext(),DATABASE_NAME,null,DATABASE_VERSION);
+
         }
         return instance;
     }
 
 
+
     private DbHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d("DbHelper","IN ON CREATE");
         String bookmarksCreateQ = "CREATE TABLE " + TABLE_BOOKMARKS + "(" + COLUMN_BOOKMARK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TITLE + " TEXT, " + COLUMN_TYPE + " int, " + COLUMN_DESCRIPTION + " TEXT)";
         String historyCreateQ = "CREATE TABLE " + TABLE_HISTORY + "(" + COLUMN_HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TITLE + " TEXT, " + COLUMN_TYPE + " int, " + COLUMN_DESCRIPTION + " TEXT)";
         String CompoundsCreateQ = "CREATE TABLE " + TABLE_COMPOUNDS + "("
@@ -110,13 +117,16 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(bookmarksCreateQ);
         db.execSQL(historyCreateQ);
         db.execSQL(ElementsCreateQ);
+        populateDb(db);
 
-        CalculatorUtil util = CalculatorUtil.getInstance();
-
-        Map<String,Compound> compoundsMap = util.getCompoundsMap();
-        loadCompoundsMapToDb(compoundsMap);
-        Map<String,Element> elementMap = util.getElementsMap();
-        loadElementsMapToDb(elementMap);
+    }
+    public void populateDb(SQLiteDatabase db){
+        CompoundLoader compoundLoader = new CompoundLoader();
+        Map<String, Compound> compoundsMap = compoundLoader.loadCompoundAsMap(context.getApplicationContext(), R.raw.compound_data);
+        ElementMapLoader elementMapLoader = new ElementMapLoader();
+        Map<String, Element> elementsMap = elementMapLoader.loadElementAsMap(context.getApplicationContext(), R.raw.element_data);
+        loadCompoundsMapToDb(db,compoundsMap);
+        loadElementsMapToDb(db,elementsMap);
     }
     public boolean addHistory(String title, int type, String description) throws  Exception {
         if(title == null || title.isEmpty() || description == null || description.isEmpty()  ){
@@ -262,26 +272,30 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        StringBuilder builder = new StringBuilder();
+        String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
+        builder.append(compound.getName()).append(" ").append("(").append(formattedFormula).append(")");
+        String displayString = builder.toString();
         values.put(COLUMN_C_NAME, compound.getName());
         values.put(COLUMN_C_CAS, compound.cas);
         values.put(COLUMN_C_IUPAC_NAME, compound.iupacName);
-        values.put(COLUMN_C_MOLECULAR_FORMULA, compound.molecularFormula);
+        values.put(COLUMN_C_MOLECULAR_FORMULA,formattedFormula);
         values.put(COLUMN_C_MOLECULAR_WEIGHT, compound.molecularWeight);
         values.put(COLUMN_C_EQUIVALENT_WEIGHT, compound.equivalentWeight);
         values.put(COLUMN_C_USERADDED,1);
-
+        values.put(COLUMN_C_DISPLAY_NAME,displayString);
         Gson gson = new Gson();
         String elementsJson = gson.toJson(compound.elements);
         values.put(COLUMN_C_ELEMENTS_JSON, elementsJson);
 
         // Use insertWithOnConflict to handle cases where compound name might already exist.
-        long result = db.insertWithOnConflict(TABLE_USER_COMPOUNDS, null, values, SQLiteDatabase.CONFLICT_ABORT);
+        long result = db.insertWithOnConflict(TABLE_COMPOUNDS, null, values, SQLiteDatabase.CONFLICT_ABORT);
 
         if (result != -1) {
-            Log.e("DbHelper", "User compound added/updated: " + compound.getName());
+            Log.d("DbHelper", "User compound added/updated: " + compound.getName());
             return true;
         } else {
-            Log.e("DbHelper", "Error adding/updating user compound: " + compound.getName());
+            Log.d("DbHelper", "Error adding/updating user compound: " + compound.getName());
             return false;
         }
     }
@@ -293,15 +307,6 @@ public class DbHelper extends SQLiteOpenHelper {
         Gson gson = new Gson();
         Type elementsListType = new TypeToken<String[]>(){}.getType();
 
-        String[] projection = {
-                COLUMN_C_NAME,
-                COLUMN_C_CAS,
-                COLUMN_C_IUPAC_NAME,
-                COLUMN_C_MOLECULAR_FORMULA,
-                COLUMN_C_MOLECULAR_WEIGHT,
-                COLUMN_C_EQUIVALENT_WEIGHT,
-                COLUMN_C_ELEMENTS_JSON
-        };
 
         try {
             cursor = db.rawQuery("Select * from "+ TABLE_COMPOUNDS + " where "+ COLUMN_C_USERADDED + " = 1",new String[]{});
@@ -343,8 +348,7 @@ public class DbHelper extends SQLiteOpenHelper {
         return rowsDeleted > 0;
     }
 
-   private void loadCompoundsMapToDb(Map<String, Compound> compoundMap){
-       SQLiteDatabase db  =  this.getWritableDatabase();
+   private void loadCompoundsMapToDb(SQLiteDatabase db,Map<String, Compound> compoundMap){
        for(String key : compoundMap.keySet()) {
 
             StringBuilder builder = new StringBuilder();
@@ -358,7 +362,7 @@ public class DbHelper extends SQLiteOpenHelper {
             values.put(COLUMN_C_MOLECULAR_FORMULA,formattedFormula);
             values.put(COLUMN_C_DISPLAY_NAME,displayString);
             values.put(COLUMN_C_EQUIVALENT_WEIGHT,compound.equivalentWeight);
-            values.put(COLUMN_C_MOLECULAR_WEIGHT,compound.molecularFormula);
+            values.put(COLUMN_C_MOLECULAR_WEIGHT,compound.molecularWeight);
             values.put(COLUMN_C_IUPAC_NAME,compound.iupacName);
             Gson gson = new Gson();
             String elementsJson = gson.toJson(compound.elements);
@@ -370,8 +374,7 @@ public class DbHelper extends SQLiteOpenHelper {
        }
    }
 
-   private void loadElementsMapToDb(Map<String,Element> elementMap){
-        SQLiteDatabase db = this.getWritableDatabase();
+   private void loadElementsMapToDb(SQLiteDatabase db,Map<String,Element> elementMap){
         for(String key : elementMap.keySet()) {
 
            StringBuilder builder = new StringBuilder();
@@ -384,7 +387,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
            long rowId = db.insert(TABLE_ELEMENTS,null,values);
            if(rowId == -1){
-               Log.e("DbHelper", "ERROR IN INSERTING Data  : " + key );
+               Log.d("DbHelper", "ERROR IN INSERTING Data  : " + key );
+           }
+           else{
+               Log.d("DbHelper","Done loading Elements Data");
            }
         }
    }
