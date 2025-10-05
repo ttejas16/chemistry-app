@@ -28,7 +28,7 @@ public class CalculatorUtil {
 
             CompoundLoader compoundLoader = new CompoundLoader();
             compoundsMap = compoundLoader.loadCompoundAsMap(context.getApplicationContext(), R.raw.compound_data);
-            loadAndMergeUserCompounds(context);
+            //loadAndMergeUserCompounds(context);
             ElementMapLoader elementMapLoader = new ElementMapLoader();
             elementsMap = elementMapLoader.loadElementAsMap(context.getApplicationContext(), R.raw.element_data);
 
