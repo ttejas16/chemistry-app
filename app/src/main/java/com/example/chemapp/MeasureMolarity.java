@@ -30,6 +30,8 @@ import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.data.repository.BookmarkRepository;
+import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 import com.google.gson.Gson;
 
@@ -64,6 +66,8 @@ public class MeasureMolarity extends AppCompatActivity {
 
         Gson gson = new Gson();
         DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
+        BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
+        HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
 
         salts = util.getFormattedDisplayName();
 
@@ -191,7 +195,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 String description = gson.toJson(data);
 
                 try {
-                    boolean res = db.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                    boolean res = historyRepository.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
                 } catch (Exception e) {
 
                 }
@@ -203,7 +207,7 @@ public class MeasureMolarity extends AppCompatActivity {
                         data,
                         () -> {
                             try {
-                                db.addBookmark(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                                bookmarkRepository.addBookmark(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
                             } catch (Exception e) {
 
                             }
