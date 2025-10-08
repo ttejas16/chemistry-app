@@ -17,12 +17,17 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CompoundRepository {
     private final String tag = "CompoundRepository";
     private static CompoundRepository repository;
     private final DbHelper dbHelper;
+
+    private final Gson gson = new Gson();
 
     private CompoundRepository(Context context) {
         this.dbHelper = DbHelper.getInstance(context.getApplicationContext());
@@ -62,6 +67,45 @@ public class CompoundRepository {
         }
 
         return displayNames.toArray(new String[0]);
+    }
+
+    public String[] getSaltsOfElement(String element) {
+        SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+        ArrayList<String> result = new ArrayList<>();
+
+        Cursor cursor = null;
+
+        String query = "SELECT "
+                + TableCompounds.COLUMN_DISPLAY_NAME + ","
+                + TableCompounds.COLUMN_ELEMENTS_JSON + " FROM "
+                + TableCompounds.TABLE_NAME;
+
+        try {
+            cursor = db.rawQuery(query, new String[]{});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String displayName = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_DISPLAY_NAME));
+                    String elementJson = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_ELEMENTS_JSON));
+
+                    String[] elements = gson.fromJson(elementJson, String[].class);
+                    Set<String> elementSet = new HashSet<>(Arrays.asList(elements));
+
+                    if (elementSet.contains(element)) {
+                        result.add(displayName);
+                    }
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(tag, "error while fetching salts of:" + element);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        return result.toArray(new String[0]);
     }
 
     public double[] getWeights(String name) throws Exception {
@@ -153,7 +197,7 @@ public class CompoundRepository {
         return false;
     }
 
-    private boolean isCompoundPresent(String compoundName) {
+    public boolean isCompoundPresent(String compoundName) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor cursor = null;
@@ -236,7 +280,7 @@ public class CompoundRepository {
             return false;
         }
 
-        if(!compoundName.contains("(userdefined)")){
+        if (!compoundName.contains("(userdefined)")) {
             Log.d(tag, "Trying to delete non-user-defined compound: " + compoundName);
             return false;
         }

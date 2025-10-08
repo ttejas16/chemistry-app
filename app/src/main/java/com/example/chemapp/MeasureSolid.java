@@ -26,18 +26,24 @@ import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
 import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.data.repository.BookmarkRepository;
+import com.example.chemapp.data.repository.CompoundRepository;
+import com.example.chemapp.data.repository.ElementRepository;
 import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureSolidBinding;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MeasureSolid extends AppCompatActivity {
     private MeasureSolidBinding binding;
     private final String[] concentrationUnits = {"ppm", "ppb", "ppt"};
     String[] elements;
-
+    Set<String> elementSet;
     CalculatorUtil util;
+    CompoundRepository compoundRepository;
+    ElementRepository elementRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +63,17 @@ public class MeasureSolid extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         Gson gson = new Gson();
-        DbHelper db = DbHelper.getInstance(MeasureSolid.this);
         BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
         HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
 
+        elementRepository = ElementRepository.getInstance(getApplicationContext());
+        compoundRepository = CompoundRepository.getInstance(getApplicationContext());
+
         util = CalculatorUtil.getInstance();
-        elements = util.getElementsMap().keySet().toArray(new String[0]);
+
+        elements = elementRepository.getAllElements();
+        elementSet = new HashSet<>(Arrays.asList(elements));
+
         setSpinnerItems(binding.element, elements);
 
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
@@ -74,8 +85,7 @@ public class MeasureSolid extends AppCompatActivity {
                 binding.element.setError(null);
                 binding.salt.setText("");
 
-                Element element = util.getElementsMap().get(selectedElement);
-                String[] elementSalts = util.getFormattedDisplayName(element);
+                String[] elementSalts = compoundRepository.getSaltsOfElement(selectedElement);
                 setSpinnerItems(binding.salt, elementSalts);
             }
         });
@@ -85,16 +95,16 @@ public class MeasureSolid extends AppCompatActivity {
                 binding.element.setError("please select a element");
                 setSpinnerItems(binding.salt, new String[0]);
                 return;
-            };
+            }
+            ;
 
-            if (!util.getElementsMap().containsKey(selectedElement)) {
+            if (!elementSet.contains(selectedElement)) {
                 setSpinnerItems(binding.salt, new String[0]);
                 binding.element.setError("invalid element");
                 return;
             }
 
-            Element element = util.getElementsMap().get(selectedElement);
-            String[] elementSalts = util.getFormattedDisplayName(element);
+            String[] elementSalts = compoundRepository.getSaltsOfElement(selectedElement);
             setSpinnerItems(binding.salt, elementSalts);
             binding.element.setError(null);
         });
@@ -108,8 +118,7 @@ public class MeasureSolid extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!hasMatchingSuggestions(s.toString(), elements)) {
                     binding.element.setError("invalid element");
-                }
-                else {
+                } else {
                     binding.element.setError(null);
                 }
             }
@@ -131,17 +140,17 @@ public class MeasureSolid extends AppCompatActivity {
             String salt = formattedSaltName;
 
             int splitIndex = formattedSaltName.lastIndexOf(" (");
-            if(splitIndex != -1){
-                salt = formattedSaltName.substring(0,splitIndex).trim();
+            if (splitIndex != -1) {
+                salt = formattedSaltName.substring(0, splitIndex).trim();
             }
 
-            if (!util.getElementsMap().containsKey(element) ||
-                !util.getCompoundsMap().containsKey(salt)
+            if (!elementSet.contains(element) ||
+                    !compoundRepository.isCompoundPresent(salt)
             ) {
                 return;
             }
 
-            double concentration,volume;
+            double concentration, volume;
 
             try {
                 concentration = Double.parseDouble(binding.concentration.getText().toString());
@@ -162,7 +171,7 @@ public class MeasureSolid extends AppCompatActivity {
 
             int i = 1;
 
-            for (double size:sizes) {
+            for (double size : sizes) {
                 try {
                     double result = util.calculateRequiredCompoundMassForElementConcentration(
                             element,
@@ -214,12 +223,10 @@ public class MeasureSolid extends AppCompatActivity {
 
         String selectedElement = binding.element.getText().toString();
 
-        if (!selectedElement.isEmpty() && util.getElementsMap().containsKey(selectedElement)) {
+        if (!selectedElement.isEmpty() && elementSet.contains(selectedElement)) {
             binding.salt.setText("");
 
-            Element element = util.getElementsMap().get(selectedElement);
-
-            String[] salts = util.getFormattedDisplayName(element);
+            String[] salts = compoundRepository.getSaltsOfElement(selectedElement);
             setSpinnerItems(binding.salt, salts);
         }
 
@@ -245,7 +252,7 @@ public class MeasureSolid extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setSpinnerItems(AutoCompleteTextView spinner, String[] options){
+    public void setSpinnerItems(AutoCompleteTextView spinner, String[] options) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -256,7 +263,8 @@ public class MeasureSolid extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
     }
-    public void setSpinnerItems(Spinner spinner, String[] options){
+
+    public void setSpinnerItems(Spinner spinner, String[] options) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
@@ -267,8 +275,9 @@ public class MeasureSolid extends AppCompatActivity {
 
         spinner.setAdapter(adapter);
     }
-    public String getResultTitle(){
-        StringBuilder builder =  new StringBuilder();
+
+    public String getResultTitle() {
+        StringBuilder builder = new StringBuilder();
         String cValue = binding.concentration.getText().toString();
         String cUnit = binding.concentrationUnit.getSelectedItem().toString();
         String element = binding.element.getText().toString();
@@ -278,10 +287,11 @@ public class MeasureSolid extends AppCompatActivity {
         builder.append("using " + salt);
         return builder.toString();
     }
-    public String getDescription(String[][] data){
+
+    public String getDescription(String[][] data) {
         StringBuilder builder = new StringBuilder();
 
-        for(int i = 0;i < data.length;i++) {
+        for (int i = 0; i < data.length; i++) {
             builder.append(data[i][0]).append("\t").append(data[i][1]);
 
             if (i != data.length - 1) {
