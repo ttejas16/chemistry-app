@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
+import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.databinding.AddCompoundBinding;
 
 public class AddCompound extends AppCompatActivity {
@@ -36,6 +37,8 @@ public class AddCompound extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         CalculatorUtil util = CalculatorUtil.getInstance();
+        CompoundRepository compoundRepository = CompoundRepository.getInstance(getApplicationContext());
+
         binding.molecularFormula.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -86,9 +89,9 @@ public class AddCompound extends AppCompatActivity {
                 double mw = Double.parseDouble(molecularWeightString);
                 double ew = equivalentWeightString.isEmpty() ? 1 : Double.parseDouble(equivalentWeightString);
 
-                boolean isAdded = util.addNewUserCompound(
-                        compoundName, mw, ew,
-                        molecularFormula, iupacName, AddCompound.this
+                boolean isAdded = compoundRepository.addUserCompound(
+                        compoundName, molecularFormula,
+                        iupacName, mw, ew
                 );
 
                 if (isAdded) {

@@ -141,7 +141,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(historyCreateQ);
         db.execSQL(ElementsCreateQ);
         populateDb(db);
-
     }
 
     public void populateDb(SQLiteDatabase db) {
@@ -151,91 +150,6 @@ public class DbHelper extends SQLiteOpenHelper {
         Map<String, Element> elementsMap = elementMapLoader.loadElementAsMap(context.getApplicationContext(), R.raw.element_data);
         loadCompoundsMapToDb(db, compoundsMap);
         loadElementsMapToDb(db, elementsMap);
-    }
-
-    public boolean addUserCompound(Compound compound) {
-        if (compound == null || compound.getName() == null || compound.getName().isEmpty()) {
-            Log.e("DbHelper", "Cannot add null compound or compound with no name.");
-            return false;
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        StringBuilder builder = new StringBuilder();
-        String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
-        builder.append(compound.getName()).append(" ").append("(").append(formattedFormula).append(")");
-        String displayString = builder.toString();
-        values.put(TableCompounds.COLUMN_NAME, compound.getName());
-        values.put(TableCompounds.COLUMN_CAS, compound.cas);
-        values.put(TableCompounds.COLUMN_IUPAC_NAME, compound.iupacName);
-        values.put(TableCompounds.COLUMN_MOLECULAR_FORMULA, formattedFormula);
-        values.put(TableCompounds.COLUMN_MOLECULAR_WEIGHT, compound.molecularWeight);
-        values.put(TableCompounds.COLUMN_EQUIVALENT_WEIGHT, compound.equivalentWeight);
-        values.put(TableCompounds.COLUMN_USERADDED, 1);
-        values.put(TableCompounds.COLUMN_DISPLAY_NAME, displayString);
-        Gson gson = new Gson();
-        String elementsJson = gson.toJson(compound.elements);
-        values.put(TableCompounds.COLUMN_ELEMENTS_JSON, elementsJson);
-
-        // Use insertWithOnConflict to handle cases where compound name might already exist.
-        long result = db.insertWithOnConflict(TableCompounds.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_ABORT);
-
-        if (result != -1) {
-            Log.d("DbHelper", "User compound added/updated: " + compound.getName());
-            return true;
-        } else {
-            Log.d("DbHelper", "Error adding/updating user compound: " + compound.getName());
-            return false;
-        }
-    }
-
-    public List<Compound> getAllUserCompounds() {
-        List<Compound> userCompoundsList = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = null;
-        Gson gson = new Gson();
-        Type elementsListType = new TypeToken<String[]>() {
-        }.getType();
-
-
-        try {
-            cursor = db.rawQuery("Select * from " + TableCompounds.TABLE_NAME + " where " + TableCompounds.COLUMN_USERADDED + " = 1", new String[]{});
-
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    String name = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_NAME));
-                    String cas = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_CAS));
-                    String iupacName = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_IUPAC_NAME));
-                    String molecularFormula = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_MOLECULAR_FORMULA));
-                    double molecularWeight = cursor.getDouble(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_MOLECULAR_WEIGHT));
-                    double equivalentWeight = cursor.getDouble(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_EQUIVALENT_WEIGHT));
-                    String elementsJson = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_ELEMENTS_JSON));
-
-                    String[] elements = gson.fromJson(elementsJson, elementsListType);
-
-                    Compound compound = new Compound(name, cas, iupacName, molecularFormula, molecularWeight, equivalentWeight, elements);
-                    userCompoundsList.add(compound);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            Log.e("DbHelper", "Error getting all user compounds", e);
-        } finally {
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
-
-        }
-        Log.d("DbHelper", "Retrieved " + userCompoundsList.size() + " user compounds.");
-        return userCompoundsList;
-    }
-
-    public boolean deleteUserCompound(String compoundName) {
-        if (compoundName == null || compoundName.isEmpty()) {
-            return false;
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TableCompounds.TABLE_NAME, TableCompounds.COLUMN_NAME + " = ?", new String[]{compoundName});
-        Log.d("DbHelper", "Deleted " + rowsDeleted + " user compound(s) with name: " + compoundName);
-        return rowsDeleted > 0;
     }
 
     private void loadCompoundsMapToDb(SQLiteDatabase db, Map<String, Compound> compoundMap) {
@@ -288,12 +202,6 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
     }
-
-    /*
-        Done  Function for Inserting Data into DB
-        Done Function for retriving Wieghts from Display name
-        //////////Remaining////
-     */
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
