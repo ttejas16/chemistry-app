@@ -166,63 +166,44 @@ public class CalculatorUtil {
     }
 
 
-    public boolean addNewUserCompound(String compoundName, double molecularWeight,double equivalentWeight, String molecularFormula,String iupacName,Context context) throws IllegalArgumentException{
-
-        if(molecularFormula.isEmpty() || compoundName.isEmpty() || iupacName.isEmpty()){
-           throw new IllegalArgumentException("addNewCompound : IllegalArgument provided");
-
-        }
-        String newCompoundName = compoundName + " (userdefined)";
-        String[] elements = Compound.getElementsFromMolecularFormula(molecularFormula);
-        Compound compound = new Compound(newCompoundName,"None",iupacName,molecularFormula,molecularWeight,equivalentWeight,elements);
-        if(compoundsMap.containsKey(compoundName) || compoundsMap.containsKey(newCompoundName)) {
-            Log.d("addNewCompound", "Compound Already Exists");
-            return  false;
-        }
-        compoundsMap.put(compound.getName(),compound);
-        DbHelper db = DbHelper.getInstance(context);
-        return db.addUserCompound(compound);
-
-    }
-
-    public static void loadAndMergeUserCompounds(Context context) {
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        List<Compound> userCompounds = dbHelper.getAllUserCompounds();
-
-        if (compoundsMap == null) {
-            compoundsMap = new HashMap<>();
-        }
-
-        if (userCompounds != null && !userCompounds.isEmpty()) {
-            Log.d("CalculatorUtil", "Merging " + userCompounds.size() + " user compounds.");
-            for (Compound userCompound : userCompounds) {
-                // User's compound overrides default if names collide
-                compoundsMap.put(userCompound.getName(), userCompound);
-            }
-        }
-    }
+//    public static void loadAndMergeUserCompounds(Context context) {
+//        DbHelper dbHelper = DbHelper.getInstance(context);
+//        List<Compound> userCompounds = dbHelper.getAllUserCompounds();
+//
+//        if (compoundsMap == null) {
+//            compoundsMap = new HashMap<>();
+//        }
+//
+//        if (userCompounds != null && !userCompounds.isEmpty()) {
+//            Log.d("CalculatorUtil", "Merging " + userCompounds.size() + " user compounds.");
+//            for (Compound userCompound : userCompounds) {
+//                // User's compound overrides default if names collide
+//                compoundsMap.put(userCompound.getName(), userCompound);
+//            }
+//        }
+//    }
 
     // the Input for the Compound name must be the Element of Compound Class i.e Comppound.getname();
-    public void removeUserCompound(Context context, String compoundName) {
-        if (compoundName == null || compoundName.isEmpty()) return;
-
-        if(!compoundName.contains("(userdefined)")){
-
-            Log.d("CalculatorUtil", "Trying to delete non-user-defined compound: " + compoundName);
-            return ;
-        }
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        boolean success = dbHelper.deleteUserCompound(compoundName);
-
-        if (success) {
-            if (compoundsMap != null) {
-                compoundsMap.remove(compoundName); // Update in-memory map
-            }
-            Log.d("CalculatorUtil", "User compound removed from persistence and in-memory map: " + compoundName);
-        } else {
-            Log.e("CalculatorUtil", "Failed to remove user compound from persistence: " + compoundName);
-        }
-    }
+//    public void removeUserCompound(Context context, String compoundName) {
+//        if (compoundName == null || compoundName.isEmpty()) return;
+//
+//        if(!compoundName.contains("(userdefined)")){
+//
+//            Log.d("CalculatorUtil", "Trying to delete non-user-defined compound: " + compoundName);
+//            return ;
+//        }
+//        DbHelper dbHelper = DbHelper.getInstance(context);
+//        boolean success = dbHelper.deleteUserCompound(compoundName);
+//
+//        if (success) {
+//            if (compoundsMap != null) {
+//                compoundsMap.remove(compoundName); // Update in-memory map
+//            }
+//            Log.d("CalculatorUtil", "User compound removed from persistence and in-memory map: " + compoundName);
+//        } else {
+//            Log.e("CalculatorUtil", "Failed to remove user compound from persistence: " + compoundName);
+//        }
+//    }
 
     public double getDilutionResultFrom(
             double stockConcentration, int stockConcentrationUnit,
