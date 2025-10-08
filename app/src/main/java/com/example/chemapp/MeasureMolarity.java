@@ -31,6 +31,7 @@ import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.NumberFormatter;
 import com.example.chemapp.data.repository.BookmarkRepository;
+import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 import com.google.gson.Gson;
@@ -42,9 +43,8 @@ public class MeasureMolarity extends AppCompatActivity {
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
     final String[] molarityUnitOptions = { "M", "mM", "μM"};
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
-
     String [] salts;
-    CalculatorUtil util = CalculatorUtil.getInstance();
+    CompoundRepository compoundRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +65,11 @@ public class MeasureMolarity extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         Gson gson = new Gson();
-        DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
         BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
         HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
+        compoundRepository = CompoundRepository.getInstance(getApplicationContext());
 
-        salts = util.getFormattedDisplayName();
+        salts = compoundRepository.getAllDisplayNames();
 
         Arrays.sort(salts);
         setSpinnerItems(binding.salt, salts);
@@ -220,7 +220,7 @@ public class MeasureMolarity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        salts = util.getFormattedDisplayName();
+        salts = compoundRepository.getAllDisplayNames();
         Arrays.sort(salts);
 
         setSpinnerItems(binding.salt, salts);
@@ -364,18 +364,19 @@ public class MeasureMolarity extends AppCompatActivity {
         }
 
         int solutionType = binding.solutionType.getSelectedItemPosition();
-        Compound  compound = util.getCompoundsMap().get(saltName);
+        try {
+            double[] weights = compoundRepository.getWeights(saltName);
 
-        if (compound == null){
-            return;
+            if (solutionType == 0) {
+                binding.weight.setText(String.valueOf(weights[0]));
+            }
+            else  {
+                binding.weight.setText(String.valueOf(weights[1]));
+            }
+        } catch (Exception e) {
+
         }
 
-        if (solutionType == 0) {
-            binding.weight.setText(String.valueOf(compound.molecularWeight));
-        }
-        else  {
-            binding.weight.setText(String.valueOf(compound.equivalentWeight));
-        }
     }
 
     public double calculateResult(double w, double c, double volumeInMillilitres){
