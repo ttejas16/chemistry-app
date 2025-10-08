@@ -23,51 +23,55 @@ import java.util.List;
 import java.util.Map;
 
 /*
-* BookMarks
-* Id : PrimaryKey
-* Title : String
-* type : String (Like of which Operation Type Like getCompoundMassForElement or PPm/PPb  or Molarity/Normality  or Dilution )
-*
-* For Types I can Declare A Enum For easy Operations
-*
-* Description : String Will Contain The remaining Details of Calculation
-*
-* History
-* Make It of Only 10 entries restricted
-*
-* Id : PrimaryKey
-*
-* Title : String
-* type : String (Like of which Operation Type Like getCompoundMassForElement or PPm/PPb  or Molarity/Normality  or Dilution )
-* For Types I can Declare A Enum For easy Operations
-*
-* Description : String Will Contain The remaining Details of Calculation
-*
-*
-*
-*
-* */
+ * BookMarks
+ * Id : PrimaryKey
+ * Title : String
+ * type : String (Like of which Operation Type Like getCompoundMassForElement or PPm/PPb  or Molarity/Normality  or Dilution )
+ *
+ * For Types I can Declare A Enum For easy Operations
+ *
+ * Description : String Will Contain The remaining Details of Calculation
+ *
+ * History
+ * Make It of Only 10 entries restricted
+ *
+ * Id : PrimaryKey
+ *
+ * Title : String
+ * type : String (Like of which Operation Type Like getCompoundMassForElement or PPm/PPb  or Molarity/Normality  or Dilution )
+ * For Types I can Declare A Enum For easy Operations
+ *
+ * Description : String Will Contain The remaining Details of Calculation
+ *
+ *
+ *
+ *
+ * */
 public class DbHelper extends SQLiteOpenHelper {
-    private static DbHelper instance ;
+    private static DbHelper instance;
     public static final String DATABASE_NAME = "ChemApp.db";
     private static final int DATABASE_VERSION = 1;
 
-    public static final String TABLE_BOOKMARKS = "Bookmarks";
-    public static final String COLUMN_BOOKMARK_ID = "BookmarkId";
-    public static final String COLUMN_TITLE = "Title";
-    public static final String COLUMN_TYPE = "Type";
-    public static final String COLUMN_DESCRIPTION = "Description";
-    public static final String TABLE_HISTORY = "History";
-    public static final String COLUMN_HISTORY_ID = "HistoryId";
+    public static abstract class TableBookmarks {
+        public static final String TABLE_NAME = "Bookmarks";
+        public static final String COLUMN_BOOKMARK_ID = "BookmarkId";
+        public static final String COLUMN_TITLE = "Title";
+        public static final String COLUMN_TYPE = "Type";
+        public static final String COLUMN_DESCRIPTION = "Description";
+    }
 
-
-
-
+    public static abstract class TableHistory {
+        public static final String TABLE_NAME = "History";
+        public static final String COLUMN_HISTORY_ID = "HistoryId";
+        public static final String COLUMN_TITLE = "Title";
+        public static final String COLUMN_TYPE = "Type";
+        public static final String COLUMN_DESCRIPTION = "Description";
+    }
 
     public static abstract class TableCompounds {
         public static final String TABLE_NAME = "Compounds";
         public static final String COLUMN_NAME = "name";
-        public static  final  String COLUMN_USERADDED = "userAdded";
+        public static final String COLUMN_USERADDED = "userAdded";
         public static final String COLUMN_CAS = "cas";
         public static final String COLUMN_IUPAC_NAME = "iupacName";
         public static final String COLUMN_MOLECULAR_FORMULA = "molecularFormula";
@@ -76,19 +80,21 @@ public class DbHelper extends SQLiteOpenHelper {
         public static final String COLUMN_DISPLAY_NAME = "displayName";
         public static final String COLUMN_ELEMENTS_JSON = "elementsJson";
     }
+
     public static abstract class TableElements {
         public static final String TABLE_NAME = "Elements";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_MOLECULAR_WEIGHT = "molecularWeight";
         public static final String COLUMN_MOLECULAR_FORMULA = "molecularFormula";
     }
+
     private static final Gson gson = new Gson();
     private final Context context;
 
 
-    public static DbHelper getInstance(Context context){
-        if(instance == null){
-            instance = new DbHelper(context.getApplicationContext(),DATABASE_NAME,null,DATABASE_VERSION);
+    public static DbHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DbHelper(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         return instance;
@@ -101,9 +107,18 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.d("DbHelper","IN ON CREATE");
-        String bookmarksCreateQ = "CREATE TABLE " + TABLE_BOOKMARKS + "(" + COLUMN_BOOKMARK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TITLE + " TEXT, " + COLUMN_TYPE + " int, " + COLUMN_DESCRIPTION + " TEXT)";
-        String historyCreateQ = "CREATE TABLE " + TABLE_HISTORY + "(" + COLUMN_HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TITLE + " TEXT, " + COLUMN_TYPE + " int, " + COLUMN_DESCRIPTION + " TEXT)";
+        Log.d("DbHelper", "IN ON CREATE");
+        String bookmarksCreateQ = "CREATE TABLE " + TableBookmarks.TABLE_NAME + "("
+                + TableBookmarks.COLUMN_BOOKMARK_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TableBookmarks.COLUMN_TITLE + " TEXT, "
+                + TableBookmarks.COLUMN_TYPE + " int, "
+                + TableBookmarks.COLUMN_DESCRIPTION + " TEXT)";
+
+        String historyCreateQ = "CREATE TABLE " + TableHistory.TABLE_NAME + "("
+                + TableHistory.COLUMN_HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + TableHistory.COLUMN_TITLE + " TEXT, "
+                + TableHistory.COLUMN_TYPE + " int, "
+                + TableHistory.COLUMN_DESCRIPTION + " TEXT)";
 
         String CompoundsCreateQ = "CREATE TABLE " + TableCompounds.TABLE_NAME + "("
                 + TableCompounds.COLUMN_NAME + " TEXT PRIMARY KEY," // Compound name is the primary key
@@ -112,7 +127,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TableCompounds.COLUMN_MOLECULAR_FORMULA + " TEXT,"
                 + TableCompounds.COLUMN_MOLECULAR_WEIGHT + " REAL,"
                 + TableCompounds.COLUMN_EQUIVALENT_WEIGHT + " REAL,"
-                + TableCompounds.COLUMN_USERADDED + " INTEGER DEFAULT 0 CHECK(" + TableCompounds.COLUMN_USERADDED +" IN  (0,1)),"
+                + TableCompounds.COLUMN_USERADDED + " INTEGER DEFAULT 0 CHECK(" + TableCompounds.COLUMN_USERADDED + " IN  (0,1)),"
                 + TableCompounds.COLUMN_DISPLAY_NAME + " TEXT,"
                 + TableCompounds.COLUMN_ELEMENTS_JSON + " TEXT" + ")";
 
@@ -120,6 +135,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TableElements.COLUMN_NAME + " TEXT PRIMARY KEY," // Compound name is the primary key
                 + TableElements.COLUMN_MOLECULAR_FORMULA + " TEXT,"
                 + TableElements.COLUMN_MOLECULAR_WEIGHT + " REAL )";
+
         db.execSQL(CompoundsCreateQ);
         db.execSQL(bookmarksCreateQ);
         db.execSQL(historyCreateQ);
@@ -127,149 +143,14 @@ public class DbHelper extends SQLiteOpenHelper {
         populateDb(db);
 
     }
-    public void populateDb(SQLiteDatabase db){
+
+    public void populateDb(SQLiteDatabase db) {
         CompoundLoader compoundLoader = new CompoundLoader();
         Map<String, Compound> compoundsMap = compoundLoader.loadCompoundAsMap(context.getApplicationContext(), R.raw.compound_data);
         ElementMapLoader elementMapLoader = new ElementMapLoader();
         Map<String, Element> elementsMap = elementMapLoader.loadElementAsMap(context.getApplicationContext(), R.raw.element_data);
-        loadCompoundsMapToDb(db,compoundsMap);
-        loadElementsMapToDb(db,elementsMap);
-    }
-    public boolean addHistory(String title, int type, String description) throws  Exception {
-        if(title == null || title.isEmpty() || description == null || description.isEmpty()  ){
-            throw new IllegalArgumentException("No Title or Description");
-        }
-
-        if(type < 1 || type > 4){
-            throw new IllegalArgumentException("Invalid Type");
-        }
-
-        SQLiteDatabase db  = this.getWritableDatabase();
-        boolean success = false;
-
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_TITLE,title);
-        values.put(COLUMN_TYPE,type);
-        values.put(COLUMN_DESCRIPTION,description);
-
-        db.beginTransaction();
-
-        try{
-            long id = db.insert(TABLE_HISTORY, null, values);
-//            Log.d("inserted id", id + "");
-
-            if (id == -1) return false;
-
-            String trimQuery = "DELETE FROM " + TABLE_HISTORY + " WHERE " + COLUMN_HISTORY_ID +
-                    " NOT IN  (SELECT "+ COLUMN_HISTORY_ID + " FROM " + TABLE_HISTORY + " ORDER BY " + COLUMN_HISTORY_ID + " DESC LIMIT 10)";
-            db.execSQL(trimQuery);
-            success = true;
-            db.setTransactionSuccessful();
-
-        } catch (Exception e) {
-            Log.d("DbHelper", "Error while trying to add history to database", e);
-        }finally {
-            db.endTransaction();
-        }
-
-        return success;
-    }
-
-    public List<CalculationRecord> getHistoryCalculations(){
-        List<CalculationRecord> historyList = new ArrayList<>();
-        Cursor cursor = null;
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_HISTORY + " ORDER BY " + COLUMN_HISTORY_ID + " DESC";
-       try{
-           cursor = db.rawQuery(query,null);
-            while(cursor.moveToNext()){
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_HISTORY_ID));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
-
-                int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
-                String[][] tableData = gson.fromJson(description, String[][].class);
-
-                historyList.add(new CalculationRecord(id, title, type, description, tableData));
-            }
-       } catch (Exception e) {
-           Log.e("DbHelper", "Error while trying to get history calculations from database", e);
-       }finally {
-           if (cursor != null) cursor.close();
-
-       }
-
-//       Log.d("history list", historyList.toString());
-       return historyList;
-    }
-    public boolean clearHistory(){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        int delCnt = db.delete(TABLE_HISTORY,"1",null);
-        if(delCnt > 0) {
-            Log.d("Database Operation", "History Deleted cnt " + delCnt);
-            return true;
-        }
-        Log.d("Database Operation", "History Not Deleted");
-        return false;
-    }
-    public boolean addBookmark (String title, int type, String description)throws Exception {
-        if(title == null || title.isEmpty() || description == null || description.isEmpty()  ){
-            throw new IllegalArgumentException("No Title or Description");
-        }
-        if(type < 1 || type > 4){
-            throw new IllegalArgumentException("Invalid Type");
-        }
-        SQLiteDatabase db = this.getWritableDatabase();
-        boolean success = false;
-        try{
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_TITLE, title);
-            values.put(COLUMN_TYPE, type);
-            values.put(COLUMN_DESCRIPTION, description);
-            success = db.insert(TABLE_BOOKMARKS, null, values) != -1;
-        } catch (Exception e) {
-            Log.d("DbHelper", "Error while trying to add bookmark to database", e);
-        }
-        return success;
-
-    }
-
-    public List<CalculationRecord> getBookmarks(){
-        List<CalculationRecord> bookmarkList = new ArrayList<>();
-        Cursor cursor = null;
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_BOOKMARKS + " ORDER BY " + COLUMN_BOOKMARK_ID + " DESC";
-        try{
-            cursor = db.rawQuery(query,null);
-            while(cursor.moveToNext()){
-                int id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_BOOKMARK_ID));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE));
-                int type = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
-
-                String[][] tableData = gson.fromJson(description, String[][].class);
-
-                bookmarkList.add(new CalculationRecord(id, title, type, description, tableData));
-            }
-        } catch (Exception e){
-            Log.e("DbHelper", "Error while trying to get bookmarks from database", e);
-        }finally {
-            if (cursor != null) cursor.close();
-        }
-        return bookmarkList;
-    }
-
-    public boolean deleteBookmark(String id){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        int delCnt =  db.delete(TABLE_BOOKMARKS, COLUMN_BOOKMARK_ID + " = ?", new String[]{id});
-        if(delCnt > 0) {
-            Log.d("Database Operation", "Bookmark Deleted cnt " + delCnt);
-            return true;
-        }
-        Log.d("Database Operation", "Bookmark Not Deleted");
-        return false;
+        loadCompoundsMapToDb(db, compoundsMap);
+        loadElementsMapToDb(db, elementsMap);
     }
 
     public boolean addUserCompound(Compound compound) {
@@ -286,11 +167,11 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put(TableCompounds.COLUMN_NAME, compound.getName());
         values.put(TableCompounds.COLUMN_CAS, compound.cas);
         values.put(TableCompounds.COLUMN_IUPAC_NAME, compound.iupacName);
-        values.put(TableCompounds.COLUMN_MOLECULAR_FORMULA,formattedFormula);
+        values.put(TableCompounds.COLUMN_MOLECULAR_FORMULA, formattedFormula);
         values.put(TableCompounds.COLUMN_MOLECULAR_WEIGHT, compound.molecularWeight);
         values.put(TableCompounds.COLUMN_EQUIVALENT_WEIGHT, compound.equivalentWeight);
-        values.put(TableCompounds.COLUMN_USERADDED,1);
-        values.put(TableCompounds.COLUMN_DISPLAY_NAME,displayString);
+        values.put(TableCompounds.COLUMN_USERADDED, 1);
+        values.put(TableCompounds.COLUMN_DISPLAY_NAME, displayString);
         Gson gson = new Gson();
         String elementsJson = gson.toJson(compound.elements);
         values.put(TableCompounds.COLUMN_ELEMENTS_JSON, elementsJson);
@@ -312,11 +193,12 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         Gson gson = new Gson();
-        Type elementsListType = new TypeToken<String[]>(){}.getType();
+        Type elementsListType = new TypeToken<String[]>() {
+        }.getType();
 
 
         try {
-            cursor = db.rawQuery("Select * from "+ TableCompounds.TABLE_NAME + " where "+ TableCompounds.COLUMN_USERADDED + " = 1",new String[]{});
+            cursor = db.rawQuery("Select * from " + TableCompounds.TABLE_NAME + " where " + TableCompounds.COLUMN_USERADDED + " = 1", new String[]{});
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
@@ -345,6 +227,7 @@ public class DbHelper extends SQLiteOpenHelper {
         Log.d("DbHelper", "Retrieved " + userCompoundsList.size() + " user compounds.");
         return userCompoundsList;
     }
+
     public boolean deleteUserCompound(String compoundName) {
         if (compoundName == null || compoundName.isEmpty()) {
             return false;
@@ -355,81 +238,69 @@ public class DbHelper extends SQLiteOpenHelper {
         return rowsDeleted > 0;
     }
 
-   private void loadCompoundsMapToDb(SQLiteDatabase db,Map<String, Compound> compoundMap){
-       Gson gson = new Gson();
+    private void loadCompoundsMapToDb(SQLiteDatabase db, Map<String, Compound> compoundMap) {
+        Gson gson = new Gson();
 
-       for(String key : compoundMap.keySet()) {
-           StringBuilder builder = new StringBuilder();
+        for (String key : compoundMap.keySet()) {
+            StringBuilder builder = new StringBuilder();
 
-           Compound compound = compoundMap.get(key);
+            Compound compound = compoundMap.get(key);
 
-           String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
-           builder.append(key).append(" ").append("(").append(formattedFormula).append(")");
+            String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
+            builder.append(key).append(" ").append("(").append(formattedFormula).append(")");
 
-           String displayString = builder.toString();
+            String displayString = builder.toString();
 
-           ContentValues values = new ContentValues();
+            ContentValues values = new ContentValues();
 
-           values.put(TableCompounds.COLUMN_NAME, compound.getName());
-           values.put(TableCompounds.COLUMN_CAS, compound.cas);
-           values.put(TableCompounds.COLUMN_MOLECULAR_FORMULA, formattedFormula);
-           values.put(TableCompounds.COLUMN_DISPLAY_NAME, displayString);
-           values.put(TableCompounds.COLUMN_EQUIVALENT_WEIGHT, compound.equivalentWeight);
-           values.put(TableCompounds.COLUMN_MOLECULAR_WEIGHT, compound.molecularWeight);
-           values.put(TableCompounds.COLUMN_IUPAC_NAME, compound.iupacName);
+            values.put(TableCompounds.COLUMN_NAME, compound.getName());
+            values.put(TableCompounds.COLUMN_CAS, compound.cas);
+            values.put(TableCompounds.COLUMN_MOLECULAR_FORMULA, formattedFormula);
+            values.put(TableCompounds.COLUMN_DISPLAY_NAME, displayString);
+            values.put(TableCompounds.COLUMN_EQUIVALENT_WEIGHT, compound.equivalentWeight);
+            values.put(TableCompounds.COLUMN_MOLECULAR_WEIGHT, compound.molecularWeight);
+            values.put(TableCompounds.COLUMN_IUPAC_NAME, compound.iupacName);
 
-           String elementsJson = gson.toJson(compound.elements);
-           values.put(TableCompounds.COLUMN_ELEMENTS_JSON, elementsJson);
+            String elementsJson = gson.toJson(compound.elements);
+            values.put(TableCompounds.COLUMN_ELEMENTS_JSON, elementsJson);
 
-           long rowId = db.insert(TableCompounds.TABLE_NAME,null, values);
-           if(rowId == -1){
-               Log.e("DbHelper", "ERROR IN INSERTING Data  : " + key );
-           }
-       }
-   }
-
-   private void loadElementsMapToDb(SQLiteDatabase db,Map<String,Element> elementMap){
-
-        for(String key : elementMap.keySet()) {
-           Element element = elementMap.get(key);
-
-           ContentValues values = new ContentValues();
-
-           values.put(TableElements.COLUMN_NAME, element.name);
-           values.put(TableElements.COLUMN_MOLECULAR_FORMULA, element.molecularFormula);
-           values.put(TableElements.COLUMN_MOLECULAR_WEIGHT, element.getMolecularWeight());
-
-           long rowId = db.insert(TableElements.TABLE_NAME,null,values);
-           if(rowId == -1){
-               Log.d("DbHelper", "ERROR IN INSERTING Data  : " + key );
-           }
-           else{
-//               Log.d("DbHelper","Done loading Elements Data");
-           }
+            long rowId = db.insert(TableCompounds.TABLE_NAME, null, values);
+            if (rowId == -1) {
+                Log.e("DbHelper", "ERROR IN INSERTING Data  : " + key);
+            }
         }
-   }
+    }
 
+    private void loadElementsMapToDb(SQLiteDatabase db, Map<String, Element> elementMap) {
 
+        for (String key : elementMap.keySet()) {
+            Element element = elementMap.get(key);
 
-/*
-    Done  Function for Inserting Data into DB
-    Done Function for retriving Wieghts from Display name
+            ContentValues values = new ContentValues();
 
+            values.put(TableElements.COLUMN_NAME, element.name);
+            values.put(TableElements.COLUMN_MOLECULAR_FORMULA, element.molecularFormula);
+            values.put(TableElements.COLUMN_MOLECULAR_WEIGHT, element.getMolecularWeight());
 
-    //////////Remaining////
+            long rowId = db.insert(TableElements.TABLE_NAME, null, values);
+            if (rowId == -1) {
+                Log.d("DbHelper", "ERROR IN INSERTING Data  : " + key);
+            }
+        }
+    }
 
- */
-
-
-
-
+    /*
+        Done  Function for Inserting Data into DB
+        Done Function for retriving Wieghts from Display name
+        //////////Remaining////
+     */
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TableCompounds.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TableElements.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HISTORY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKMARKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TableBookmarks.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TableHistory.TABLE_NAME);
 
         onCreate(db);
     }
