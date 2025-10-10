@@ -5852,7 +5852,7 @@
   "potassium permanganate": {
     "cas": "7722-64-7",
     "molecularWeight": 158.034,
-    "equivalentWeight": 158.034,
+    "equivalentWeight": 31.61,
     "molecularFormula": "KMnO4",
     "elements": [
       "Mn",
@@ -11482,7 +11482,7 @@
   "potassium dichromate": {
     "cas": "7778-50-9",
     "molecularWeight": 294.18,
-    "equivalentWeight": 294.18,
+    "equivalentWeight": 49.03,
     "molecularFormula": "K2Cr2O7",
     "elements": [
       "Cr",
