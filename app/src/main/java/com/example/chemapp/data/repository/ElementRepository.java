@@ -46,4 +46,26 @@ public class ElementRepository {
 
         return result.toArray(new String[0]);
     }
+
+    public double getMolecularWeight(String[] elementsArray) throws Exception{
+        SQLiteDatabase db  = this.dbHelper.getReadableDatabase();
+        double result = 0;
+        String query = "SELECT " + TableElements.COLUMN_MOLECULAR_WEIGHT + " FROM " + TableElements.TABLE_NAME +
+                " WHERE " + TableElements.COLUMN_NAME + " = ?;";
+        for(String element : elementsArray) {
+            try (Cursor cursor = db.rawQuery(query, new String[]{element})) {
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(TableElements.COLUMN_MOLECULAR_WEIGHT);
+                    result += cursor.getDouble(columnIndex);
+                }
+            } catch (Exception e) {
+                Log.d(tag, "error in fetching molecular weight", e);
+            }
+        }
+
+        return result;
+
+    }
+
+
 }
