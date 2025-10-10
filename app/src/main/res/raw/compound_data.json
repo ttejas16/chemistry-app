@@ -1,4 +1,20 @@
 {
+  "ammonium chloride":{
+    "cas": "12125-02-9",
+    "molecularWeight": 53.49,
+    "equivalentWeight": 53.49,
+    "molecularFormula": "NH4Cl",
+    "elements": ["N", "H", "H", "H", "H", "Cl"],
+    "iupacName": "ammonium chloride"
+  },
+  "oxalic acid":{
+    "cas": "6153-56-6",
+    "molecularWeight": 126.07,
+    "equivalentWeight": 63.03,
+    "molecularFormula": "C2H6O6",
+    "elements": ["C", "C", "H", "H", "H", "H", "H", "H", "O", "O", "O", "O", "O", "O"],
+    "iupacName": "oxalic acid"
+  },
   "cadmium sulfate": {
     "cas": "7790-84-3",
     "molecularWeight": 769.51,
