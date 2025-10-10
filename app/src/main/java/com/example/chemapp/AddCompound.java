@@ -40,9 +40,9 @@ public class AddCompound extends AppCompatActivity {
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        CalculatorUtil util = CalculatorUtil.getInstance();
         CompoundRepository compoundRepository = CompoundRepository.getInstance(getApplicationContext());
         ElementRepository elementRepository = ElementRepository.getInstance(getApplicationContext());
+
         binding.molecularFormula.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
