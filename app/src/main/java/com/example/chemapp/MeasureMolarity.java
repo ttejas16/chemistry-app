@@ -209,7 +209,7 @@ public class MeasureMolarity extends AppCompatActivity {
                             }
                         }
                 );
-
+                resetInputs();
             } catch (NumberFormatException e) {
                 Toast.makeText(getApplicationContext(), "Please enter valid strings ...", Toast.LENGTH_SHORT).show();
 
@@ -409,5 +409,13 @@ public class MeasureMolarity extends AppCompatActivity {
                 imm.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
             }
         }
+    }
+
+    private void resetInputs(){
+        binding.salt.setText("");
+        binding.concentration.setText("");
+        binding.weight.setText("");
+        binding.volume.setText("");
+        binding.standardSizes.setChecked(false);
     }
 }

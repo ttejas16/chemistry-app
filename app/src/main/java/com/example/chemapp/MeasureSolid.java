@@ -208,6 +208,7 @@ public class MeasureSolid extends AppCompatActivity {
                         }
                     }
             );
+            resetInputs();
         });
 
     }
@@ -309,5 +310,12 @@ public class MeasureSolid extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    private void resetInputs(){
+        binding.element.setText("");
+        binding.salt.setText("");
+        binding.concentration.setText("");
+        binding.volume.setText("");
     }
 }
