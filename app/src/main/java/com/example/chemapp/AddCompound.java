@@ -3,6 +3,7 @@ package com.example.chemapp;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,7 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.data.repository.CompoundRepository;
+import com.example.chemapp.data.repository.ElementRepository;
 import com.example.chemapp.databinding.AddCompoundBinding;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AddCompound extends AppCompatActivity {
 
@@ -38,7 +42,7 @@ public class AddCompound extends AppCompatActivity {
 
         CalculatorUtil util = CalculatorUtil.getInstance();
         CompoundRepository compoundRepository = CompoundRepository.getInstance(getApplicationContext());
-
+        ElementRepository elementRepository = ElementRepository.getInstance(getApplicationContext());
         binding.molecularFormula.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -59,13 +63,20 @@ public class AddCompound extends AppCompatActivity {
                     binding.molecularFormula.setError(result[0]);
                     return ;
                 }
+                try{
+                    Log.d("Molecular Weight", ""+elementRepository.getMolecularWeight(result));
+
+                }catch (Exception e){
+                    Toast.makeText(AddCompound.this, " "+e.toString(), Toast.LENGTH_SHORT).show();
+
+                }
+
 
                 binding.molecularFormula.setError(null);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
