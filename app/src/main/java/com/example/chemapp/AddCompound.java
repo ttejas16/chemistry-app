@@ -64,7 +64,9 @@ public class AddCompound extends AppCompatActivity {
                     return ;
                 }
                 try{
-                    Log.d("Molecular Weight", ""+elementRepository.getMolecularWeight(result));
+                    double weight = elementRepository.getMolecularWeight(result);
+                    binding.molecularWeight.setText(String.valueOf(weight));
+                    Log.d("Molecular Weight", "" + weight);
 
                 }catch (Exception e){
                     Toast.makeText(AddCompound.this, " "+e.toString(), Toast.LENGTH_SHORT).show();
@@ -90,6 +92,14 @@ public class AddCompound extends AppCompatActivity {
 
             if (compoundName.isEmpty() || molecularFormula.isEmpty() || molecularWeightString.isEmpty()) {
                 return;
+            }
+
+            String[] result = Compound.getElementsFromMolecularFormula1(molecularFormula);
+
+            if(result.length > 0 && result[0].startsWith("Error")){
+                binding.molecularFormula.requestFocus();
+                binding.molecularFormula.setError(result[0]);
+                return ;
             }
 
             if (iupacName.isEmpty()) {

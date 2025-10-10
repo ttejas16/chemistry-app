@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Compound {
@@ -32,6 +33,10 @@ public class Compound {
 /// TRYING RETURN A ERROR MSG
 /// ALSO IT RETURNS A ARRAY OF ELEMENTS IF VALIDATION DONE ,THAT CAN BE STORED.
     public static String[] getElementsFromMolecularFormula1(String molecularFormula) {
+        if (!checkSubscriptBounds(molecularFormula)) {
+            return new String[]{"Error: subscripts should be between 1 and 100"};
+        }
+
         CalculatorUtil util = CalculatorUtil.getInstance();
         Map<String,Element> elementMap =util.getElementsMap();
         String error;
@@ -135,6 +140,26 @@ public class Compound {
         ElementsArray =  result.toArray(new String[0]);
 
         return ElementsArray;
+    }
+
+    public static boolean checkSubscriptBounds(String molecularFormula) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(molecularFormula);
+
+        while (matcher.find()) {
+            String match = matcher.group();
+
+            try {
+                int subscript = Integer.parseInt(match);
+                if (subscript <= 0 || subscript > 100) {
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public String getName(){
