@@ -9,6 +9,10 @@ import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.DbHelper.TableElements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ElementRepository {
     private final String tag = "ElementRepository";
@@ -52,14 +56,25 @@ public class ElementRepository {
         double result = 0;
         String query = "SELECT " + TableElements.COLUMN_MOLECULAR_WEIGHT + " FROM " + TableElements.TABLE_NAME +
                 " WHERE " + TableElements.COLUMN_NAME + " = ?;";
+        Map<String,Double> elementWeightMap = new HashMap<>();
         for(String element : elementsArray) {
-            try (Cursor cursor = db.rawQuery(query, new String[]{element})) {
-                if (cursor.moveToFirst()) {
-                    int columnIndex = cursor.getColumnIndexOrThrow(TableElements.COLUMN_MOLECULAR_WEIGHT);
-                    result += cursor.getDouble(columnIndex);
+
+            if(!element.isEmpty()  && elementWeightMap.containsKey(element)){
+                result += elementWeightMap.get(element);
+
+            }
+            else{
+
+                try (Cursor cursor = db.rawQuery(query, new String[]{element})) {
+                    if (cursor.moveToFirst()) {
+                        int columnIndex = cursor.getColumnIndexOrThrow(TableElements.COLUMN_MOLECULAR_WEIGHT);
+                        elementWeightMap.put(element, cursor.getDouble(columnIndex));
+                        result += cursor.getDouble(columnIndex);
+                    }
+
+                } catch (Exception e) {
+                    Log.d(tag, "error in fetching molecular weight", e);
                 }
-            } catch (Exception e) {
-                Log.d(tag, "error in fetching molecular weight", e);
             }
         }
 
