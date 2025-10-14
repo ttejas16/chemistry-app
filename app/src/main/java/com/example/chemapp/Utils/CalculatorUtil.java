@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.chemapp.R;
+import com.example.chemapp.data.repository.CompoundRepository;
+import com.example.chemapp.data.repository.ElementRepository;
 
 import java.lang.annotation.Documented;
 import java.util.ArrayList;
@@ -16,23 +18,21 @@ import java.util.stream.Collectors;
 
 public class CalculatorUtil {
     private static CalculatorUtil instance;
-    private static Map<String, Compound> compoundsMap;
-    private static Map<String, Element> elementsMap;
+
+    private final ElementRepository elementRepository;
+    private final CompoundRepository compoundRepository;
     private static final String[] SUBSCRIPT_DIGITS = {
             "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"
     };
-    private CalculatorUtil() {}
+    private CalculatorUtil(Context context) {
+        this.elementRepository = ElementRepository.getInstance(context.getApplicationContext());
+        this.compoundRepository = CompoundRepository.getInstance(context.getApplicationContext());
+    }
 
     public static void init(Context context){
         if (instance == null) {
 
-            CompoundLoader compoundLoader = new CompoundLoader();
-            compoundsMap = compoundLoader.loadCompoundAsMap(context.getApplicationContext(), R.raw.compound_data);
-            //loadAndMergeUserCompounds(context);
-            ElementMapLoader elementMapLoader = new ElementMapLoader();
-            elementsMap = elementMapLoader.loadElementAsMap(context.getApplicationContext(), R.raw.element_data);
-
-            instance = new CalculatorUtil();
+            instance = new CalculatorUtil(context);
         }
     }
     public static CalculatorUtil getInstance() {
@@ -43,30 +43,8 @@ public class CalculatorUtil {
         return instance;
     }
 
-    public Map<String, Compound> getCompoundsMap(){
-        return compoundsMap;
-    }
 
-    public Map<String, Element> getElementsMap(){
-        return elementsMap;
-    }
 
-    public String[] getSaltsOfElement(Element e){
-        ArrayList<String> salts = new ArrayList<>();
-
-        for(String salt:compoundsMap.keySet()) {
-            Compound compound = compoundsMap.get(salt);
-
-            // stream api functional programming bro
-            Set<String> uniqueElements  = Arrays.stream(compound.elements).map(String::toLowerCase).collect(Collectors.toSet());
-
-            if (uniqueElements.contains(e.name.toLowerCase())) {
-                salts.add(salt);
-            }
-        }
-
-        return salts.toArray(new String[0]);
-    }
 
     public double calculateSoluteMassForPartsPerConcentration(double targetPartsPerValue, double solutionVolumeMl, int partsPerUnitSelector){
         /*concentration IS IN PPM
@@ -87,13 +65,15 @@ public class CalculatorUtil {
         //CAN USE SWITCH FOR MORE READABILITY
         return (targetPartsPerValue * (solutionVolumeMl /1000)) / unitConversionFactorToMg;
     }
+
     public double calculateRequiredCompoundMassForElementConcentration(String targetElementName, String sourceCompoundName, double concentration, double volumeMl,int partsPerUnitSelectorForTarget) throws Exception{
 
         if( targetElementName == null || sourceCompoundName == null || concentration < 0 || volumeMl < 0){
             throw new IllegalArgumentException("Error msg");
         }
-        Element e = elementsMap.get(targetElementName);
-        Compound c = compoundsMap.get(sourceCompoundName);
+
+        Element e = elementRepository.getElement(targetElementName);
+        Compound c = compoundRepository.getCompound(sourceCompoundName);
         if(e == null || c == null){
             throw new Exception("Element or Compound not found");
         }
@@ -109,40 +89,18 @@ public class CalculatorUtil {
         double elementMassInCompound = e.getMolecularWeight() * elementCount;
         double molarMassOfCompound = c.getMolecularWeight();
         percentage =  elementMassInCompound / molarMassOfCompound;
+        Log.d("CalculatorUtil","Percentage of Element in compound" + percentage);
         result = calculateSoluteMassForPartsPerConcentration(concentration,volumeMl,partsPerUnitSelectorForTarget) / percentage;
 
         // Returns Required Compound Mass in MILLIGRAMS
+        Log.d("CalculatorUtil",sourceCompoundName +" mass for Element "+ targetElementName
+                +"  with concentration " + concentration +
+                (partsPerUnitSelectorForTarget ==1 ? "ppm" : partsPerUnitSelectorForTarget ==2 ? "ppb" : "ppt")+" is " + result);
         return result;
     }
 
-
-    public String[] getFormattedDisplayName(){
-        String[] Keys  = compoundsMap.keySet().toArray(new String[0]);
-        return formatCompoundNameFromKeys(Keys);
-    }
-
-    public String[] getFormattedDisplayName(Element e){
-        String[] Keys = getSaltsOfElement(e);
-        return formatCompoundNameFromKeys(Keys);
-    }
-
-    private String[] formatCompoundNameFromKeys(String[] Keys){
-        if (Keys == null || compoundsMap == null) {
-            return new String[0];
-        }
-        ArrayList<String> saltNames = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
-
-        for (String key : Keys){
-            Compound compound = compoundsMap.get(key);
-            if(compound == null) continue;
-
-            String formulaWithSubscripts = formatChemicalFormula(compound.molecularFormula);
-            builder.append(key).append(" ").append("(").append(formulaWithSubscripts).append(")");
-            saltNames.add(builder.toString());
-            builder.setLength(0);
-        }
-        return saltNames.toArray(new String[0]);
+    public String[]  getAllElements(){
+        return elementRepository.getAllElements();
     }
 
     public static String formatChemicalFormula(String formula) {
@@ -166,44 +124,6 @@ public class CalculatorUtil {
     }
 
 
-//    public static void loadAndMergeUserCompounds(Context context) {
-//        DbHelper dbHelper = DbHelper.getInstance(context);
-//        List<Compound> userCompounds = dbHelper.getAllUserCompounds();
-//
-//        if (compoundsMap == null) {
-//            compoundsMap = new HashMap<>();
-//        }
-//
-//        if (userCompounds != null && !userCompounds.isEmpty()) {
-//            Log.d("CalculatorUtil", "Merging " + userCompounds.size() + " user compounds.");
-//            for (Compound userCompound : userCompounds) {
-//                // User's compound overrides default if names collide
-//                compoundsMap.put(userCompound.getName(), userCompound);
-//            }
-//        }
-//    }
-
-    // the Input for the Compound name must be the Element of Compound Class i.e Comppound.getname();
-//    public void removeUserCompound(Context context, String compoundName) {
-//        if (compoundName == null || compoundName.isEmpty()) return;
-//
-//        if(!compoundName.contains("(userdefined)")){
-//
-//            Log.d("CalculatorUtil", "Trying to delete non-user-defined compound: " + compoundName);
-//            return ;
-//        }
-//        DbHelper dbHelper = DbHelper.getInstance(context);
-//        boolean success = dbHelper.deleteUserCompound(compoundName);
-//
-//        if (success) {
-//            if (compoundsMap != null) {
-//                compoundsMap.remove(compoundName); // Update in-memory map
-//            }
-//            Log.d("CalculatorUtil", "User compound removed from persistence and in-memory map: " + compoundName);
-//        } else {
-//            Log.e("CalculatorUtil", "Failed to remove user compound from persistence: " + compoundName);
-//        }
-//    }
 
     public double getDilutionResultFrom(
             double stockConcentration, int stockConcentrationUnit,
@@ -245,4 +165,102 @@ public class CalculatorUtil {
                 return c;
         }
     }
+/*
+      private String[] formatCompoundNameFromKeys(String[] Keys){
+        if (Keys == null || compoundsMap == null) {
+            return new String[0];
+        }
+        ArrayList<String> saltNames = new ArrayList<>();
+        StringBuilder builder = new StringBuilder();
+
+        for (String key : Keys){
+            Compound compound = compoundsMap.get(key);
+            if(compound == null) continue;
+
+            String formulaWithSubscripts = formatChemicalFormula(compound.molecularFormula);
+            builder.append(key).append(" ").append("(").append(formulaWithSubscripts).append(")");
+            saltNames.add(builder.toString());
+            builder.setLength(0);
+        }
+        return saltNames.toArray(new String[0]);
+    }
+
+
+    public Map<String, Compound> getCompoundsMap(){
+        return compoundsMap;
+    }
+
+    public Map<String, Element> getElementsMap(){
+        return elementsMap;
+    }
+    public String[] getSaltsOfElement(Element e){
+        ArrayList<String> salts = new ArrayList<>();
+
+        for(String salt:compoundsMap.keySet()) {
+            Compound compound = compoundsMap.get(salt);
+
+            // stream api functional programming bro
+            Set<String> uniqueElements  = Arrays.stream(compound.elements).map(String::toLowerCase).collect(Collectors.toSet());
+
+            if (uniqueElements.contains(e.name.toLowerCase())) {
+                salts.add(salt);
+            }
+        }
+
+        return salts.toArray(new String[0]);
+    }
+
+
+    public String[] getFormattedDisplayName(){
+        String[] Keys  = compoundsMap.keySet().toArray(new String[0]);
+        return formatCompoundNameFromKeys(Keys);
+    }
+
+    public String[] getFormattedDisplayName(Element e){
+        String[] Keys = getSaltsOfElement(e);
+        return formatCompoundNameFromKeys(Keys);
+    }
+
+    public static void loadAndMergeUserCompounds(Context context) {
+        DbHelper dbHelper = DbHelper.getInstance(context);
+        List<Compound> userCompounds = dbHelper.getAllUserCompounds();
+
+        if (compoundsMap == null) {
+            compoundsMap = new HashMap<>();
+        }
+
+        if (userCompounds != null && !userCompounds.isEmpty()) {
+            Log.d("CalculatorUtil", "Merging " + userCompounds.size() + " user compounds.");
+            for (Compound userCompound : userCompounds) {
+                // User's compound overrides default if names collide
+                compoundsMap.put(userCompound.getName(), userCompound);
+            }
+        }
+    }
+
+     the Input for the Compound name must be the Element of Compound Class i.e Comppound.getname();
+    public void removeUserCompound(Context context, String compoundName) {
+        if (compoundName == null || compoundName.isEmpty()) return;
+
+        if(!compoundName.contains("(userdefined)")){
+
+            Log.d("CalculatorUtil", "Trying to delete non-user-defined compound: " + compoundName);
+            return ;
+        }
+        DbHelper dbHelper = DbHelper.getInstance(context);
+        boolean success = dbHelper.deleteUserCompound(compoundName);
+
+        if (success) {
+            if (compoundsMap != null) {
+                compoundsMap.remove(compoundName); // Update in-memory map
+            }
+            Log.d("CalculatorUtil", "User compound removed from persistence and in-memory map: " + compoundName);
+        } else {
+            Log.e("CalculatorUtil", "Failed to remove user compound from persistence: " + compoundName);
+        }
+    }
+
+ */
+
+
 }

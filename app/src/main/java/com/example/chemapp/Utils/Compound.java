@@ -3,8 +3,10 @@ package com.example.chemapp.Utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,7 +40,7 @@ public class Compound {
         }
 
         CalculatorUtil util = CalculatorUtil.getInstance();
-        Map<String,Element> elementMap =util.getElementsMap();
+        Set<String> elementSet = new HashSet<String>(Arrays.asList(util.getAllElements()));
         String error;
         Pattern  VALID_CHAR = Pattern.compile("^((?:[A-Z][a-z]?\\d*|[\\[(]|[\\])]\\d*)+)$");
         if(molecularFormula.isEmpty()){
@@ -85,7 +87,7 @@ public class Compound {
                     i++;
                 }
                 String element = molecularFormula.substring(start, i);
-                if(!elementMap.containsKey(element)){
+                if(!elementSet.contains(element)){
 
                     error = "Invalid Element Name : " + element;
                     return new String[]{"Error: "+error};

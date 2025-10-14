@@ -193,7 +193,8 @@ public class MeasureSolid extends AppCompatActivity {
                     data[i][2] = NumberFormatter.formatNumber(result);
 
                 } catch (Exception e) {
-
+                    Toast.makeText(MeasureSolid.this, ""+e, Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 i++;

@@ -12,13 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.ElementRepository;
 import com.example.chemapp.databinding.AddCompoundBinding;
-
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class AddCompound extends AppCompatActivity {
 
@@ -64,7 +61,7 @@ public class AddCompound extends AppCompatActivity {
                     return ;
                 }
                 try{
-                    double weight = elementRepository.getMolecularWeight(result);
+                    double weight = elementRepository.getMolecularWeightOfCompound(result);
                     binding.molecularWeight.setText(String.valueOf(weight));
                     Log.d("Molecular Weight", "" + weight);
 
