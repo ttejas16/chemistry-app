@@ -140,7 +140,31 @@ public class CompoundRepository {
             }
         }
     }
+    public Compound getCompound(String compoundName) throws Exception{
+        if(compoundName == null || compoundName.isEmpty()){
+            throw new IllegalArgumentException();
+        }
+        SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+        String query = "Select * from "+ TableCompounds.TABLE_NAME +
+                " where "+ TableCompounds.COLUMN_NAME +" = ? LIMIT 1 ;";
+        try(Cursor cursor = db.rawQuery(query,new String[]{compoundName})){
+            if(cursor.moveToFirst()) {
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_NAME));
+                String cas = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_CAS));
+                String iupacName = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_IUPAC_NAME));
+                String molecularFormula = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_MOLECULAR_FORMULA));
+                double molecularWeight = cursor.getDouble(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_MOLECULAR_WEIGHT));
+                double equivalentWeight = cursor.getDouble(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_EQUIVALENT_WEIGHT));
+                String elementsJson = cursor.getString(cursor.getColumnIndexOrThrow(TableCompounds.COLUMN_ELEMENTS_JSON));
+                String[] elements = gson.fromJson(elementsJson, String[].class);
+                return new Compound(name, cas, iupacName, molecularFormula, molecularWeight, equivalentWeight, elements);
+            }
+        }catch (Exception e){
+            Log.e(tag, "Error in fetching Compound");
 
+        }
+        return  null;
+    }
     public boolean addUserCompound(
             String compoundName,
             String molecularFormula,
