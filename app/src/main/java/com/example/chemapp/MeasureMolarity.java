@@ -30,6 +30,7 @@ import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.Compound;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.adapters.SaltOptionAdapter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.HistoryRepository;
@@ -41,7 +42,7 @@ import java.util.Arrays;
 public class MeasureMolarity extends AppCompatActivity {
     private MeasureMolarityBinding binding;
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
-    final String[] molarityUnitOptions = { "M", "mM", "μM"};
+    final String[] molarityUnitOptions = { "M", "mM", "μM" };
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
     String [] salts;
     CompoundRepository compoundRepository;
@@ -72,9 +73,16 @@ public class MeasureMolarity extends AppCompatActivity {
         salts = compoundRepository.getAllDisplayNames();
 
         Arrays.sort(salts);
-        setSpinnerItems(binding.salt, salts);
+        SaltOptionAdapter adapter = new SaltOptionAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                salts
+        );
+        binding.salt.setAdapter(adapter);
 
-        binding.salt.setOnItemClickListener((parent, view, position, id) -> updateWeights(parent.getItemAtPosition(position).toString()));
+        binding.salt.setOnItemClickListener((parent, view, position, id) -> {
+            updateWeights(parent.getItemAtPosition(position).toString());
+        });
         binding.salt.setOnDismissListener(() -> {
             String saltWithFormula = binding.salt.getText().toString();
             if (saltWithFormula.isEmpty()) {
@@ -82,7 +90,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 return;
             }
 
-            if (!isValidSelection(saltWithFormula, salts)) {
+            if (!adapter.isValidSelection(saltWithFormula)) {
                 binding.salt.setError("invalid salt");
                 return;
             }
@@ -97,7 +105,7 @@ public class MeasureMolarity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!hasMatchingSuggestions(s.toString(), salts)) {
+                if (!adapter.hasMatchingSuggestions(s)) {
                     binding.salt.setError("invalid salt");
                 }
                 else {
@@ -228,7 +236,12 @@ public class MeasureMolarity extends AppCompatActivity {
         salts = compoundRepository.getAllDisplayNames();
         Arrays.sort(salts);
 
-        setSpinnerItems(binding.salt, salts);
+        SaltOptionAdapter adapter = new SaltOptionAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                salts
+        );
+        binding.salt.setAdapter(adapter);
     }
 
     @Override
@@ -315,39 +328,6 @@ public class MeasureMolarity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(adapter);
-    }
-
-    public void setSpinnerItems(AutoCompleteTextView spinner, String[] options){
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                options
-        );
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-    }
-
-    private boolean isValidSelection(String input, String[] items) {
-        if (input == null || input.trim().isEmpty()) return false;
-
-        return Arrays.asList(items).contains(input);
-    }
-
-    private boolean hasMatchingSuggestions(String currentText, String[] allOptions) {
-        if (currentText == null || currentText.trim().isEmpty()) {
-            return true;
-        }
-
-        String searchText = currentText.toLowerCase().trim();
-
-        for (String option : allOptions) {
-            if (option.toLowerCase().contains(searchText)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void updateWeights(String formattedSaltName) {
