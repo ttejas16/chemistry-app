@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class SaltOptionAdapter extends ArrayAdapter<String> {
     private final List<String> itemsAll;
@@ -24,6 +23,24 @@ public class SaltOptionAdapter extends ArrayAdapter<String> {
             this.itemsAllNormalized.add(normalize(i));
         }
         this.suggestions = new ArrayList<>();
+    }
+
+    public void updateItems(String[] items) {
+        List<String> newItems = Arrays.asList(items);
+
+        itemsAll.clear();
+        itemsAll.addAll(newItems);
+
+        suggestions.clear();
+
+        itemsAllNormalized.clear();
+        for (String i : itemsAll) {
+            this.itemsAllNormalized.add(normalize(i));
+        }
+
+        clear();
+        addAll(newItems);
+        notifyDataSetChanged();
     }
 
     public boolean isValidSelection(String input) {

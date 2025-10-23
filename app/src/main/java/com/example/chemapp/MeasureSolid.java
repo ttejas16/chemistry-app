@@ -25,6 +25,7 @@ import com.example.chemapp.Utils.CalculatorUtil;
 import com.example.chemapp.Utils.DbHelper;
 import com.example.chemapp.Utils.Element;
 import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.adapters.SaltOptionAdapter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.ElementRepository;
@@ -44,6 +45,8 @@ public class MeasureSolid extends AppCompatActivity {
     CalculatorUtil util;
     CompoundRepository compoundRepository;
     ElementRepository elementRepository;
+
+    SaltOptionAdapter saltOptionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,13 @@ public class MeasureSolid extends AppCompatActivity {
 
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
 
+        saltOptionAdapter = new SaltOptionAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                new String[0]
+        );
+        binding.salt.setAdapter(saltOptionAdapter);
+
         binding.element.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,26 +96,32 @@ public class MeasureSolid extends AppCompatActivity {
                 binding.salt.setText("");
 
                 String[] elementSalts = compoundRepository.getSaltsOfElement(selectedElement);
-                setSpinnerItems(binding.salt, elementSalts);
+                Arrays.sort(elementSalts);
+
+                saltOptionAdapter.updateItems(elementSalts);
+                saltOptionAdapter.getFilter().filter("");
             }
         });
         binding.element.setOnDismissListener(() -> {
             String selectedElement = binding.element.getText().toString();
             if (selectedElement.isEmpty()) {
                 binding.element.setError("please select a element");
-                setSpinnerItems(binding.salt, new String[0]);
+                saltOptionAdapter.updateItems(new String[0]);
                 return;
             }
-            ;
 
             if (!elementSet.contains(selectedElement)) {
-                setSpinnerItems(binding.salt, new String[0]);
+                saltOptionAdapter.updateItems(new String[0]);
                 binding.element.setError("invalid element");
                 return;
             }
 
             String[] elementSalts = compoundRepository.getSaltsOfElement(selectedElement);
-            setSpinnerItems(binding.salt, elementSalts);
+            Arrays.sort(elementSalts);
+
+            saltOptionAdapter.updateItems(elementSalts);
+            saltOptionAdapter.getFilter().filter("");
+
             binding.element.setError(null);
         });
         binding.element.addTextChangedListener(new TextWatcher() {
@@ -237,7 +253,9 @@ public class MeasureSolid extends AppCompatActivity {
             binding.salt.setText("");
 
             String[] salts = compoundRepository.getSaltsOfElement(selectedElement);
-            setSpinnerItems(binding.salt, salts);
+            Arrays.sort(salts);
+
+            saltOptionAdapter.updateItems(salts);
         }
 
     }
