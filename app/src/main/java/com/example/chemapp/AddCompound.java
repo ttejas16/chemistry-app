@@ -12,7 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chemapp.Utils.Compound;
+import com.example.chemapp.utils.Compound;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.ElementRepository;
 import com.example.chemapp.databinding.AddCompoundBinding;

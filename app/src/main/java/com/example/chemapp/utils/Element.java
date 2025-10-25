@@ -1,4 +1,4 @@
-package com.example.chemapp.Utils;
+package com.example.chemapp.utils;
 
 import androidx.annotation.NonNull;
 

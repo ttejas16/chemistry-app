@@ -11,10 +11,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.Compound;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.UserCompoundAdapter;
+import com.example.chemapp.utils.CalculatorUtil;
+import com.example.chemapp.utils.Compound;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.adapters.UserCompoundAdapter;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.databinding.AdditionalCompoundsBinding;
 

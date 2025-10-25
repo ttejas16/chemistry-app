@@ -6,12 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.Compound;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.DbHelper.TableCompounds;
+import com.example.chemapp.utils.CalculatorUtil;
+import com.example.chemapp.utils.Compound;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.utils.DbHelper.TableCompounds;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

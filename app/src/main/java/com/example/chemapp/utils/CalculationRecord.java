@@ -1,4 +1,4 @@
-package com.example.chemapp.Utils;
+package com.example.chemapp.utils;
 
 
 public class CalculationRecord {

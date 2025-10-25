@@ -3,8 +3,6 @@ package com.example.chemapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,11 +22,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.Compound;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.utils.BottomSheetHelper;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.NumberFormatter;
 import com.example.chemapp.adapters.SaltOptionAdapter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.CompoundRepository;
@@ -46,6 +41,7 @@ public class MeasureMolarity extends AppCompatActivity {
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
     String [] salts;
     CompoundRepository compoundRepository;
+    SaltOptionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +69,7 @@ public class MeasureMolarity extends AppCompatActivity {
         salts = compoundRepository.getAllDisplayNames();
 
         Arrays.sort(salts);
-        SaltOptionAdapter adapter = new SaltOptionAdapter(
+        adapter = new SaltOptionAdapter(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
                 salts
@@ -236,12 +232,7 @@ public class MeasureMolarity extends AppCompatActivity {
         salts = compoundRepository.getAllDisplayNames();
         Arrays.sort(salts);
 
-        SaltOptionAdapter adapter = new SaltOptionAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                salts
-        );
-        binding.salt.setAdapter(adapter);
+        adapter.updateItems(salts);
     }
 
     @Override

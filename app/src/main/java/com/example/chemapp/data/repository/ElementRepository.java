@@ -5,10 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.DbHelper.TableElements;
-import com.example.chemapp.Utils.Element;
-import com.google.android.material.tabs.TabLayout;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.utils.DbHelper.TableElements;
+import com.example.chemapp.utils.Element;
 
 import java.util.ArrayList;
 import java.util.HashMap;

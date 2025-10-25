@@ -14,9 +14,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chemapp.Utils.BookmarkAdapter;
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.DbHelper;
+import com.example.chemapp.adapters.BookmarkAdapter;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.DbHelper;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.databinding.BookmarksBinding;
 

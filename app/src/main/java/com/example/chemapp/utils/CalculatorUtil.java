@@ -1,20 +1,10 @@
-package com.example.chemapp.Utils;
+package com.example.chemapp.utils;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.example.chemapp.R;
 import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.data.repository.ElementRepository;
-
-import java.lang.annotation.Documented;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CalculatorUtil {
     private static CalculatorUtil instance;

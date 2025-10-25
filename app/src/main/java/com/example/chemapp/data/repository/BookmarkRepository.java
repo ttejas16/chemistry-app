@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.DbHelper.TableBookmarks;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.utils.DbHelper.TableBookmarks;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
