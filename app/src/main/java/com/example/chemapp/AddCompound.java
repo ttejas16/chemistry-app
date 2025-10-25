@@ -54,7 +54,7 @@ public class AddCompound extends AppCompatActivity {
                     return;
                 }
 
-                String[] result = Compound.getElementsFromMolecularFormula1(inputText);
+                String[] result = Compound.getElementsFromMolecularFormula(inputText, getApplicationContext());
 
                 if(result.length > 0 && result[0].startsWith("Error")){
                     binding.molecularFormula.setError(result[0]);
@@ -96,7 +96,7 @@ public class AddCompound extends AppCompatActivity {
                 return;
             }
 
-            String[] result = Compound.getElementsFromMolecularFormula1(molecularFormula);
+            String[] result = Compound.getElementsFromMolecularFormula(molecularFormula, getApplicationContext());
 
             if(result.length > 0 && result[0].startsWith("Error")){
                 binding.molecularFormula.requestFocus();
@@ -114,7 +114,8 @@ public class AddCompound extends AppCompatActivity {
 
                 boolean isAdded = compoundRepository.addUserCompound(
                         compoundName, molecularFormula,
-                        iupacName, mw, ew
+                        iupacName, mw, ew,
+                        getApplicationContext()
                 );
 
                 if (isAdded) {

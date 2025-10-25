@@ -8,33 +8,21 @@ import com.example.chemapp.data.repository.ElementRepository;
 
 public class CalculatorUtil {
     private static CalculatorUtil instance;
-
     private final ElementRepository elementRepository;
     private final CompoundRepository compoundRepository;
-    private static final String[] SUBSCRIPT_DIGITS = {
-            "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"
-    };
+
     private CalculatorUtil(Context context) {
         this.elementRepository = ElementRepository.getInstance(context.getApplicationContext());
         this.compoundRepository = CompoundRepository.getInstance(context.getApplicationContext());
     }
 
-    public static void init(Context context){
+    public static CalculatorUtil getInstance(Context context) {
         if (instance == null) {
-
             instance = new CalculatorUtil(context);
-        }
-    }
-    public static CalculatorUtil getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("CalculatorUtil class not initialized");
         }
 
         return instance;
     }
-
-
-
 
     public double calculateSoluteMassForPartsPerConcentration(double targetPartsPerValue, double solutionVolumeMl, int partsPerUnitSelector){
         /*concentration IS IN PPM
@@ -89,32 +77,6 @@ public class CalculatorUtil {
         return result;
     }
 
-    public String[]  getAllElements(){
-        return elementRepository.getAllElements();
-    }
-
-    public static String formatChemicalFormula(String formula) {
-        if (formula == null || formula.isEmpty()) {
-            return formula;
-        }
-
-        StringBuilder result = new StringBuilder();
-        char[] chars = formula.toCharArray();
-
-        for (char ch : chars) {
-            if (Character.isDigit(ch)) {
-                int digit = Character.getNumericValue(ch);
-                result.append(SUBSCRIPT_DIGITS[digit]);
-            } else {
-                result.append(ch);
-            }
-        }
-
-        return result.toString();
-    }
-
-
-
     public double getDilutionResultFrom(
             double stockConcentration, int stockConcentrationUnit,
             double reqConcentration, int reqConcentrationUnit,
@@ -132,15 +94,15 @@ public class CalculatorUtil {
         return (normalizedReqConcentration * volumeInMillilitres) / normalizedStockConcentration;
     }
 
+    /**
+     *
+     * @param c
+     * @param unit
+     * 1 for PPM and M,
+     * 2 for PPB and mM,
+     * 3 for PPT and uM
+     */
     private double getNormalizedConcentration(double c, int unit){
-        /*
-        * 1 for PPM
-        * 2 for PPB
-        * 3 for PPT
-        * 4 for M
-        * 5 for mM
-        * 6 for uM
-        */
         switch (unit) {
             case 1:
                 return c;
@@ -155,102 +117,4 @@ public class CalculatorUtil {
                 return c;
         }
     }
-/*
-      private String[] formatCompoundNameFromKeys(String[] Keys){
-        if (Keys == null || compoundsMap == null) {
-            return new String[0];
-        }
-        ArrayList<String> saltNames = new ArrayList<>();
-        StringBuilder builder = new StringBuilder();
-
-        for (String key : Keys){
-            Compound compound = compoundsMap.get(key);
-            if(compound == null) continue;
-
-            String formulaWithSubscripts = formatChemicalFormula(compound.molecularFormula);
-            builder.append(key).append(" ").append("(").append(formulaWithSubscripts).append(")");
-            saltNames.add(builder.toString());
-            builder.setLength(0);
-        }
-        return saltNames.toArray(new String[0]);
-    }
-
-
-    public Map<String, Compound> getCompoundsMap(){
-        return compoundsMap;
-    }
-
-    public Map<String, Element> getElementsMap(){
-        return elementsMap;
-    }
-    public String[] getSaltsOfElement(Element e){
-        ArrayList<String> salts = new ArrayList<>();
-
-        for(String salt:compoundsMap.keySet()) {
-            Compound compound = compoundsMap.get(salt);
-
-            // stream api functional programming bro
-            Set<String> uniqueElements  = Arrays.stream(compound.elements).map(String::toLowerCase).collect(Collectors.toSet());
-
-            if (uniqueElements.contains(e.name.toLowerCase())) {
-                salts.add(salt);
-            }
-        }
-
-        return salts.toArray(new String[0]);
-    }
-
-
-    public String[] getFormattedDisplayName(){
-        String[] Keys  = compoundsMap.keySet().toArray(new String[0]);
-        return formatCompoundNameFromKeys(Keys);
-    }
-
-    public String[] getFormattedDisplayName(Element e){
-        String[] Keys = getSaltsOfElement(e);
-        return formatCompoundNameFromKeys(Keys);
-    }
-
-    public static void loadAndMergeUserCompounds(Context context) {
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        List<Compound> userCompounds = dbHelper.getAllUserCompounds();
-
-        if (compoundsMap == null) {
-            compoundsMap = new HashMap<>();
-        }
-
-        if (userCompounds != null && !userCompounds.isEmpty()) {
-            Log.d("CalculatorUtil", "Merging " + userCompounds.size() + " user compounds.");
-            for (Compound userCompound : userCompounds) {
-                // User's compound overrides default if names collide
-                compoundsMap.put(userCompound.getName(), userCompound);
-            }
-        }
-    }
-
-     the Input for the Compound name must be the Element of Compound Class i.e Comppound.getname();
-    public void removeUserCompound(Context context, String compoundName) {
-        if (compoundName == null || compoundName.isEmpty()) return;
-
-        if(!compoundName.contains("(userdefined)")){
-
-            Log.d("CalculatorUtil", "Trying to delete non-user-defined compound: " + compoundName);
-            return ;
-        }
-        DbHelper dbHelper = DbHelper.getInstance(context);
-        boolean success = dbHelper.deleteUserCompound(compoundName);
-
-        if (success) {
-            if (compoundsMap != null) {
-                compoundsMap.remove(compoundName); // Update in-memory map
-            }
-            Log.d("CalculatorUtil", "User compound removed from persistence and in-memory map: " + compoundName);
-        } else {
-            Log.e("CalculatorUtil", "Failed to remove user compound from persistence: " + compoundName);
-        }
-    }
-
- */
-
-
 }

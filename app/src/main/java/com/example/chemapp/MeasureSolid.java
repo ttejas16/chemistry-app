@@ -23,7 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.chemapp.utils.BottomSheetHelper;
 import com.example.chemapp.utils.CalculationRecord;
 import com.example.chemapp.utils.CalculatorUtil;
-import com.example.chemapp.utils.NumberFormatter;
+import com.example.chemapp.utils.Formatter;
 import com.example.chemapp.adapters.SaltOptionAdapter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.CompoundRepository;
@@ -71,7 +71,7 @@ public class MeasureSolid extends AppCompatActivity {
         elementRepository = ElementRepository.getInstance(getApplicationContext());
         compoundRepository = CompoundRepository.getInstance(getApplicationContext());
 
-        util = CalculatorUtil.getInstance();
+        util = CalculatorUtil.getInstance(getApplicationContext());
 
         elements = elementRepository.getAllElements();
         elementSet = new HashSet<>(Arrays.asList(elements));
@@ -204,8 +204,8 @@ public class MeasureSolid extends AppCompatActivity {
                             concentrationUnit
                     );
                     data[i][0] = size + "";
-                    data[i][1] = NumberFormatter.formatNumber(result / 1000);
-                    data[i][2] = NumberFormatter.formatNumber(result);
+                    data[i][1] = Formatter.formatNumber(result / 1000);
+                    data[i][2] = Formatter.formatNumber(result);
 
                 } catch (Exception e) {
                     Toast.makeText(MeasureSolid.this, ""+e, Toast.LENGTH_SHORT).show();

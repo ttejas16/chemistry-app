@@ -76,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startNewActivity(MeasureDilution.class);
         });
 
-
-        CalculatorUtil.init(this);
-
-
         toggle = new ActionBarDrawerToggle(
                 this,
                 binding.drawerLayout,

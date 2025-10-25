@@ -2,10 +2,39 @@ package com.example.chemapp.utils;
 
 import java.text.DecimalFormat;
 
-public class NumberFormatter {
+public class Formatter {
     private static final String[] SUPERSCRIPT_DIGITS = {
             "⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"
     };
+
+    private static final String[] SUBSCRIPT_DIGITS = {
+            "₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"
+    };
+
+    /**
+     * Formats a molecular formula with subscript digits.
+     * It basically replaces every digit in the formula
+     * with its subscript equivalent
+     */
+    public static String formatChemicalFormula(String formula) {
+        if (formula == null || formula.isEmpty()) {
+            return formula;
+        }
+
+        StringBuilder result = new StringBuilder();
+        char[] chars = formula.toCharArray();
+
+        for (char ch : chars) {
+            if (Character.isDigit(ch)) {
+                int digit = Character.getNumericValue(ch);
+                result.append(SUBSCRIPT_DIGITS[digit]);
+            } else {
+                result.append(ch);
+            }
+        }
+
+        return result.toString();
+    }
 
     /**
      * Formats a double value according to these rules:

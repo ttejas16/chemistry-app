@@ -17,7 +17,7 @@ import com.example.chemapp.utils.BottomSheetHelper;
 import com.example.chemapp.utils.CalculationRecord;
 import com.example.chemapp.utils.CalculatorUtil;
 import com.example.chemapp.utils.DbHelper;
-import com.example.chemapp.utils.NumberFormatter;
+import com.example.chemapp.utils.Formatter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureDilutionBinding;
@@ -46,7 +46,7 @@ public class MeasureDilution extends AppCompatActivity {
             return insets;
         });
 
-        CalculatorUtil util = CalculatorUtil.getInstance();
+        CalculatorUtil util = CalculatorUtil.getInstance(getApplicationContext());
         BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
         HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
 
@@ -137,8 +137,8 @@ public class MeasureDilution extends AppCompatActivity {
                 data[0][0] = "Req stock volume (mL)";
                 data[0][1] = "Req solvent volume (mL)";
 
-                data[1][0] = NumberFormatter.formatNumber(result);
-                data[1][1] = NumberFormatter.formatNumber(volume - result);
+                data[1][0] = Formatter.formatNumber(result);
+                data[1][1] = Formatter.formatNumber(volume - result);
 
 
                 String description = gson.toJson(data);

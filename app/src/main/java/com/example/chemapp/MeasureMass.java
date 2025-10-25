@@ -15,7 +15,7 @@ import com.example.chemapp.utils.BottomSheetHelper;
 import com.example.chemapp.utils.CalculationRecord;
 import com.example.chemapp.utils.CalculatorUtil;
 import com.example.chemapp.utils.DbHelper;
-import com.example.chemapp.utils.NumberFormatter;
+import com.example.chemapp.utils.Formatter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureMassBinding;
@@ -44,7 +44,7 @@ public class MeasureMass extends AppCompatActivity {
         setSpinnerItems(binding.concentrationUnit, concentrationUnits);
 
         Gson gson = new Gson();
-        CalculatorUtil util = CalculatorUtil.getInstance();
+        CalculatorUtil util = CalculatorUtil.getInstance(getApplicationContext());
         DbHelper db = DbHelper.getInstance(MeasureMass.this);
         BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
         HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
@@ -82,8 +82,8 @@ public class MeasureMass extends AppCompatActivity {
                 data[0][2] = "Req mass (mg)";
 
                 data[1][0] = String.valueOf(volume);
-                data[1][1] = NumberFormatter.formatNumber(result / 1000);
-                data[1][2] = NumberFormatter.formatNumber(result);
+                data[1][1] = Formatter.formatNumber(result / 1000);
+                data[1][2] = Formatter.formatNumber(result);
 
 
                 String description = gson.toJson(data);

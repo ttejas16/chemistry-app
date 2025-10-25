@@ -24,7 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chemapp.utils.BottomSheetHelper;
 import com.example.chemapp.utils.CalculationRecord;
-import com.example.chemapp.utils.NumberFormatter;
+import com.example.chemapp.utils.Formatter;
 import com.example.chemapp.adapters.SaltOptionAdapter;
 import com.example.chemapp.data.repository.BookmarkRepository;
 import com.example.chemapp.data.repository.CompoundRepository;
@@ -189,8 +189,8 @@ public class MeasureMolarity extends AppCompatActivity {
                     double resInMilligrams = resInGrams * 1000;
 
                     data[j][0] = vlm + "";
-                    data[j][1] = NumberFormatter.formatNumber(resInGrams);
-                    data[j][2] = NumberFormatter.formatNumber(resInMilligrams);
+                    data[j][1] = Formatter.formatNumber(resInGrams);
+                    data[j][2] = Formatter.formatNumber(resInMilligrams);
 
                     j++;
                 }

@@ -47,7 +47,7 @@ public class AdditionalCompounds extends AppCompatActivity {
         setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        util = CalculatorUtil.getInstance();
+        util = CalculatorUtil.getInstance(getApplicationContext());
         db = DbHelper.getInstance(AdditionalCompounds.this);
         CompoundRepository compoundRepository = CompoundRepository.getInstance(getApplicationContext());
 

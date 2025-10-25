@@ -151,7 +151,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
             Compound compound = compoundMap.get(key);
 
-            String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
+            String formattedFormula = Formatter.formatChemicalFormula(compound.molecularFormula);
             builder.append(key).append(" ").append("(").append(formattedFormula).append(")");
 
             String displayString = builder.toString();

@@ -10,6 +10,7 @@ import com.example.chemapp.utils.CalculatorUtil;
 import com.example.chemapp.utils.Compound;
 import com.example.chemapp.utils.DbHelper;
 import com.example.chemapp.utils.DbHelper.TableCompounds;
+import com.example.chemapp.utils.Formatter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -175,7 +176,8 @@ public class CompoundRepository {
             String molecularFormula,
             String iupacName,
             double molecularWeight,
-            double equivalentWeight
+            double equivalentWeight,
+            Context context
     ) {
         if (compoundName.isEmpty() || molecularFormula.isEmpty() || iupacName.isEmpty()) {
             throw new IllegalArgumentException("invalid arguments");
@@ -187,7 +189,7 @@ public class CompoundRepository {
             return false;
         }
 
-        String[] elements = Compound.getElementsFromMolecularFormula(molecularFormula);
+        String[] elements = Compound.getElementsFromMolecularFormula(molecularFormula, context.getApplicationContext());
         Compound compound = new Compound(newCompoundName, "None", iupacName, molecularFormula, molecularWeight, equivalentWeight, elements);
 
         SQLiteDatabase db = this.dbHelper.getWritableDatabase();
@@ -195,7 +197,7 @@ public class CompoundRepository {
         ContentValues values = new ContentValues();
         StringBuilder builder = new StringBuilder();
 
-        String formattedFormula = CalculatorUtil.formatChemicalFormula(compound.molecularFormula);
+        String formattedFormula = Formatter.formatChemicalFormula(compound.molecularFormula);
 
         builder.append(compound.getName()).append(" ").append("(").append(formattedFormula).append(")");
         String displayString = builder.toString();
