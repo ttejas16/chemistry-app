@@ -32,12 +32,13 @@
         />
 
     <ScrollView
-        android:paddingBottom="@dimen/activityBottomPadding"
+        android:id="@+id/scroll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/divider"
-        app:layout_constraintStart_toStartOf="@id/divider"
-        app:layout_constraintEnd_toEndOf="@id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_height="0dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

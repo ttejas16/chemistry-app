@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -52,10 +53,35 @@ public class MeasureMolarity extends AppCompatActivity {
         binding = MeasureMolarityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        ScrollView scroll = findViewById(R.id.scroll);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, windowInsets) -> {
+
+            Insets sysInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+
+            v.setPadding(sysInsets.left, sysInsets.top, sysInsets.right, sysInsets.bottom);
+
+            // Add IME bottom as extra padding to the scrollable content so it can scroll above keyboard
+            // Keep original left/top/right padding of scroll
+            scroll.setPadding(
+                    scroll.getPaddingLeft(),
+                    scroll.getPaddingTop(),
+                    scroll.getPaddingRight(),
+                    imeInsets.bottom
+            );
+
+            // If keyboard just opened, ensure the focused child is visible
+            if (imeInsets.bottom > 0) {
+                View focused = getCurrentFocus();
+                if (focused != null) {
+                    scroll.post(() -> {
+                        int childBottom = focused.getBottom();
+                        scroll.smoothScrollTo(0, childBottom);
+                    });
+                }
+            }
+
+            return windowInsets;
         });
 
         setSupportActionBar(binding.navigation);
