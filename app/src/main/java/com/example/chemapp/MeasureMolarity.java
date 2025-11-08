@@ -185,7 +185,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 return;
             }
 
-            if (!isValidSelection(salt, salts)) {
+            if (!adapter.isValidSelection(salt)) {
                 return;
             }
 
