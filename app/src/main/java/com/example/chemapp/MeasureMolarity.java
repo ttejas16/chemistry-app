@@ -3,8 +3,6 @@ package com.example.chemapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -13,7 +11,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,11 +23,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.Compound;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.utils.BottomSheetHelper;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.Formatter;
+import com.example.chemapp.adapters.SaltOptionAdapter;
+import com.example.chemapp.data.repository.BookmarkRepository;
+import com.example.chemapp.data.repository.CompoundRepository;
+import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureMolarityBinding;
 import com.google.gson.Gson;
 
@@ -38,11 +38,11 @@ import java.util.Arrays;
 public class MeasureMolarity extends AppCompatActivity {
     private MeasureMolarityBinding binding;
     final String[] solutionOptions = { "Molar solution", "Normal solution" };
-    final String[] molarityUnitOptions = { "M", "mM", "μM"};
+    final String[] molarityUnitOptions = { "M", "mM", "μM" };
     final double[] sizes = {25.0, 50.0, 100.0, 250.0, 500.0, 1000.0};
-
     String [] salts;
-    CalculatorUtil util = CalculatorUtil.getInstance();
+    CompoundRepository compoundRepository;
+    SaltOptionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +53,58 @@ public class MeasureMolarity extends AppCompatActivity {
         binding = MeasureMolarityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        ScrollView scroll = findViewById(R.id.scroll);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, windowInsets) -> {
+
+            Insets sysInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+
+            v.setPadding(sysInsets.left, sysInsets.top, sysInsets.right, sysInsets.bottom);
+
+            // Add IME bottom as extra padding to the scrollable content so it can scroll above keyboard
+            // Keep original left/top/right padding of scroll
+            scroll.setPadding(
+                    scroll.getPaddingLeft(),
+                    scroll.getPaddingTop(),
+                    scroll.getPaddingRight(),
+                    imeInsets.bottom
+            );
+
+            // If keyboard just opened, ensure the focused child is visible
+            if (imeInsets.bottom > 0) {
+                View focused = getCurrentFocus();
+                if (focused != null) {
+                    scroll.post(() -> {
+                        int childBottom = focused.getBottom();
+                        scroll.smoothScrollTo(0, childBottom);
+                    });
+                }
+            }
+
+            return windowInsets;
         });
 
         setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         Gson gson = new Gson();
-        DbHelper db = DbHelper.getInstance(MeasureMolarity.this);
+        BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
+        HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
+        compoundRepository = CompoundRepository.getInstance(getApplicationContext());
 
-        salts = util.getFormattedDisplayName();
+        salts = compoundRepository.getAllDisplayNames();
 
         Arrays.sort(salts);
-        setSpinnerItems(binding.salt, salts);
+        adapter = new SaltOptionAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                salts
+        );
+        binding.salt.setAdapter(adapter);
 
-        binding.salt.setOnItemClickListener((parent, view, position, id) -> updateWeights(parent.getItemAtPosition(position).toString()));
+        binding.salt.setOnItemClickListener((parent, view, position, id) -> {
+            updateWeights(parent.getItemAtPosition(position).toString());
+        });
         binding.salt.setOnDismissListener(() -> {
             String saltWithFormula = binding.salt.getText().toString();
             if (saltWithFormula.isEmpty()) {
@@ -78,7 +112,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 return;
             }
 
-            if (!isValidSelection(saltWithFormula, salts)) {
+            if (!adapter.isValidSelection(saltWithFormula)) {
                 binding.salt.setError("invalid salt");
                 return;
             }
@@ -93,7 +127,7 @@ public class MeasureMolarity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!hasMatchingSuggestions(s.toString(), salts)) {
+                if (!adapter.hasMatchingSuggestions(s)) {
                     binding.salt.setError("invalid salt");
                 }
                 else {
@@ -151,7 +185,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 return;
             }
 
-            if (!isValidSelection(salt, salts)) {
+            if (!adapter.isValidSelection(salt)) {
                 return;
             }
 
@@ -181,8 +215,8 @@ public class MeasureMolarity extends AppCompatActivity {
                     double resInMilligrams = resInGrams * 1000;
 
                     data[j][0] = vlm + "";
-                    data[j][1] = NumberFormatter.formatNumber(resInGrams);
-                    data[j][2] = NumberFormatter.formatNumber(resInMilligrams);
+                    data[j][1] = Formatter.formatNumber(resInGrams);
+                    data[j][2] = Formatter.formatNumber(resInMilligrams);
 
                     j++;
                 }
@@ -191,7 +225,7 @@ public class MeasureMolarity extends AppCompatActivity {
                 String description = gson.toJson(data);
 
                 try {
-                    boolean res = db.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                    boolean res = historyRepository.addHistory(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
                 } catch (Exception e) {
 
                 }
@@ -203,7 +237,7 @@ public class MeasureMolarity extends AppCompatActivity {
                         data,
                         () -> {
                             try {
-                                db.addBookmark(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
+                                bookmarkRepository.addBookmark(title, CalculationRecord.MOLARITY_HISTORY_ITEM, description);
                             } catch (Exception e) {
 
                             }
@@ -221,10 +255,10 @@ public class MeasureMolarity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        salts = util.getFormattedDisplayName();
+        salts = compoundRepository.getAllDisplayNames();
         Arrays.sort(salts);
 
-        setSpinnerItems(binding.salt, salts);
+        adapter.updateItems(salts);
     }
 
     @Override
@@ -313,39 +347,6 @@ public class MeasureMolarity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
-    public void setSpinnerItems(AutoCompleteTextView spinner, String[] options){
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                options
-        );
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner.setAdapter(adapter);
-    }
-
-    private boolean isValidSelection(String input, String[] items) {
-        if (input == null || input.trim().isEmpty()) return false;
-
-        return Arrays.asList(items).contains(input);
-    }
-
-    private boolean hasMatchingSuggestions(String currentText, String[] allOptions) {
-        if (currentText == null || currentText.trim().isEmpty()) {
-            return true;
-        }
-
-        String searchText = currentText.toLowerCase().trim();
-
-        for (String option : allOptions) {
-            if (option.toLowerCase().contains(searchText)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void updateWeights(String formattedSaltName) {
         if (binding.salt.getText().length() == 0) {
             binding.weight.setText("");
@@ -365,18 +366,19 @@ public class MeasureMolarity extends AppCompatActivity {
         }
 
         int solutionType = binding.solutionType.getSelectedItemPosition();
-        Compound  compound = util.getCompoundsMap().get(saltName);
+        try {
+            double[] weights = compoundRepository.getWeights(saltName);
 
-        if (compound == null){
-            return;
+            if (solutionType == 0) {
+                binding.weight.setText(String.valueOf(weights[0]));
+            }
+            else  {
+                binding.weight.setText(String.valueOf(weights[1]));
+            }
+        } catch (Exception e) {
+
         }
 
-        if (solutionType == 0) {
-            binding.weight.setText(String.valueOf(compound.molecularWeight));
-        }
-        else  {
-            binding.weight.setText(String.valueOf(compound.equivalentWeight));
-        }
     }
 
     public double calculateResult(double w, double c, double volumeInMillilitres){

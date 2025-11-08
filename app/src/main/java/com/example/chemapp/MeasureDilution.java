@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -13,17 +14,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.NumberFormatter;
+import com.example.chemapp.utils.BottomSheetHelper;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.CalculatorUtil;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.utils.Formatter;
+import com.example.chemapp.data.repository.BookmarkRepository;
+import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.MeasureDilutionBinding;
 import com.google.gson.Gson;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.stream.Stream;
 
 
@@ -40,13 +41,40 @@ public class MeasureDilution extends AppCompatActivity {
         binding = MeasureDilutionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+        ScrollView scroll = findViewById(R.id.scroll);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, windowInsets) -> {
+
+            Insets sysInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+
+            v.setPadding(sysInsets.left, sysInsets.top, sysInsets.right, sysInsets.bottom);
+
+            // Add IME bottom as extra padding to the scrollable content so it can scroll above keyboard
+            // Keep original left/top/right padding of scroll
+            scroll.setPadding(
+                    scroll.getPaddingLeft(),
+                    scroll.getPaddingTop(),
+                    scroll.getPaddingRight(),
+                    imeInsets.bottom
+            );
+
+            // If keyboard just opened, ensure the focused child is visible
+            if (imeInsets.bottom > 0) {
+                View focused = getCurrentFocus();
+                if (focused != null) {
+                    scroll.post(() -> {
+                        int childBottom = focused.getBottom();
+                        scroll.smoothScrollTo(0, childBottom);
+                    });
+                }
+            }
+
+            return windowInsets;
         });
 
-        CalculatorUtil util = CalculatorUtil.getInstance();
+        CalculatorUtil util = CalculatorUtil.getInstance(getApplicationContext());
+        BookmarkRepository bookmarkRepository = BookmarkRepository.getInstance(getApplicationContext());
+        HistoryRepository historyRepository = HistoryRepository.getInstance(getApplicationContext());
 
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
@@ -135,14 +163,14 @@ public class MeasureDilution extends AppCompatActivity {
                 data[0][0] = "Req stock volume (mL)";
                 data[0][1] = "Req solvent volume (mL)";
 
-                data[1][0] = NumberFormatter.formatNumber(result);
-                data[1][1] = NumberFormatter.formatNumber(volume - result);
+                data[1][0] = Formatter.formatNumber(result);
+                data[1][1] = Formatter.formatNumber(volume - result);
 
 
                 String description = gson.toJson(data);
 
                 try {
-                    boolean res = db.addHistory(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
+                    boolean res = historyRepository.addHistory(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
                 } catch (Exception e) {
 
                 }
@@ -154,7 +182,7 @@ public class MeasureDilution extends AppCompatActivity {
                         data,
                         () -> {
                             try {
-                                db.addBookmark(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
+                                bookmarkRepository.addBookmark(title, CalculationRecord.DILUTION_HISTORY_ITEM, description);
                             } catch (Exception e) {
 
                             }

@@ -1,4 +1,4 @@
-package com.example.chemapp.Utils;
+package com.example.chemapp.adapters;
 
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -11,10 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chemapp.BottomSheetHelper;
+import com.example.chemapp.utils.BottomSheetHelper;
 import com.example.chemapp.R;
+import com.example.chemapp.utils.CalculationRecord;
 
-import java.util.Collections;
 import java.util.List;
 
 public class BookmarkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

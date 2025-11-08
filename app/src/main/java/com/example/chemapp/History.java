@@ -15,9 +15,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chemapp.Utils.CalculationRecord;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.HistoryAdapter;
+import com.example.chemapp.utils.CalculationRecord;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.adapters.HistoryAdapter;
+import com.example.chemapp.data.repository.HistoryRepository;
 import com.example.chemapp.databinding.HistoryBinding;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class History extends AppCompatActivity {
 
     private HistoryBinding binding;
     private HistoryAdapter adapter;
+
+    private HistoryRepository historyRepository;
     private DbHelper db;
 
     private final RecyclerView.AdapterDataObserver emptyObserver = new RecyclerView.AdapterDataObserver() {
@@ -51,8 +54,9 @@ public class History extends AppCompatActivity {
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
         db = DbHelper.getInstance(History.this);
+        historyRepository = HistoryRepository.getInstance(getApplicationContext());
 
-        List<CalculationRecord> items = db.getHistoryCalculations();
+        List<CalculationRecord> items = historyRepository.getHistoryCalculations();
         adapter = new HistoryAdapter(items);
         adapter.registerAdapterDataObserver(emptyObserver);
 
@@ -83,7 +87,7 @@ public class History extends AppCompatActivity {
             builder.setTitle("Clear History")
                     .setMessage("Are you sure you want to clear history?")
                     .setPositiveButton("Yes", (dialog,whichButton) -> {
-                        boolean res = db.clearHistory();
+                        boolean res = historyRepository.clearHistory();
                         if (res) {
                             adapter.clearItems();
                         }

@@ -11,10 +11,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.chemapp.Utils.CalculatorUtil;
-import com.example.chemapp.Utils.Compound;
-import com.example.chemapp.Utils.DbHelper;
-import com.example.chemapp.Utils.UserCompoundAdapter;
+import com.example.chemapp.utils.CalculatorUtil;
+import com.example.chemapp.utils.Compound;
+import com.example.chemapp.utils.DbHelper;
+import com.example.chemapp.adapters.UserCompoundAdapter;
+import com.example.chemapp.data.repository.CompoundRepository;
 import com.example.chemapp.databinding.AdditionalCompoundsBinding;
 
 import java.util.List;
@@ -46,10 +47,11 @@ public class AdditionalCompounds extends AppCompatActivity {
         setSupportActionBar(binding.navigation);
         binding.navigation.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
 
-        util = CalculatorUtil.getInstance();
+        util = CalculatorUtil.getInstance(getApplicationContext());
         db = DbHelper.getInstance(AdditionalCompounds.this);
+        CompoundRepository compoundRepository = CompoundRepository.getInstance(getApplicationContext());
 
-        List<Compound> items = db.getAllUserCompounds();
+        List<Compound> items = compoundRepository.getAllUserCompounds();
 
         adapter = new UserCompoundAdapter(items);
         adapter.registerAdapterDataObserver(emptyObserver);
@@ -57,7 +59,7 @@ public class AdditionalCompounds extends AppCompatActivity {
         adapter.setOnItemDeleteListener((compoundName, position) -> {
             if (position == RecyclerView.NO_POSITION) return;
 
-            util.removeUserCompound(AdditionalCompounds.this, compoundName);
+            compoundRepository.deleteUserCompound(compoundName);
             adapter.removeAt(position);
         });
 

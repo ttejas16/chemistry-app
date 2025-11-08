@@ -1,4 +1,4 @@
-package com.example.chemapp.Utils;
+package com.example.chemapp.adapters;
 
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chemapp.R;
+import com.example.chemapp.utils.Compound;
 
 import java.util.List;
 
